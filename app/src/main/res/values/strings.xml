@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- All user-visible text lives here so a Persian (fa) RTL translation can be added
+     later by creating values-fa/strings.xml. -->
+<resources>
+    <string name="app_name">WakeMeThere</string>
+
+    <!-- Home screen -->
+    <string name="home_set_alarm">Set Alarm</string>
+    <string name="home_favorites_title">Saved destinations</string>
+    <string name="home_no_favorites">No saved destinations yet. Pick one on the map and save it.</string>
+    <string name="home_armed_title">Alarm armed</string>
+    <string name="home_armed_distance">%1$s remaining</string>
+    <string name="home_armed_waiting_fix">Waiting for GPS fix…</string>
+    <string name="home_cancel_tracking">Cancel</string>
+    <string name="home_arm_favorite">Arm</string>
+    <string name="home_delete_favorite">Delete</string>
+    <string name="home_settings">Settings</string>
+
+    <!-- Map / pick destination screen -->
+    <string name="map_title">Pick destination</string>
+    <string name="map_search_hint">Search station or place…</string>
+    <string name="map_search_no_results">No results</string>
+    <string name="map_search_error">Search failed — check your connection</string>
+    <string name="map_radius_label">Alarm radius: %1$d m</string>
+    <string name="map_save_favorite">Save as favorite</string>
+    <string name="map_favorite_name_hint">Name (e.g. Work – Station X)</string>
+    <string name="map_start_tracking">Start Tracking</string>
+    <string name="map_tap_hint">Tap the map to drop a destination pin</string>
+    <string name="map_my_location">My location</string>
+
+    <!-- Tracking notification -->
+    <string name="notif_channel_tracking_name">Trip tracking</string>
+    <string name="notif_channel_tracking_desc">Live distance to your destination while an alarm is armed</string>
+    <string name="notif_channel_alarm_name">Destination alarm</string>
+    <string name="notif_channel_alarm_desc">Loud alarm when you reach your destination</string>
+    <string name="notif_tracking_title">Tracking: %1$s</string>
+    <string name="notif_distance_remaining">%1$s remaining</string>
+    <string name="notif_waiting_fix">Waiting for GPS fix…</string>
+    <string name="notif_signal_weak">GPS signal weak — still tracking</string>
+    <string name="notif_stop_action">Stop Tracking</string>
+    <string name="notif_alarm_title">Wake up! Approaching %1$s</string>
+    <string name="notif_alarm_text">You are within %1$s of your destination</string>
+
+    <!-- Alarm screen -->
+    <string name="alarm_headline">Wake up!</string>
+    <string name="alarm_approaching">You are arriving at</string>
+    <string name="alarm_distance_now">Distance: %1$s</string>
+    <string name="alarm_dismiss">Dismiss</string>
+
+    <!-- Settings screen -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_sound_title">Alarm sound</string>
+    <string name="settings_sound_default">Default alarm sound</string>
+    <string name="settings_sound_custom">Custom sound</string>
+    <string name="settings_sound_pick">Choose custom sound</string>
+    <string name="settings_vibration_title">Vibration</string>
+    <string name="settings_vibration_desc">Vibrate strongly when the alarm fires</string>
+    <string name="settings_default_radius_title">Default radius</string>
+    <string name="settings_default_radius_value">%1$d m</string>
+    <string name="settings_permissions_title">Permissions</string>
+    <string name="settings_permissions_desc">Review permission status</string>
+
+    <!-- Onboarding / permissions -->
+    <string name="onboarding_title">Before we start</string>
+    <string name="onboarding_intro">WakeMeThere needs a few permissions to wake you up reliably. We ask for each one with an explanation first.</string>
+    <string name="perm_location_title">Location</string>
+    <string name="perm_location_desc">We track your position during the trip to know when you get close to your stop. Only while-in-use access is needed — tracking runs in a visible foreground service, never silently.</string>
+    <string name="perm_notifications_title">Notifications</string>
+    <string name="perm_notifications_desc">The persistent trip notification and the wake-up alarm are delivered as notifications. Without this, the alarm cannot appear.</string>
+    <string name="perm_fullscreen_title">Full-screen alarm</string>
+    <string name="perm_fullscreen_desc">Allows the alarm to take over the screen like an incoming call, even when the phone is locked and you are asleep.</string>
+    <string name="perm_battery_title">Battery optimization</string>
+    <string name="perm_battery_desc">Aggressive battery savers (especially on Xiaomi and Samsung phones) can silently kill tracking mid-trip. Exempting WakeMeThere keeps the alarm reliable.</string>
+    <string name="perm_grant">Grant</string>
+    <string name="perm_granted">Granted</string>
+    <string name="perm_open_settings">Open settings</string>
+    <string name="perm_denied_title">Some permissions are missing</string>
+    <string name="perm_denied_location">Without location access the app cannot track your trip at all.</string>
+    <string name="perm_denied_notifications">Without notifications the alarm cannot ring. Enable them in app settings.</string>
+    <string name="perm_denied_fullscreen">Without full-screen permission the alarm shows only as a normal notification and may not wake you.</string>
+    <string name="perm_skip">Skip for now</string>
+    <string name="perm_continue">Continue</string>
+
+    <!-- Misc -->
+    <string name="distance_meters">%1$d m</string>
+    <string name="distance_kilometers">%1$.1f km</string>
+    <string name="back">Back</string>
+</resources>
