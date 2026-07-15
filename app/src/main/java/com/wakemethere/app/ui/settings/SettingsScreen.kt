@@ -1,0 +1,196 @@
+package com.wakemethere.app.ui.settings
+
+import android.app.Activity
+import android.content.Intent
+import android.media.RingtoneManager
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.wakemethere.app.R
+import com.wakemethere.app.data.datastore.AppSettings
+
+/**
+ * Settings: default vs custom alarm sound, vibration toggle and the default
+ * trigger radius, plus a shortcut to the permission overview.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsScreen(
+    onBack: () -> Unit,
+    onOpenPermissions: () -> Unit,
+    viewModel: SettingsViewModel = hiltViewModel(),
+) {
+    val settings by viewModel.settings.collectAsStateWithLifecycle()
+
+    // System ringtone picker for the custom alarm sound.
+    val ringtoneLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            @Suppress("DEPRECATION")
+            val uri: Uri? =
+                result.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+            viewModel.setCustomSoundUri(uri?.toString())
+        }
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.settings_title)) },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back),
+                        )
+                    }
+                },
+            )
+        },
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+        ) {
+            // Alarm sound: default vs custom.
+            Text(
+                text = stringResource(R.string.settings_sound_title),
+                style = MaterialTheme.typography.titleMedium,
+            )
+            SettingRow(
+                title = stringResource(R.string.settings_sound_default),
+                checked = settings.useDefaultAlarmSound,
+                onCheckedChange = viewModel::setUseDefaultSound,
+            )
+            if (!settings.useDefaultAlarmSound) {
+                OutlinedButton(
+                    onClick = {
+                        val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
+                            putExtra(
+                                RingtoneManager.EXTRA_RINGTONE_TYPE,
+                                RingtoneManager.TYPE_ALARM,
+                            )
+                            putExtra(
+                                RingtoneManager.EXTRA_RINGTONE_EXISTING_URI,
+                                settings.customSoundUri?.let(Uri::parse),
+                            )
+                        }
+                        ringtoneLauncher.launch(intent)
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(stringResource(R.string.settings_sound_pick))
+                }
+            }
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+
+            // Vibration.
+            Text(
+                text = stringResource(R.string.settings_vibration_title),
+                style = MaterialTheme.typography.titleMedium,
+            )
+            SettingRow(
+                title = stringResource(R.string.settings_vibration_desc),
+                checked = settings.vibrationEnabled,
+                onCheckedChange = viewModel::setVibration,
+            )
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+
+            // Default radius. Local slider state so dragging is smooth; the
+            // value is persisted when the gesture ends.
+            var sliderRadius by remember(settings.defaultRadiusMeters) {
+                mutableFloatStateOf(settings.defaultRadiusMeters.toFloat())
+            }
+            Text(
+                text = stringResource(R.string.settings_default_radius_title),
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Text(
+                text = stringResource(R.string.settings_default_radius_value, sliderRadius.toInt()),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Slider(
+                value = sliderRadius,
+                onValueChange = { sliderRadius = it },
+                onValueChangeFinished = { viewModel.setDefaultRadius(sliderRadius.toInt()) },
+                valueRange = AppSettings.MIN_RADIUS_METERS.toFloat()..AppSettings.MAX_RADIUS_METERS.toFloat(),
+                steps = 18,
+            )
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+
+            // Permission overview shortcut.
+            Text(
+                text = stringResource(R.string.settings_permissions_title),
+                style = MaterialTheme.typography.titleMedium,
+            )
+            OutlinedButton(
+                onClick = onOpenPermissions,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+            ) {
+                Text(stringResource(R.string.settings_permissions_desc))
+            }
+        }
+    }
+}
+
+/** A labeled switch row. */
+@Composable
+private fun SettingRow(
+    title: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.weight(1f),
+        )
+        Switch(checked = checked, onCheckedChange = onCheckedChange)
+    }
+}
