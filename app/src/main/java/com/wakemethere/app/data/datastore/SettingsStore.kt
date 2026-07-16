@@ -17,6 +17,9 @@ import javax.inject.Singleton
 
 private val Context.settingsDataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
+/** App-wide theme preference. */
+enum class ThemeMode { SYSTEM, LIGHT, DARK }
+
 /** User-configurable settings snapshot. */
 data class AppSettings(
     /** When false, use the custom sound in [customSoundUri] if set. */
@@ -26,6 +29,7 @@ data class AppSettings(
     val vibrationEnabled: Boolean = true,
     val defaultRadiusMeters: Int = DEFAULT_RADIUS_METERS,
     val onboardingDone: Boolean = false,
+    val themeMode: ThemeMode = ThemeMode.SYSTEM,
 ) {
     companion object {
         const val DEFAULT_RADIUS_METERS = 500
@@ -50,7 +54,13 @@ class SettingsStore @Inject constructor(
             vibrationEnabled = prefs[KEY_VIBRATION] ?: true,
             defaultRadiusMeters = prefs[KEY_DEFAULT_RADIUS] ?: AppSettings.DEFAULT_RADIUS_METERS,
             onboardingDone = prefs[KEY_ONBOARDING_DONE] ?: false,
+            themeMode = runCatching { ThemeMode.valueOf(prefs[KEY_THEME_MODE] ?: "SYSTEM") }
+                .getOrDefault(ThemeMode.SYSTEM),
         )
+    }
+
+    suspend fun setThemeMode(mode: ThemeMode) {
+        context.settingsDataStore.edit { it[KEY_THEME_MODE] = mode.name }
     }
 
     suspend fun current(): AppSettings = settings.first()
@@ -83,5 +93,6 @@ class SettingsStore @Inject constructor(
         val KEY_VIBRATION = booleanPreferencesKey("vibration_enabled")
         val KEY_DEFAULT_RADIUS = intPreferencesKey("default_radius")
         val KEY_ONBOARDING_DONE = booleanPreferencesKey("onboarding_done")
+        val KEY_THEME_MODE = stringPreferencesKey("theme_mode")
     }
 }

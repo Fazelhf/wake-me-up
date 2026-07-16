@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -71,18 +72,27 @@ fun AmbientBackground(modifier: Modifier = Modifier) {
     }
 }
 
+/** True when the current color scheme is dark (by surface luminance). */
+@Composable
+private fun isDarkScheme(): Boolean = MaterialTheme.colorScheme.surface.luminance() < 0.5f
+
 /**
- * A translucent glass surface. Use for cards, panels and pills.
+ * A translucent glass surface. Use for cards, panels and pills. The tint and
+ * the bright hairline border adapt to light/dark so the glass stays legible.
  *
- * @param color base tint of the glass (defaults to a bright surface).
+ * @param color base tint of the glass (defaults to a scheme surface).
  * @param alpha translucency of the tint.
  */
 @Composable
 fun glassModifier(
     shape: Shape,
-    color: Color = MaterialTheme.colorScheme.surfaceBright,
-    alpha: Float = 0.72f,
-    borderColor: Color = Color.White.copy(alpha = 0.6f),
+    color: Color = if (isDarkScheme()) {
+        MaterialTheme.colorScheme.surfaceContainerHigh
+    } else {
+        MaterialTheme.colorScheme.surfaceBright
+    },
+    alpha: Float = if (isDarkScheme()) 0.55f else 0.72f,
+    borderColor: Color = Color.White.copy(alpha = if (isDarkScheme()) 0.12f else 0.6f),
 ): Modifier = Modifier
     .clip(shape)
     .background(color.copy(alpha = alpha), shape)
@@ -95,11 +105,9 @@ fun glassModifier(
 fun GlassCard(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(28.dp),
-    color: Color = MaterialTheme.colorScheme.surfaceBright,
-    alpha: Float = 0.72f,
     content: @Composable () -> Unit,
 ) {
-    Box(modifier = modifier.then(glassModifier(shape, color, alpha))) {
+    Box(modifier = modifier.then(glassModifier(shape))) {
         content()
     }
 }

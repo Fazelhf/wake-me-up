@@ -6,6 +6,7 @@ import android.media.RingtoneManager
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,11 +36,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wakemethere.app.R
 import com.wakemethere.app.data.datastore.AppSettings
+import com.wakemethere.app.data.datastore.ThemeMode
+import com.wakemethere.app.util.AppLocale
 
 /**
  * Settings: default vs custom alarm sound, vibration toggle and the default
@@ -156,6 +162,58 @@ fun SettingsScreen(
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
 
+            // Language.
+            val currentLang = AppLocale.current()
+            Text(
+                text = stringResource(R.string.settings_language_title),
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Row(
+                modifier = Modifier.padding(top = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                FilterChip(
+                    selected = currentLang == AppLocale.PERSIAN,
+                    onClick = { AppLocale.set(AppLocale.PERSIAN) },
+                    label = { Text(stringResource(R.string.settings_language_fa)) },
+                )
+                FilterChip(
+                    selected = currentLang == AppLocale.ENGLISH,
+                    onClick = { AppLocale.set(AppLocale.ENGLISH) },
+                    label = { Text(stringResource(R.string.settings_language_en)) },
+                )
+            }
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+
+            // Theme.
+            Text(
+                text = stringResource(R.string.settings_theme_title),
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Row(
+                modifier = Modifier.padding(top = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                FilterChip(
+                    selected = settings.themeMode == ThemeMode.SYSTEM,
+                    onClick = { viewModel.setThemeMode(ThemeMode.SYSTEM) },
+                    label = { Text(stringResource(R.string.settings_theme_system)) },
+                )
+                FilterChip(
+                    selected = settings.themeMode == ThemeMode.LIGHT,
+                    onClick = { viewModel.setThemeMode(ThemeMode.LIGHT) },
+                    label = { Text(stringResource(R.string.settings_theme_light)) },
+                )
+                FilterChip(
+                    selected = settings.themeMode == ThemeMode.DARK,
+                    onClick = { viewModel.setThemeMode(ThemeMode.DARK) },
+                    label = { Text(stringResource(R.string.settings_theme_dark)) },
+                )
+            }
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+
             // Permission overview shortcut.
             Text(
                 text = stringResource(R.string.settings_permissions_title),
@@ -169,6 +227,18 @@ fun SettingsScreen(
             ) {
                 Text(stringResource(R.string.settings_permissions_desc))
             }
+
+            // Creator credit.
+            Text(
+                text = stringResource(R.string.settings_credit),
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 28.dp, bottom = 12.dp),
+            )
         }
     }
 }

@@ -1,8 +1,8 @@
 package com.wakemethere.app
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -14,7 +14,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.compose.foundation.isSystemInDarkTheme
 import com.wakemethere.app.data.datastore.SettingsStore
+import com.wakemethere.app.data.datastore.ThemeMode
 import com.wakemethere.app.service.TrackingStateHolder
 import com.wakemethere.app.ui.home.HomeScreen
 import com.wakemethere.app.ui.map.MapScreen
@@ -54,6 +56,10 @@ class MainViewModel @Inject constructor(
         .map { it.onboardingDone }
         .stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = null)
 
+    val themeMode = settingsStore.settings
+        .map { it.themeMode }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = ThemeMode.SYSTEM)
+
     val justCompletedTripId = stateHolder.justCompletedTripId
 
     fun consumeCompletedTrip() = stateHolder.consumeCompletedTrip()
@@ -64,13 +70,19 @@ class MainViewModel @Inject constructor(
  * activity so it can appear over the lock screen).
  */
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            WakeMeThereTheme {
-                val viewModel: MainViewModel = hiltViewModel()
+            val viewModel: MainViewModel = hiltViewModel()
+            val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
+            val darkTheme = when (themeMode) {
+                ThemeMode.LIGHT -> false
+                ThemeMode.DARK -> true
+                ThemeMode.SYSTEM -> isSystemInDarkTheme()
+            }
+            WakeMeThereTheme(darkTheme = darkTheme) {
                 val onboardingDone by viewModel.onboardingDone.collectAsStateWithLifecycle()
                 val completedTripId by viewModel.justCompletedTripId.collectAsStateWithLifecycle()
 

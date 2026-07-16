@@ -40,4 +40,8 @@ class SettingsViewModel @Inject constructor(
     fun setDefaultRadius(radiusMeters: Int) {
         viewModelScope.launch { settingsStore.setDefaultRadiusMeters(radiusMeters) }
     }
+
+    fun setThemeMode(mode: com.wakemethere.app.data.datastore.ThemeMode) {
+        viewModelScope.launch { settingsStore.setThemeMode(mode) }
+    }
 }
