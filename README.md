@@ -43,6 +43,21 @@ and builds the debug APK on every push and pull request; the APK is
 downloadable from the workflow run's **Artifacts** section — handy if you
 don't have Android Studio at hand.
 
+## Metro & BRT station picker
+
+The map screen has three bold modes — **Metro**, **BRT** and **Anywhere**:
+
+- Metro/BRT mode draws the whole Tehran network graphically: colored
+  polylines per line and circular station markers (classic transit-map
+  style). Tap a station to select it as the wake-up destination; the
+  selected station gets an enlarged marker plus the trigger-radius circle.
+- The station data ships **offline** inside the APK
+  (`app/src/main/assets/transit/`) — no connectivity needed in the metro.
+- Bundled coordinates are approximate (within a few hundred meters). Run
+  `python3 tools/fetch_stations.py` once on a machine with internet access
+  to regenerate the JSON assets with exact OpenStreetMap data.
+- "Anywhere" mode keeps the original free pin drop + Nominatim search.
+
 ## How it works
 
 1. **Pick a destination** on the OSMdroid map (tap to drop a pin, or search a

@@ -26,6 +26,10 @@
     <string name="map_favorite_name_hint">نام (مثلاً محل کار – ایستگاه X)</string>
     <string name="map_start_tracking">شروع ردیابی</string>
     <string name="map_tap_hint">برای انداختن پین مقصد، روی نقشه بزن</string>
+    <string name="map_mode_metro">مترو</string>
+    <string name="map_mode_brt">بی‌آرتی</string>
+    <string name="map_mode_free">آزاد</string>
+    <string name="map_tap_station_hint">روی ایستگاه موردنظر بزن تا مقصد بیدارباش انتخاب شود</string>
     <string name="map_my_location">موقعیت من</string>
 
     <!-- Tracking notification -->
