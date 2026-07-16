@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Persian (fa) translation. RTL layout is handled automatically via
+     supportsRtl and the Compose Material 3 components. -->
+<resources>
+    <string name="app_name">WakeMeThere</string>
+
+    <!-- Home screen -->
+    <string name="home_set_alarm">تنظیم هشدار</string>
+    <string name="home_favorites_title">مقصدهای ذخیره‌شده</string>
+    <string name="home_no_favorites">هنوز مقصدی ذخیره نشده. روی نقشه یکی انتخاب و ذخیره کن.</string>
+    <string name="home_armed_title">هشدار فعال است</string>
+    <string name="home_armed_distance">%1$s مانده</string>
+    <string name="home_armed_waiting_fix">در انتظار سیگنال GPS…</string>
+    <string name="home_cancel_tracking">لغو</string>
+    <string name="home_arm_favorite">فعال‌سازی</string>
+    <string name="home_delete_favorite">حذف</string>
+    <string name="home_settings">تنظیمات</string>
+
+    <!-- Map / pick destination screen -->
+    <string name="map_title">انتخاب مقصد</string>
+    <string name="map_search_hint">جست‌وجوی ایستگاه یا مکان…</string>
+    <string name="map_search_no_results">نتیجه‌ای یافت نشد</string>
+    <string name="map_search_error">جست‌وجو ناموفق بود — اتصال اینترنت را بررسی کن</string>
+    <string name="map_radius_label">شعاع هشدار: %1$d متر</string>
+    <string name="map_save_favorite">ذخیره به‌عنوان مقصد ثابت</string>
+    <string name="map_favorite_name_hint">نام (مثلاً محل کار – ایستگاه X)</string>
+    <string name="map_start_tracking">شروع ردیابی</string>
+    <string name="map_tap_hint">برای انداختن پین مقصد، روی نقشه بزن</string>
+    <string name="map_mode_metro">مترو</string>
+    <string name="map_mode_brt">بی‌آرتی</string>
+    <string name="map_mode_free">آزاد</string>
+    <string name="map_tap_station_hint">روی ایستگاه موردنظر بزن تا مقصد بیدارباش انتخاب شود</string>
+    <string name="map_my_location">موقعیت من</string>
+
+    <!-- Tracking notification -->
+    <string name="notif_channel_tracking_name">ردیابی سفر</string>
+    <string name="notif_channel_tracking_desc">فاصلهٔ زندهٔ تا مقصد در حین فعال بودن هشدار</string>
+    <string name="notif_channel_alarm_name">هشدار مقصد</string>
+    <string name="notif_channel_alarm_desc">هشدار بلند هنگام رسیدن به مقصد</string>
+    <string name="notif_tracking_title">در حال ردیابی: %1$s</string>
+    <string name="notif_distance_remaining">%1$s مانده</string>
+    <string name="notif_waiting_fix">در انتظار سیگنال GPS…</string>
+    <string name="notif_signal_weak">سیگنال GPS ضعیف است — ردیابی ادامه دارد</string>
+    <string name="notif_stop_action">توقف ردیابی</string>
+    <string name="notif_alarm_title">بیدار شو! در حال رسیدن به %1$s</string>
+    <string name="notif_alarm_text">به شعاع %1$s از مقصدت رسیده‌ای</string>
+
+    <!-- Alarm screen -->
+    <string name="alarm_headline">بیدار شو!</string>
+    <string name="alarm_approaching">در حال رسیدن به</string>
+    <string name="alarm_distance_now">فاصله: %1$s</string>
+    <string name="alarm_dismiss">خاموش کن</string>
+
+    <!-- Settings screen -->
+    <string name="settings_title">تنظیمات</string>
+    <string name="settings_sound_title">صدای هشدار</string>
+    <string name="settings_sound_default">صدای پیش‌فرض هشدار</string>
+    <string name="settings_sound_custom">صدای دلخواه</string>
+    <string name="settings_sound_pick">انتخاب صدای دلخواه</string>
+    <string name="settings_vibration_title">لرزش</string>
+    <string name="settings_vibration_desc">لرزش قوی هنگام فعال شدن هشدار</string>
+    <string name="settings_default_radius_title">شعاع پیش‌فرض</string>
+    <string name="settings_default_radius_value">%1$d متر</string>
+    <string name="settings_permissions_title">مجوزها</string>
+    <string name="settings_permissions_desc">بررسی وضعیت مجوزها</string>
+
+    <!-- Onboarding / permissions -->
+    <string name="onboarding_title">قبل از شروع</string>
+    <string name="onboarding_intro">WakeMeThere برای این‌که مطمئن بیدارت کند به چند مجوز نیاز دارد. هر کدام را قبل از پنجرهٔ سیستمی توضیح می‌دهیم.</string>
+    <string name="perm_location_title">موقعیت مکانی</string>
+    <string name="perm_location_desc">در طول سفر موقعیتت را دنبال می‌کنیم تا بفهمیم کی به ایستگاهت نزدیک شده‌ای. فقط دسترسی «حین استفاده» لازم است — ردیابی در یک سرویس قابل‌مشاهده انجام می‌شود، نه مخفیانه.</string>
+    <string name="perm_notifications_title">اعلان‌ها</string>
+    <string name="perm_notifications_desc">اعلان دائمی سفر و خود هشدار بیدارباش به‌صورت اعلان نمایش داده می‌شوند. بدون این مجوز، هشدار نمی‌تواند ظاهر شود.</string>
+    <string name="perm_fullscreen_title">هشدار تمام‌صفحه</string>
+    <string name="perm_fullscreen_desc">اجازه می‌دهد هشدار مثل تماس ورودی کل صفحه را بگیرد، حتی وقتی گوشی قفل است و خوابیده‌ای.</string>
+    <string name="perm_battery_title">بهینه‌سازی باتری</string>
+    <string name="perm_battery_desc">بهینه‌سازهای تهاجمی باتری (به‌خصوص در گوشی‌های شیائومی و سامسونگ) می‌توانند ردیابی را وسط سفر بی‌صدا متوقف کنند. معاف کردن WakeMeThere هشدار را قابل‌اعتماد نگه می‌دارد.</string>
+    <string name="perm_grant">اعطای مجوز</string>
+    <string name="perm_granted">اعطا شد</string>
+    <string name="perm_open_settings">باز کردن تنظیمات</string>
+    <string name="perm_denied_title">برخی مجوزها داده نشده‌اند</string>
+    <string name="perm_denied_location">بدون دسترسی به موقعیت مکانی، برنامه اصلاً نمی‌تواند سفرت را ردیابی کند.</string>
+    <string name="perm_denied_notifications">بدون اعلان‌ها هشدار نمی‌تواند زنگ بزند. آن‌ها را در تنظیمات برنامه فعال کن.</string>
+    <string name="perm_denied_fullscreen">بدون مجوز تمام‌صفحه، هشدار فقط به‌صورت اعلان عادی نشان داده می‌شود و شاید بیدارت نکند.</string>
+    <string name="perm_skip">فعلاً رد شو</string>
+    <string name="perm_continue">ادامه</string>
+
+    <!-- Misc -->
+    <string name="distance_meters">%1$d متر</string>
+    <string name="distance_kilometers">%1$.1f کیلومتر</string>
+    <string name="back">بازگشت</string>
+</resources>

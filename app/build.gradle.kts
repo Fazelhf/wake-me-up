@@ -79,4 +79,6 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
+    // Real org.json for JVM unit tests (the android.jar version is stubbed).
+    testImplementation(libs.org.json)
 }

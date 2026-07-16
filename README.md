@@ -24,8 +24,8 @@ geocoding uses **Nominatim** — no Google Maps SDK, no API keys, no billing.
 
 ## Building & running
 
-1. Open the `wakemethere/` directory in Android Studio (Koala or newer) — it is
-   a self-contained Gradle project.
+1. Open the repository in Android Studio (Koala or newer) — it is a
+   self-contained Gradle project.
 2. Let Gradle sync (requires Android SDK 34 and JDK 17+).
 3. Run the `app` configuration on a device or emulator, or from the CLI:
 
@@ -38,11 +38,25 @@ Unit tests cover the alarm trigger logic (including stale/inaccurate fix
 rejection and the tunnel-emergence case) and the adaptive interval policy —
 see `app/src/test/`.
 
-> Note: this project was generated in an environment without the Android SDK,
-> so the full `assembleDebug` build has not been executed yet. The pure-JVM
-> domain logic and its 15 unit tests were compiled and run green on Kotlin
-> 2.0.21. If the first sync reports a version conflict, check
-> `gradle/libs.versions.toml` — all versions are pinned there.
+GitHub Actions CI (`.github/workflows/android-ci.yml`) runs the unit tests
+and builds the debug APK on every push and pull request; the APK is
+downloadable from the workflow run's **Artifacts** section — handy if you
+don't have Android Studio at hand.
+
+## Metro & BRT station picker
+
+The map screen has three bold modes — **Metro**, **BRT** and **Anywhere**:
+
+- Metro/BRT mode draws the whole Tehran network graphically: colored
+  polylines per line and circular station markers (classic transit-map
+  style). Tap a station to select it as the wake-up destination; the
+  selected station gets an enlarged marker plus the trigger-radius circle.
+- The station data ships **offline** inside the APK
+  (`app/src/main/assets/transit/`) — no connectivity needed in the metro.
+- Bundled coordinates are approximate (within a few hundred meters). Run
+  `python3 tools/fetch_stations.py` once on a machine with internet access
+  to regenerate the JSON assets with exact OpenStreetMap data.
+- "Anywhere" mode keeps the original free pin drop + Nominatim search.
 
 ## How it works
 
@@ -103,8 +117,8 @@ settings screen. Onboarding can be revisited from Settings → Permissions.
   "Battery saver" for the app.
 - **Custom alarm sound** uses the system ringtone picker; arbitrary audio
   files are not supported in v1.
-- UI is English-only for now; all strings live in `res/values/strings.xml`
-  ready for a `values-fa` RTL translation.
+- UI is localized in English (default) and Persian (`res/values-fa/`, RTL);
+  the app follows the system language.
 
 ## Defaults chosen (not specified in the brief)
 

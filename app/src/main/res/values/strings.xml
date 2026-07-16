@@ -26,6 +26,10 @@
     <string name="map_favorite_name_hint">Name (e.g. Work – Station X)</string>
     <string name="map_start_tracking">Start Tracking</string>
     <string name="map_tap_hint">Tap the map to drop a destination pin</string>
+    <string name="map_mode_metro">Metro</string>
+    <string name="map_mode_brt">BRT</string>
+    <string name="map_mode_free">Anywhere</string>
+    <string name="map_tap_station_hint">Tap a station to set your wake-up stop</string>
     <string name="map_my_location">My location</string>
 
     <!-- Tracking notification -->
