@@ -89,6 +89,20 @@
     <string name="perm_skip">Skip for now</string>
     <string name="perm_continue">Continue</string>
 
+    <!-- Trip history & summary -->
+    <string name="history_title">Trip history</string>
+    <string name="history_filter_all">All</string>
+    <string name="history_empty">No trips yet. Your completed journeys will appear here.</string>
+    <string name="summary_title">Trip completed</string>
+    <string name="summary_subtitle">Arrived safely at your destination</string>
+    <string name="summary_departure">Departure</string>
+    <string name="summary_arrival">Arrival</string>
+    <string name="summary_mins">Mins</string>
+    <string name="summary_km">Km</string>
+    <string name="summary_status">Status</string>
+    <string name="summary_ontime">On time</string>
+    <string name="summary_done">Done</string>
+
     <!-- Misc -->
     <string name="distance_meters">%1$d m</string>
     <string name="distance_kilometers">%1$.1f km</string>

@@ -257,6 +257,8 @@ class MapViewModel @Inject constructor(
                 latitude = lat,
                 longitude = lon,
                 radiusMeters = current.radiusMeters,
+                transitType = if (current.mode == PickerMode.FREE) "ANYWHERE" else current.mode.name,
+                lineName = current.selectedLineName,
             )
             if (current.saveAsFavorite) {
                 val id = repository.save(destination)

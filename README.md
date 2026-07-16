@@ -74,6 +74,17 @@ The map screen has three bold modes — **Metro**, **BRT** and **Anywhere**:
   to regenerate the JSON assets with exact OpenStreetMap data.
 - "Anywhere" mode keeps the original free pin drop + Nominatim search.
 
+## Trip history & summary
+
+Every completed journey is recorded automatically when you arrive (the alarm
+fires) and stored in Room (`trips` table):
+
+- **Trip Summary** opens on arrival — a success state with the departure→
+  arrival times, duration, distance and an "on time" status, then **Done**.
+- **Trip History** (history icon on the Home bar) lists past journeys as glass
+  cards with the route, a Metro/BRT type chip and distance/duration, filterable
+  by transit type.
+
 ## How it works
 
 1. **Pick a destination** on the OSMdroid map (tap to drop a pin, or search a

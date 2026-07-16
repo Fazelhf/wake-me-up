@@ -27,7 +27,7 @@ class ArmedStateStore @Inject constructor(
 ) {
 
     /** Saves [destination] as the armed target. */
-    suspend fun setArmed(destination: Destination) {
+    suspend fun setArmed(destination: Destination, startedAt: Long) {
         context.armedStateDataStore.edit { prefs ->
             prefs[KEY_ID] = destination.id
             prefs[KEY_NAME] = destination.name
@@ -35,8 +35,15 @@ class ArmedStateStore @Inject constructor(
             prefs[KEY_LON] = destination.longitude
             prefs[KEY_RADIUS] = destination.radiusMeters
             prefs[KEY_CREATED_AT] = destination.createdAt
+            prefs[KEY_TRANSIT] = destination.transitType
+            destination.lineName?.let { prefs[KEY_LINE] = it } ?: prefs.remove(KEY_LINE)
+            prefs[KEY_STARTED_AT] = startedAt
         }
     }
+
+    /** Wall-clock time the current alarm was armed, or null. */
+    suspend fun getStartedAt(): Long? =
+        context.armedStateDataStore.data.first()[KEY_STARTED_AT]
 
     /** Clears the armed target (tracking stopped or alarm dismissed). */
     suspend fun clear() {
@@ -57,6 +64,8 @@ class ArmedStateStore @Inject constructor(
             longitude = lon,
             radiusMeters = radius,
             createdAt = prefs[KEY_CREATED_AT] ?: 0L,
+            transitType = prefs[KEY_TRANSIT] ?: "ANYWHERE",
+            lineName = prefs[KEY_LINE],
         )
     }
 
@@ -67,5 +76,8 @@ class ArmedStateStore @Inject constructor(
         val KEY_LON = doublePreferencesKey("lon")
         val KEY_RADIUS = intPreferencesKey("radius")
         val KEY_CREATED_AT = longPreferencesKey("created_at")
+        val KEY_TRANSIT = stringPreferencesKey("transit")
+        val KEY_LINE = stringPreferencesKey("line")
+        val KEY_STARTED_AT = longPreferencesKey("started_at")
     }
 }

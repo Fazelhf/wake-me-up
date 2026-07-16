@@ -57,6 +57,7 @@ class TrackingService : LifecycleService() {
     @Inject lateinit var armedStateStore: ArmedStateStore
     @Inject lateinit var settingsStore: SettingsStore
     @Inject lateinit var alarmRinger: AlarmRinger
+    @Inject lateinit var tripRepository: com.wakemethere.app.data.repository.TripRepository
 
     private var destination: Destination? = null
     private var trackingJob: Job? = null
@@ -69,12 +70,20 @@ class TrackingService : LifecycleService() {
     private var signalWeak = false
     private var alarming = false
 
+    /** Wall-clock arm time and the initial distance, used to record the trip. */
+    private var tripStartedAtWall: Long = 0L
+    private var tripStartDistance: Float? = null
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         when (intent?.action) {
             ACTION_START -> {
                 val dest = intent.readDestination()
-                if (dest != null) startTracking(dest) else stopEverything()
+                if (dest != null) {
+                    startTracking(dest, startedAt = System.currentTimeMillis())
+                } else {
+                    stopEverything()
+                }
             }
             ACTION_STOP -> stopEverything()
             ACTION_DISMISS_ALARM -> stopEverything()
@@ -82,25 +91,32 @@ class TrackingService : LifecycleService() {
             // Restore the armed destination from persistent storage.
             null -> lifecycleScope.launch {
                 val restored = armedStateStore.getArmed()
-                if (restored != null) startTracking(restored) else stopEverything()
+                val startedAt = armedStateStore.getStartedAt()
+                if (restored != null) {
+                    startTracking(restored, startedAt = startedAt ?: System.currentTimeMillis())
+                } else {
+                    stopEverything()
+                }
             }
         }
         return START_STICKY
     }
 
     /** Arms (or re-arms) tracking toward [dest]. */
-    private fun startTracking(dest: Destination) {
+    private fun startTracking(dest: Destination, startedAt: Long) {
         destination = dest
         alarming = false
         lastDistanceMeters = null
         lastFixElapsedMillis = SystemClock.elapsedRealtime()
         signalWeak = false
+        tripStartedAtWall = startedAt
+        tripStartDistance = null
 
         goForeground(buildTrackingNotification())
         acquireWakeLock()
         stateHolder.update(TrackingStatus.Tracking(dest, distanceMeters = null))
 
-        lifecycleScope.launch { armedStateStore.setArmed(dest) }
+        lifecycleScope.launch { armedStateStore.setArmed(dest, startedAt) }
 
         restartLocationUpdates(intervalPolicy.intervalFor(null))
         startSignalWatchdog()
@@ -132,6 +148,8 @@ class TrackingService : LifecycleService() {
             nowElapsedRealtimeMillis = SystemClock.elapsedRealtime(),
         )
         lastDistanceMeters = decision.distanceMeters ?: lastDistanceMeters
+        // Remember the first known distance as the approximate trip length.
+        if (tripStartDistance == null) tripStartDistance = decision.distanceMeters
 
         if (signalWeak) {
             signalWeak = false
@@ -181,6 +199,7 @@ class TrackingService : LifecycleService() {
     private fun fireAlarm(dest: Destination) {
         alarming = true
         stateHolder.update(TrackingStatus.Alarming(dest, lastDistanceMeters))
+        recordTrip(dest)
 
         lifecycleScope.launch {
             val settings = settingsStore.current()
@@ -203,6 +222,23 @@ class TrackingService : LifecycleService() {
         // covers the locked/background case).
         runCatching {
             startActivity(AlarmActivity.createIntent(this).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        }
+    }
+
+    /** Records the completed journey and signals the UI to show its summary. */
+    private fun recordTrip(dest: Destination) {
+        val trip = com.wakemethere.app.domain.model.Trip(
+            destinationName = dest.name,
+            transitType = dest.transitType,
+            lineName = dest.lineName,
+            // Fall back to the radius if no fix ever arrived (unlikely).
+            distanceMeters = tripStartDistance ?: dest.radiusMeters.toFloat(),
+            startedAt = tripStartedAtWall.takeIf { it > 0L } ?: System.currentTimeMillis(),
+            arrivedAt = System.currentTimeMillis(),
+        )
+        lifecycleScope.launch {
+            val id = runCatching { tripRepository.record(trip) }.getOrNull()
+            if (id != null) stateHolder.setCompletedTrip(id)
         }
     }
 
@@ -342,6 +378,8 @@ class TrackingService : LifecycleService() {
             latitude = getDoubleExtra(EXTRA_LAT, 0.0),
             longitude = getDoubleExtra(EXTRA_LON, 0.0),
             radiusMeters = getIntExtra(EXTRA_RADIUS, 500),
+            transitType = getStringExtra(EXTRA_TRANSIT) ?: "ANYWHERE",
+            lineName = getStringExtra(EXTRA_LINE),
         )
     }
 
@@ -355,6 +393,8 @@ class TrackingService : LifecycleService() {
         private const val EXTRA_LAT = "lat"
         private const val EXTRA_LON = "lon"
         private const val EXTRA_RADIUS = "radius"
+        private const val EXTRA_TRANSIT = "transit"
+        private const val EXTRA_LINE = "line"
 
         private const val NOTIFICATION_ID = 1001
         private const val WATCHDOG_PERIOD_MILLIS = 10_000L
@@ -372,6 +412,8 @@ class TrackingService : LifecycleService() {
                 .putExtra(EXTRA_LAT, destination.latitude)
                 .putExtra(EXTRA_LON, destination.longitude)
                 .putExtra(EXTRA_RADIUS, destination.radiusMeters)
+                .putExtra(EXTRA_TRANSIT, destination.transitType)
+                .putExtra(EXTRA_LINE, destination.lineName)
             ContextCompat.startForegroundService(context, intent)
         }
 

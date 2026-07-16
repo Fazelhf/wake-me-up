@@ -89,6 +89,20 @@
     <string name="perm_skip">فعلاً رد شو</string>
     <string name="perm_continue">ادامه</string>
 
+    <!-- Trip history & summary -->
+    <string name="history_title">تاریخچهٔ سفر</string>
+    <string name="history_filter_all">همه</string>
+    <string name="history_empty">هنوز سفری نداری. سفرهای تمام‌شده اینجا نمایش داده می‌شوند.</string>
+    <string name="summary_title">سفر تمام شد</string>
+    <string name="summary_subtitle">به‌سلامت به مقصد رسیدی</string>
+    <string name="summary_departure">مبدأ</string>
+    <string name="summary_arrival">مقصد</string>
+    <string name="summary_mins">دقیقه</string>
+    <string name="summary_km">کیلومتر</string>
+    <string name="summary_status">وضعیت</string>
+    <string name="summary_ontime">به‌موقع</string>
+    <string name="summary_done">تمام</string>
+
     <!-- Misc -->
     <string name="distance_meters">%1$d متر</string>
     <string name="distance_kilometers">%1$.1f کیلومتر</string>

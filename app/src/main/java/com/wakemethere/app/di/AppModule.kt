@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.wakemethere.app.data.local.DestinationDao
+import com.wakemethere.app.data.local.TripDao
 import com.wakemethere.app.data.local.WakeMeThereDatabase
 import com.wakemethere.app.domain.AdaptiveIntervalPolicy
 import com.wakemethere.app.domain.TriggerEvaluator
@@ -32,10 +33,16 @@ object AppModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): WakeMeThereDatabase =
         Room.databaseBuilder(context, WakeMeThereDatabase::class.java, "wakemethere.db")
+            // Trips were added in v2; the app is pre-release, so recreating the
+            // DB on schema change is acceptable (no migration to maintain yet).
+            .fallbackToDestructiveMigration()
             .build()
 
     @Provides
     fun provideDestinationDao(db: WakeMeThereDatabase): DestinationDao = db.destinationDao()
+
+    @Provides
+    fun provideTripDao(db: WakeMeThereDatabase): TripDao = db.tripDao()
 
     @Provides
     @Singleton

@@ -4,9 +4,14 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 
 /**
- * App database. Currently only stores favorite destinations.
+ * App database: favorite destinations and recorded trips.
  */
-@Database(entities = [DestinationEntity::class], version = 1, exportSchema = false)
+@Database(
+    entities = [DestinationEntity::class, TripEntity::class],
+    version = 2,
+    exportSchema = false,
+)
 abstract class WakeMeThereDatabase : RoomDatabase() {
     abstract fun destinationDao(): DestinationDao
+    abstract fun tripDao(): TripDao
 }

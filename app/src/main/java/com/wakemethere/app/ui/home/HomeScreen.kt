@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Navigation
 import androidx.compose.material.icons.filled.Settings
@@ -60,6 +61,7 @@ import com.wakemethere.app.util.formatDistance
 fun HomeScreen(
     onSetAlarm: () -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenHistory: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val favorites by viewModel.favorites.collectAsStateWithLifecycle()
@@ -70,7 +72,7 @@ fun HomeScreen(
         AmbientBackground()
 
         Column(modifier = Modifier.fillMaxSize()) {
-            GlassTopBar(onOpenSettings = onOpenSettings)
+            GlassTopBar(onOpenSettings = onOpenSettings, onOpenHistory = onOpenHistory)
 
             Column(
                 modifier = Modifier
@@ -148,9 +150,9 @@ fun HomeScreen(
     }
 }
 
-/** Floating glass top app bar. */
+/** Floating glass top app bar with history + settings actions. */
 @Composable
-private fun GlassTopBar(onOpenSettings: () -> Unit) {
+private fun GlassTopBar(onOpenSettings: () -> Unit, onOpenHistory: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -158,6 +160,16 @@ private fun GlassTopBar(onOpenSettings: () -> Unit) {
             .then(glassModifier(RoundedCornerShape(20.dp)))
             .height(56.dp),
     ) {
+        IconButton(
+            onClick = onOpenHistory,
+            modifier = Modifier.align(Alignment.CenterStart).padding(start = 4.dp),
+        ) {
+            Icon(
+                Icons.Default.History,
+                contentDescription = stringResource(R.string.history_title),
+                tint = MaterialTheme.colorScheme.primary,
+            )
+        }
         Text(
             text = stringResource(R.string.app_name),
             style = MaterialTheme.typography.headlineSmall,
