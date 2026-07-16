@@ -43,6 +43,22 @@ and builds the debug APK on every push and pull request; the APK is
 downloadable from the workflow run's **Artifacts** section — handy if you
 don't have Android Studio at hand.
 
+## Design — Liquid Transit (liquid glass)
+
+The UI follows a custom "Liquid Transit" design system:
+
+- **Palette:** a fixed Material 3 brand scheme (blue primary `#0058bc`) with
+  dedicated Metro (`#007AFF`) and BRT (`#FF9500`) accents — see
+  `ui/theme/Color.kt`. Dynamic color is intentionally disabled so the look is
+  consistent across devices.
+- **Typography:** the Plus Jakarta Sans scale (`ui/theme/Type.kt`). To ship the
+  actual font, drop the files into `res/font/` and point `BrandFontFamily` at
+  them; until then it falls back to the platform sans-serif at the exact
+  sizes/weights.
+- **Glass components:** `ui/components/LiquidGlass.kt` provides the ambient
+  blurred-orb background, translucent glass cards/panels and a pulse animation
+  used by the live tracking card.
+
 ## Metro & BRT station picker
 
 The map screen has three bold modes — **Metro**, **BRT** and **Anywhere**:

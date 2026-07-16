@@ -15,6 +15,10 @@
     <string name="home_arm_favorite">فعال‌سازی</string>
     <string name="home_delete_favorite">حذف</string>
     <string name="home_settings">تنظیمات</string>
+    <string name="home_stat_remaining">باقی‌مانده</string>
+    <string name="home_stat_status">وضعیت</string>
+    <string name="home_stat_live">زنده</string>
+    <string name="home_stat_weak">GPS ضعیف</string>
 
     <!-- Map / pick destination screen -->
     <string name="map_title">انتخاب مقصد</string>
