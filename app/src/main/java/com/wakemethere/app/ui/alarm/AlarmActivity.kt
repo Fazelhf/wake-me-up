@@ -4,8 +4,8 @@ import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,7 +48,7 @@ import javax.inject.Inject
  * keeps ringing until the user hits Dismiss (no auto-timeout).
  */
 @AndroidEntryPoint
-class AlarmActivity : ComponentActivity() {
+class AlarmActivity : AppCompatActivity() {
 
     @Inject lateinit var stateHolder: TrackingStateHolder
 

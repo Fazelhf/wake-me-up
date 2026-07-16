@@ -43,6 +43,24 @@ and builds the debug APK on every push and pull request; the APK is
 downloadable from the workflow run's **Artifacts** section — handy if you
 don't have Android Studio at hand.
 
+## Design — Liquid Transit (liquid glass)
+
+The UI follows a custom "Liquid Transit" design system:
+
+- **Palette:** a fixed Material 3 brand scheme (blue primary `#0058bc`) with
+  dedicated Metro (`#007AFF`) and BRT (`#FF9500`) accents — see
+  `ui/theme/Color.kt`. Dynamic color is intentionally disabled so the look is
+  consistent across devices.
+- **Typography:** the Plus Jakarta Sans scale (`ui/theme/Type.kt`). To ship the
+  actual font, drop the files into `res/font/` and point `BrandFontFamily` at
+  them; until then it falls back to the platform sans-serif at the exact
+  sizes/weights.
+- **Dark mode:** full dark color scheme; Settings offers System / Light / Dark,
+  and the glass surfaces adapt to stay legible in both.
+- **Glass components:** `ui/components/LiquidGlass.kt` provides the ambient
+  blurred-orb background, translucent glass cards/panels and a pulse animation
+  used by the live tracking card.
+
 ## Metro & BRT station picker
 
 The map screen has three bold modes — **Metro**, **BRT** and **Anywhere**:
@@ -53,10 +71,23 @@ The map screen has three bold modes — **Metro**, **BRT** and **Anywhere**:
   selected station gets an enlarged marker plus the trigger-radius circle.
 - The station data ships **offline** inside the APK
   (`app/src/main/assets/transit/`) — no connectivity needed in the metro.
-- Bundled coordinates are approximate (within a few hundred meters). Run
+- Bundled coordinates are hand-placed on the real corridors (e.g. BRT line 1
+  along Azadi–Enghelab, line 7 along Valiasr) and interchange squares are
+  street-verified, but they are not survey-exact. Run
   `python3 tools/fetch_stations.py` once on a machine with internet access
   to regenerate the JSON assets with exact OpenStreetMap data.
 - "Anywhere" mode keeps the original free pin drop + Nominatim search.
+
+## Trip history & summary
+
+Every completed journey is recorded automatically when you arrive (the alarm
+fires) and stored in Room (`trips` table):
+
+- **Trip Summary** opens on arrival — a success state with the departure→
+  arrival times, duration, distance and an "on time" status, then **Done**.
+- **Trip History** (history icon on the Home bar) lists past journeys as glass
+  cards with the route, a Metro/BRT type chip and distance/duration, filterable
+  by transit type.
 
 ## How it works
 
@@ -117,8 +148,9 @@ settings screen. Onboarding can be revisited from Settings → Permissions.
   "Battery saver" for the app.
 - **Custom alarm sound** uses the system ringtone picker; arbitrary audio
   files are not supported in v1.
-- UI is localized in English (default) and Persian (`res/values-fa/`, RTL);
-  the app follows the system language.
+- UI defaults to **Persian** (RTL) and can be switched to **English** in
+  Settings (per-app language via AppCompat). Persian is the default resource
+  set (`res/values/`); English lives in `res/values-en/`.
 
 ## Defaults chosen (not specified in the brief)
 

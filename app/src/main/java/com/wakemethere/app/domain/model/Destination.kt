@@ -11,4 +11,8 @@ data class Destination(
     val longitude: Double,
     val radiusMeters: Int,
     val createdAt: Long = System.currentTimeMillis(),
+    /** How this destination was chosen: METRO, BRT or ANYWHERE. */
+    val transitType: String = "ANYWHERE",
+    /** Transit line name when picked from Metro/BRT (e.g. "خط ۴"), else null. */
+    val lineName: String? = null,
 )

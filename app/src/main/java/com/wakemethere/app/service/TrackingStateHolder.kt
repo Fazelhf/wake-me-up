@@ -18,7 +18,24 @@ class TrackingStateHolder @Inject constructor() {
     private val _status = MutableStateFlow<TrackingStatus>(TrackingStatus.Idle)
     val status: StateFlow<TrackingStatus> = _status.asStateFlow()
 
+    /**
+     * Id of the most recently completed (arrived) trip, awaiting display in
+     * the Trip Summary screen. Set by the service on arrival; consumed by the
+     * UI via [consumeCompletedTrip].
+     */
+    private val _justCompletedTripId = MutableStateFlow<Long?>(null)
+    val justCompletedTripId: StateFlow<Long?> = _justCompletedTripId.asStateFlow()
+
     fun update(status: TrackingStatus) {
         _status.value = status
+    }
+
+    fun setCompletedTrip(tripId: Long) {
+        _justCompletedTripId.value = tripId
+    }
+
+    /** Called by the UI once it has navigated to the summary. */
+    fun consumeCompletedTrip() {
+        _justCompletedTripId.value = null
     }
 }

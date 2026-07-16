@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Compose draws all real theming; this only styles the window before Compose attaches. -->
-    <style name="Theme.WakeMeThere" parent="android:Theme.Material.Light.NoActionBar">
+    <!-- Compose draws all real theming; this only styles the window before
+         Compose attaches. It must descend from Theme.AppCompat because the
+         activities are AppCompatActivity (needed for per-app locales). -->
+    <style name="Theme.WakeMeThere" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/window_background</item>
     </style>
 </resources>

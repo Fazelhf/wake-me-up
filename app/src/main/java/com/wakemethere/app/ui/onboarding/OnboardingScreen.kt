@@ -12,6 +12,7 @@ import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,11 +21,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -52,6 +54,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wakemethere.app.R
 import com.wakemethere.app.data.datastore.SettingsStore
+import com.wakemethere.app.ui.components.AmbientBackground
+import com.wakemethere.app.ui.components.GlassCard
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -105,13 +109,16 @@ fun OnboardingScreen(
         ActivityResultContracts.RequestPermission()
     ) { refresh++ }
 
+    Box(modifier = Modifier.fillMaxSize()) {
+    AmbientBackground()
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+            .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
+        Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = stringResource(R.string.onboarding_title),
             style = MaterialTheme.typography.headlineMedium,
@@ -173,11 +180,12 @@ fun OnboardingScreen(
         Button(
             onClick = { viewModel.markDone(onFinished) },
             enabled = locationGranted,
+            shape = CircleShape,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
         ) {
-            Text(stringResource(R.string.perm_continue))
+            Text(stringResource(R.string.perm_continue), fontWeight = FontWeight.Bold)
         }
         TextButton(
             onClick = { viewModel.markDone(onFinished) },
@@ -185,6 +193,8 @@ fun OnboardingScreen(
         ) {
             Text(stringResource(R.string.perm_skip))
         }
+        Spacer(modifier = Modifier.height(16.dp))
+    }
     }
 }
 
@@ -198,8 +208,8 @@ private fun PermissionStep(
     onGrant: () -> Unit,
     onOpenSettings: () -> Unit,
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp)) {
+    GlassCard(shape = RoundedCornerShape(24.dp), modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(20.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = title,

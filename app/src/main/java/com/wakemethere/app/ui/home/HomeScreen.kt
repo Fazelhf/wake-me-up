@@ -1,6 +1,8 @@
 package com.wakemethere.app.ui.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,27 +10,32 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Navigation
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,101 +45,152 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wakemethere.app.R
 import com.wakemethere.app.domain.model.Destination
 import com.wakemethere.app.domain.model.TrackingStatus
+import com.wakemethere.app.ui.components.AmbientBackground
+import com.wakemethere.app.ui.components.GlassCard
+import com.wakemethere.app.ui.components.ScreenMargin
+import com.wakemethere.app.ui.components.glassModifier
+import com.wakemethere.app.ui.components.rememberPulse
 import com.wakemethere.app.util.formatDistance
 
 /**
- * Home screen: big "Set Alarm" entry point, armed-alarm status card and the
- * favorites list.
+ * Home screen (Liquid Transit look): glass top bar, a live armed-alarm glass
+ * card with a pulsing status and stat tiles, glass favorite cards, and a
+ * floating "Set Alarm" capsule.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onSetAlarm: () -> Unit,
     onOpenSettings: () -> Unit,
+    onOpenHistory: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val favorites by viewModel.favorites.collectAsStateWithLifecycle()
     val status by viewModel.trackingStatus.collectAsStateWithLifecycle()
+    val idle = status is TrackingStatus.Idle
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.app_name)) },
-                actions = {
-                    IconButton(onClick = onOpenSettings) {
-                        Icon(
-                            Icons.Default.Settings,
-                            contentDescription = stringResource(R.string.home_settings),
-                        )
-                    }
-                },
-            )
-        },
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp),
-        ) {
-            when (val current = status) {
-                is TrackingStatus.Tracking -> ArmedCard(
-                    destination = current.destination,
-                    distanceMeters = current.distanceMeters,
-                    signalWeak = current.signalWeak,
-                    onCancel = viewModel::cancelTracking,
-                )
-                is TrackingStatus.Alarming -> ArmedCard(
-                    destination = current.destination,
-                    distanceMeters = current.distanceMeters,
-                    signalWeak = false,
-                    onCancel = viewModel::cancelTracking,
-                )
-                TrackingStatus.Idle -> Button(
-                    onClick = onSetAlarm,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(64.dp),
-                ) {
-                    Text(
-                        text = stringResource(R.string.home_set_alarm),
-                        style = MaterialTheme.typography.titleLarge,
+    Box(modifier = Modifier.fillMaxSize()) {
+        AmbientBackground()
+
+        Column(modifier = Modifier.fillMaxSize()) {
+            GlassTopBar(onOpenSettings = onOpenSettings, onOpenHistory = onOpenHistory)
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = ScreenMargin),
+            ) {
+                when (val current = status) {
+                    is TrackingStatus.Tracking -> ArmedCard(
+                        destination = current.destination,
+                        distanceMeters = current.distanceMeters,
+                        signalWeak = current.signalWeak,
+                        onCancel = viewModel::cancelTracking,
                     )
+                    is TrackingStatus.Alarming -> ArmedCard(
+                        destination = current.destination,
+                        distanceMeters = current.distanceMeters,
+                        signalWeak = false,
+                        onCancel = viewModel::cancelTracking,
+                    )
+                    TrackingStatus.Idle -> Unit
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Text(
+                    text = stringResource(R.string.home_favorites_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+
+                if (favorites.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.home_no_favorites),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                } else {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 120.dp),
+                    ) {
+                        items(favorites, key = Destination::id) { favorite ->
+                            FavoriteRow(
+                                favorite = favorite,
+                                armEnabled = idle,
+                                onArm = { viewModel.armFavorite(favorite) },
+                                onDelete = { viewModel.deleteFavorite(favorite) },
+                            )
+                        }
+                    }
                 }
             }
+        }
 
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                text = stringResource(R.string.home_favorites_title),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            if (favorites.isEmpty()) {
+        // Floating "Set Alarm" capsule (hidden while an alarm is armed).
+        if (idle) {
+            Button(
+                onClick = onSetAlarm,
+                shape = CircleShape,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 32.dp)
+                    .height(56.dp),
+            ) {
+                Icon(Icons.Default.Add, contentDescription = null)
+                Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    text = stringResource(R.string.home_no_favorites),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    text = stringResource(R.string.home_set_alarm),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold,
                 )
-            } else {
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(favorites, key = Destination::id) { favorite ->
-                        FavoriteRow(
-                            favorite = favorite,
-                            armEnabled = status is TrackingStatus.Idle,
-                            onArm = { viewModel.armFavorite(favorite) },
-                            onDelete = { viewModel.deleteFavorite(favorite) },
-                        )
-                    }
-                }
             }
         }
     }
 }
 
-/** Card shown while an alarm is armed: destination, live distance, cancel. */
+/** Floating glass top app bar with history + settings actions. */
+@Composable
+private fun GlassTopBar(onOpenSettings: () -> Unit, onOpenHistory: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .then(glassModifier(RoundedCornerShape(20.dp)))
+            .height(56.dp),
+    ) {
+        IconButton(
+            onClick = onOpenHistory,
+            modifier = Modifier.align(Alignment.CenterStart).padding(start = 4.dp),
+        ) {
+            Icon(
+                Icons.Default.History,
+                contentDescription = stringResource(R.string.history_title),
+                tint = MaterialTheme.colorScheme.primary,
+            )
+        }
+        Text(
+            text = stringResource(R.string.app_name),
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.align(Alignment.Center),
+        )
+        IconButton(
+            onClick = onOpenSettings,
+            modifier = Modifier.align(Alignment.CenterEnd).padding(end = 4.dp),
+        ) {
+            Icon(
+                Icons.Default.Settings,
+                contentDescription = stringResource(R.string.home_settings),
+                tint = MaterialTheme.colorScheme.primary,
+            )
+        }
+    }
+}
+
+/** Glass card shown while an alarm is armed: pulsing status + stat tiles. */
 @Composable
 private fun ArmedCard(
     destination: Destination,
@@ -141,44 +199,145 @@ private fun ArmedCard(
     onCancel: () -> Unit,
 ) {
     val context = LocalContext.current
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-        ),
+    val pulse = rememberPulse()
+
+    GlassCard(
+        shape = RoundedCornerShape(32.dp),
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = stringResource(R.string.home_armed_title),
-                style = MaterialTheme.typography.labelLarge,
-            )
-            Text(
-                text = destination.name,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-            )
-            Text(
-                text = when {
-                    signalWeak -> stringResource(R.string.notif_signal_weak)
-                    distanceMeters != null -> stringResource(
-                        R.string.home_armed_distance,
-                        formatDistance(context, distanceMeters),
+        Column(modifier = Modifier.padding(20.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = stringResource(R.string.home_armed_title).uppercase(),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
                     )
-                    else -> stringResource(R.string.home_armed_waiting_fix)
-                },
-                style = MaterialTheme.typography.bodyLarge,
-            )
-            OutlinedButton(
+                    Text(
+                        text = destination.name,
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+                // Pulsing navigation badge.
+                Box(contentAlignment = Alignment.Center) {
+                    Box(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .scale(0.8f + pulse * 0.5f)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = (1f - pulse) * 0.4f)),
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primaryContainer),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            Icons.Default.Navigation,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                StatTile(
+                    modifier = Modifier.weight(1f),
+                    label = stringResource(R.string.home_stat_remaining),
+                    value = when {
+                        signalWeak -> stringResource(R.string.home_stat_weak)
+                        distanceMeters != null -> formatDistance(context, distanceMeters)
+                        else -> "—"
+                    },
+                )
+                StatTile(
+                    modifier = Modifier.weight(1f),
+                    label = stringResource(R.string.home_stat_status),
+                    value = stringResource(R.string.home_stat_live),
+                    valueColor = MaterialTheme.colorScheme.tertiaryContainer,
+                    showLiveDot = true,
+                    pulse = pulse,
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
                 onClick = onCancel,
-                modifier = Modifier.padding(top = 8.dp),
+                shape = CircleShape,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.onError,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(52.dp),
             ) {
-                Text(stringResource(R.string.home_cancel_tracking))
+                Icon(Icons.Default.Stop, contentDescription = null)
+                Spacer(modifier = Modifier.size(8.dp))
+                Text(
+                    text = stringResource(R.string.home_cancel_tracking),
+                    fontWeight = FontWeight.Bold,
+                )
             }
         }
     }
 }
 
-/** One favorite destination row with arm and delete actions. */
+/** Small inner stat tile used inside the armed card. */
+@Composable
+private fun StatTile(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier,
+    valueColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurface,
+    showLiveDot: Boolean = false,
+    pulse: Float = 0f,
+) {
+    Box(
+        modifier = modifier.then(
+            glassModifier(
+                RoundedCornerShape(20.dp),
+                color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                alpha = 0.5f,
+            )
+        ),
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = label.uppercase(),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (showLiveDot) {
+                    Box(
+                        modifier = Modifier
+                            .size(8.dp)
+                            .graphicsLayer { alpha = 0.4f + (1f - pulse) * 0.6f }
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.tertiaryContainer),
+                    )
+                    Spacer(modifier = Modifier.size(6.dp))
+                }
+                Text(
+                    text = value,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = valueColor,
+                )
+            }
+        }
+    }
+}
+
+/** One favorite destination as a glass card with arm and delete actions. */
 @Composable
 private fun FavoriteRow(
     favorite: Destination,
@@ -186,31 +345,48 @@ private fun FavoriteRow(
     onArm: () -> Unit,
     onDelete: () -> Unit,
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    GlassCard(shape = RoundedCornerShape(24.dp), modifier = Modifier.fillMaxWidth()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
         ) {
-            Icon(Icons.Default.LocationOn, contentDescription = null)
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.surfaceContainerLow),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    Icons.Default.LocationOn,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 12.dp),
             ) {
-                Text(favorite.name, style = MaterialTheme.typography.titleMedium)
+                Text(
+                    favorite.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
                 Text(
                     text = "${favorite.radiusMeters} m",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            Button(onClick = onArm, enabled = armEnabled) {
+            Button(onClick = onArm, enabled = armEnabled, shape = CircleShape) {
                 Text(stringResource(R.string.home_arm_favorite))
             }
             IconButton(onClick = onDelete) {
                 Icon(
                     Icons.Default.Delete,
                     contentDescription = stringResource(R.string.home_delete_favorite),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
