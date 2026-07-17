@@ -34,9 +34,19 @@ class TransitRepository @Inject constructor(
                     TransitSystem.METRO -> "transit/tehran_metro.json"
                     TransitSystem.BRT -> "transit/tehran_brt.json"
                 }
-                val json = context.assets.open(fileName).bufferedReader().use { it.readText() }
+                // Prefer exact data downloaded in-app from OpenStreetMap
+                // (see TransitUpdater); fall back to the bundled asset.
+                val updated = java.io.File(context.filesDir, fileName)
+                val json = if (updated.isFile) {
+                    updated.readText()
+                } else {
+                    context.assets.open(fileName).bufferedReader().use { it.readText() }
+                }
                 TransitParser.parse(system, json)
             }
         }
     }
+
+    /** Drops the in-memory cache after a data update. */
+    suspend fun invalidate() = mutex.withLock { cache.clear() }
 }

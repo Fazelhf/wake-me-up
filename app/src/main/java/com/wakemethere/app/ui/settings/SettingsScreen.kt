@@ -163,7 +163,8 @@ fun SettingsScreen(
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
 
             // Language.
-            val currentLang = AppLocale.current()
+            val ctx = androidx.compose.ui.platform.LocalContext.current
+            val currentLang = AppLocale.current(ctx)
             Text(
                 text = stringResource(R.string.settings_language_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -174,12 +175,12 @@ fun SettingsScreen(
             ) {
                 FilterChip(
                     selected = currentLang == AppLocale.PERSIAN,
-                    onClick = { AppLocale.set(AppLocale.PERSIAN) },
+                    onClick = { AppLocale.set(ctx, AppLocale.PERSIAN) },
                     label = { Text(stringResource(R.string.settings_language_fa)) },
                 )
                 FilterChip(
                     selected = currentLang == AppLocale.ENGLISH,
-                    onClick = { AppLocale.set(AppLocale.ENGLISH) },
+                    onClick = { AppLocale.set(ctx, AppLocale.ENGLISH) },
                     label = { Text(stringResource(R.string.settings_language_en)) },
                 )
             }
@@ -226,6 +227,40 @@ fun SettingsScreen(
                     .padding(top = 8.dp),
             ) {
                 Text(stringResource(R.string.settings_permissions_desc))
+            }
+
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+
+            // Exact station data from OpenStreetMap (runs on the device).
+            val updateState by viewModel.updateState.collectAsStateWithLifecycle()
+            Text(
+                text = stringResource(R.string.settings_data_title),
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Text(
+                text = stringResource(
+                    when (updateState) {
+                        DataUpdateState.RUNNING -> R.string.settings_data_running
+                        DataUpdateState.DONE -> R.string.settings_data_done
+                        DataUpdateState.FAILED -> R.string.settings_data_failed
+                        DataUpdateState.IDLE -> R.string.settings_data_desc
+                    }
+                ),
+                style = MaterialTheme.typography.bodyMedium,
+                color = when (updateState) {
+                    DataUpdateState.FAILED -> MaterialTheme.colorScheme.error
+                    DataUpdateState.DONE -> MaterialTheme.colorScheme.tertiary
+                    else -> MaterialTheme.colorScheme.onSurfaceVariant
+                },
+            )
+            OutlinedButton(
+                onClick = viewModel::updateStations,
+                enabled = updateState != DataUpdateState.RUNNING,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+            ) {
+                Text(stringResource(R.string.settings_data_action))
             }
 
             // Creator credit.

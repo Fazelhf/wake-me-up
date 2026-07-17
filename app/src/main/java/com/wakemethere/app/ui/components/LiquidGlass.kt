@@ -9,15 +9,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -47,29 +45,33 @@ fun AmbientBackground(modifier: Modifier = Modifier) {
     val secondary = MaterialTheme.colorScheme.secondaryContainer
     val base = MaterialTheme.colorScheme.background
 
+    // Radial gradients fade smoothly to transparent — unlike blurred boxes,
+    // they can never show hard rectangular edges (visible in dark mode).
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(base)
-    ) {
-        // Top-left blue orb.
-        Box(
-            modifier = Modifier
-                .offset(x = (-80).dp, y = (-100).dp)
-                .size(320.dp)
-                .blur(90.dp)
-                .background(primary.copy(alpha = 0.18f), RoundedCornerShape(50))
-        )
-        // Bottom-right warm orb.
-        Box(
-            modifier = Modifier
-                .align(androidx.compose.ui.Alignment.BottomEnd)
-                .offset(x = 70.dp, y = 90.dp)
-                .size(280.dp)
-                .blur(90.dp)
-                .background(secondary.copy(alpha = 0.14f), RoundedCornerShape(50))
-        )
-    }
+            .drawBehind {
+                drawRect(base)
+                drawCircle(
+                    brush = Brush.radialGradient(
+                        colors = listOf(primary.copy(alpha = 0.16f), Color.Transparent),
+                        center = Offset(size.width * 0.08f, size.height * 0.02f),
+                        radius = size.width * 0.85f,
+                    ),
+                    center = Offset(size.width * 0.08f, size.height * 0.02f),
+                    radius = size.width * 0.85f,
+                )
+                drawCircle(
+                    brush = Brush.radialGradient(
+                        colors = listOf(secondary.copy(alpha = 0.10f), Color.Transparent),
+                        center = Offset(size.width * 0.95f, size.height * 0.92f),
+                        radius = size.width * 0.75f,
+                    ),
+                    center = Offset(size.width * 0.95f, size.height * 0.92f),
+                    radius = size.width * 0.75f,
+                )
+            }
+    )
 }
 
 /** True when the current color scheme is dark (by surface luminance). */

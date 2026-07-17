@@ -3,6 +3,9 @@ package com.wakemethere.app
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -33,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -53,6 +57,7 @@ import com.wakemethere.app.service.TrackingStateHolder
 import com.wakemethere.app.ui.home.HomeScreen
 import com.wakemethere.app.ui.map.MapScreen
 import com.wakemethere.app.ui.onboarding.OnboardingScreen
+import com.wakemethere.app.ui.settings.PermissionHealthScreen
 import com.wakemethere.app.ui.settings.SettingsScreen
 import com.wakemethere.app.ui.theme.WakeMeThereTheme
 import com.wakemethere.app.ui.trips.TripHistoryScreen
@@ -72,6 +77,7 @@ object Routes {
     const val MAP = "map"
     const val SETTINGS = "settings"
     const val HISTORY = "history"
+    const val HEALTH = "health"
     const val SUMMARY = "summary" // summary/{tripId}
     fun summary(tripId: Long) = "summary/$tripId"
 }
@@ -105,11 +111,12 @@ class MainViewModel @Inject constructor(
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    override fun attachBaseContext(newBase: android.content.Context) {
+        // Apply the stored language (default Persian) before anything renders.
+        super.attachBaseContext(AppLocale.wrap(newBase))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Must run before super.onCreate so the very first frame is Persian.
-        // (Calling this from Application.onCreate is too early and gets
-        // ignored — that was why the app came up in English.)
-        AppLocale.applyDefaultIfUnset()
         super.onCreate(savedInstanceState)
         setContent {
             val viewModel: MainViewModel = hiltViewModel()
@@ -180,8 +187,11 @@ class MainActivity : AppCompatActivity() {
                     composable(Routes.SETTINGS) {
                         SettingsScreen(
                             onBack = { navController.popBackStack() },
-                            onOpenPermissions = { navController.navigate(Routes.ONBOARDING) },
+                            onOpenPermissions = { navController.navigate(Routes.HEALTH) },
                         )
+                    }
+                    composable(Routes.HEALTH) {
+                        PermissionHealthScreen(onBack = { navController.popBackStack() })
                     }
                     composable(Routes.HISTORY) {
                         TripHistoryScreen(
@@ -254,29 +264,40 @@ private fun GlassBottomNav(
     ) {
         tabs.forEach { tab ->
             val selected = tab.route == currentRoute
+            // Animated selection: pill color, content tint and a gentle pop.
+            val pill by animateColorAsState(
+                if (selected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.9f)
+                else androidx.compose.ui.graphics.Color.Transparent,
+                animationSpec = tween(250), label = "pill",
+            )
+            val tint by animateColorAsState(
+                if (selected) MaterialTheme.colorScheme.onPrimaryContainer
+                else MaterialTheme.colorScheme.onSurfaceVariant,
+                animationSpec = tween(250), label = "tint",
+            )
+            val pop by animateFloatAsState(
+                if (selected) 1.08f else 1f,
+                animationSpec = spring(dampingRatio = 0.5f), label = "pop",
+            )
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
+                    .scale(pop)
                     .clip(RoundedCornerShape(20.dp))
-                    .background(
-                        if (selected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.9f)
-                        else androidx.compose.ui.graphics.Color.Transparent
-                    )
+                    .background(pill)
                     .clickable { onNavigate(tab.route) }
                     .padding(horizontal = 22.dp, vertical = 7.dp),
             ) {
                 Icon(
                     imageVector = tab.icon,
                     contentDescription = null,
-                    tint = if (selected) MaterialTheme.colorScheme.onPrimaryContainer
-                    else MaterialTheme.colorScheme.onSurfaceVariant,
+                    tint = tint,
                     modifier = Modifier.size(22.dp),
                 )
                 Text(
                     text = stringResource(tab.labelRes),
                     style = MaterialTheme.typography.labelMedium,
-                    color = if (selected) MaterialTheme.colorScheme.onPrimaryContainer
-                    else MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = tint,
                 )
             }
         }

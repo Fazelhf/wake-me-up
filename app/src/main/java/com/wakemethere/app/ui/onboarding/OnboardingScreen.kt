@@ -205,16 +205,17 @@ fun OnboardingScreen(
     }
 
     val pagerState = rememberPagerState(pageCount = { pages.size })
-    val isLast = pagerState.currentPage == pages.lastIndex
-    val currentGranted = remember(refresh, pagerState.currentPage) {
-        pages[pagerState.currentPage].isGranted(context)
-    }
+    val page = pagerState.settledPage
+    val isLast = page == pages.lastIndex
+    val currentGranted = remember(refresh, page) { pages[page].isGranted(context) }
 
     // Auto-advance shortly after the current page's permission is granted.
-    LaunchedEffect(currentGranted, pagerState.currentPage) {
-        if (currentGranted && pagerState.currentPage in 1 until pages.lastIndex) {
+    // Keyed on settledPage (not currentPage) so the scroll animation is not
+    // cancelled halfway — that used to freeze the pager between two pages.
+    LaunchedEffect(currentGranted, page) {
+        if (currentGranted && page in 1 until pages.lastIndex) {
             kotlinx.coroutines.delay(650)
-            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+            runCatching { pagerState.animateScrollToPage(page + 1) }
         }
     }
 
@@ -251,16 +252,16 @@ fun OnboardingScreen(
                     .padding(bottom = 28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                val page = pages[pagerState.currentPage]
+                val current = pages[page]
                 Button(
                     onClick = {
                         when {
-                            pagerState.currentPage == 0 ->
-                                scope.launch { pagerState.animateScrollToPage(1) }
-                            !currentGranted -> page.request(actions)
+                            page == 0 ->
+                                scope.launch { runCatching { pagerState.animateScrollToPage(1) } }
+                            !currentGranted -> current.request(actions)
                             isLast -> viewModel.markDone(onFinished)
                             else -> scope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                runCatching { pagerState.animateScrollToPage(page + 1) }
                             }
                         }
                     },
@@ -272,22 +273,22 @@ fun OnboardingScreen(
                     Text(
                         text = stringResource(
                             when {
-                                pagerState.currentPage == 0 -> page.actionRes
+                                page == 0 -> current.actionRes
                                 currentGranted && isLast -> R.string.onb_finish
                                 currentGranted -> R.string.onb_next
-                                else -> page.actionRes
+                                else -> current.actionRes
                             }
                         ),
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold,
                     )
                 }
-                if (pagerState.currentPage > 0) {
+                if (page > 0) {
                     TextButton(
                         onClick = {
                             if (isLast) viewModel.markDone(onFinished)
                             else scope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                runCatching { pagerState.animateScrollToPage(page + 1) }
                             }
                         },
                     ) {
@@ -298,7 +299,7 @@ fun OnboardingScreen(
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
                     repeat(pages.size) { i ->
-                        val active = i == pagerState.currentPage
+                        val active = i == page
                         val w by animateFloatAsState(
                             targetValue = if (active) 26f else 8f,
                             animationSpec = tween(250),

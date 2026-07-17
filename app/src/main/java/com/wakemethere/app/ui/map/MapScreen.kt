@@ -8,8 +8,12 @@ import android.location.LocationManager
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,9 +45,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -73,6 +74,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wakemethere.app.R
 import com.wakemethere.app.data.datastore.AppSettings
+import com.wakemethere.app.ui.components.glassModifier
 import com.wakemethere.app.domain.model.TransitNetwork
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -191,8 +193,11 @@ fun MapScreen(
     }
 }
 
-/** Prominent Metro / BRT / free-pick switcher. */
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * Prominent Metro / BRT / free-pick switcher — a custom glass segmented
+ * control (the stock M3 one truncated Persian labels on narrow screens and
+ * felt broken). Selection is animated and the labels never disappear.
+ */
 @Composable
 private fun ModeSwitcher(
     mode: PickerMode,
@@ -203,29 +208,45 @@ private fun ModeSwitcher(
         Triple(PickerMode.BRT, Icons.Default.DirectionsBus, R.string.map_mode_brt),
         Triple(PickerMode.FREE, Icons.Default.Place, R.string.map_mode_free),
     )
-    SingleChoiceSegmentedButtonRow(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 8.dp)
-            .height(48.dp),
+            .then(glassModifier(RoundedCornerShape(26.dp)))
+            .padding(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        options.forEachIndexed { index, (itemMode, icon, labelRes) ->
-            SegmentedButton(
-                selected = mode == itemMode,
-                onClick = { onModeChanged(itemMode) },
-                shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
-                colors = SegmentedButtonDefaults.colors(
-                    activeContainerColor = MaterialTheme.colorScheme.primary,
-                    activeContentColor = MaterialTheme.colorScheme.onPrimary,
-                ),
-                icon = {
-                    Icon(icon, contentDescription = null, modifier = Modifier.size(20.dp))
-                },
+        options.forEach { (itemMode, icon, labelRes) ->
+            val selected = mode == itemMode
+            val bg by animateColorAsState(
+                if (selected) MaterialTheme.colorScheme.primaryContainer
+                else Color.Transparent,
+                animationSpec = tween(220), label = "seg-bg",
+            )
+            val fg by animateColorAsState(
+                if (selected) MaterialTheme.colorScheme.onPrimaryContainer
+                else MaterialTheme.colorScheme.onSurfaceVariant,
+                animationSpec = tween(220), label = "seg-fg",
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(bg)
+                    .clickable { onModeChanged(itemMode) }
+                    .padding(vertical = 11.dp, horizontal = 4.dp),
             ) {
+                Icon(icon, contentDescription = null, tint = fg, modifier = Modifier.size(18.dp))
+                Spacer(modifier = Modifier.width(5.dp))
                 Text(
                     text = stringResource(labelRes),
+                    style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
+                    color = fg,
                     maxLines = 1,
+                    softWrap = false,
                 )
             }
         }
@@ -294,7 +315,11 @@ private fun BottomPanel(
         tonalElevation = 3.dp,
         shadowElevation = 12.dp,
     ) {
-        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 14.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 14.dp)
+                .animateContentSize(tween(260)),
+        ) {
             // Selected station header (transit modes).
             if (state.selectedStationId != null) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -383,10 +408,26 @@ private fun OsmMap(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    val mapBackground = MaterialTheme.colorScheme.surfaceContainerLow
     val mapView = remember {
         MapView(context).apply {
             setTileSource(TileSourceFactory.MAPNIK)
             setMultiTouchControls(true)
+            // Pinch-to-zoom only: the built-in +/- buttons look out of place.
+            zoomController.setVisibility(
+                org.osmdroid.views.CustomZoomButtonsController.Visibility.NEVER
+            )
+            isTilesScaledToDpi = true
+            minZoomLevel = 9.5
+            maxZoomLevel = 19.0
+            // Theme-aware canvas behind tiles, so the map still looks
+            // designed while tiles load (or fail to) on slow connections.
+            setBackgroundColor(android.graphics.Color.argb(
+                255,
+                (mapBackground.red * 255).toInt(),
+                (mapBackground.green * 255).toInt(),
+                (mapBackground.blue * 255).toInt(),
+            ))
             controller.setZoom(INITIAL_ZOOM)
             controller.setCenter(GeoPoint(state.startLatitude, state.startLongitude))
         }
@@ -458,7 +499,7 @@ private fun OsmMap(
                 if (fittedNetwork[0] !== network) {
                     fittedNetwork[0] = network
                     networkBoundingBox(network)?.let { box ->
-                        view.post { view.zoomToBoundingBox(box, false, 64) }
+                        view.post { view.zoomToBoundingBox(box, true, 96) }
                     }
                 }
             }

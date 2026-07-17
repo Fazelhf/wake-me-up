@@ -1,5 +1,12 @@
 package com.wakemethere.app.ui.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,10 +34,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -68,11 +77,21 @@ fun HomeScreen(
     val status by viewModel.trackingStatus.collectAsStateWithLifecycle()
     val idle = status is TrackingStatus.Idle
 
+    // One-shot entrance animation for the dashboard content.
+    val entered = remember { MutableTransitionState(false).apply { targetState = true } }
+
     Box(modifier = Modifier.fillMaxSize()) {
         AmbientBackground()
 
         Column(modifier = Modifier.fillMaxSize()) {
             GlassTopBar(onOpenSettings = onOpenSettings, onOpenHistory = onOpenHistory)
+
+            AnimatedVisibility(
+                visibleState = entered,
+                enter = fadeIn(tween(420)) + slideInVertically(tween(420)) { it / 10 },
+            ) {
+            Column {
+            GreetingCard()
 
             Column(
                 modifier = Modifier
@@ -83,12 +102,14 @@ fun HomeScreen(
                     is TrackingStatus.Tracking -> ArmedCard(
                         destination = current.destination,
                         distanceMeters = current.distanceMeters,
+                        startDistanceMeters = current.startDistanceMeters,
                         signalWeak = current.signalWeak,
                         onCancel = viewModel::cancelTracking,
                     )
                     is TrackingStatus.Alarming -> ArmedCard(
                         destination = current.destination,
                         distanceMeters = current.distanceMeters,
+                        startDistanceMeters = null,
                         signalWeak = false,
                         onCancel = viewModel::cancelTracking,
                     )
@@ -121,10 +142,13 @@ fun HomeScreen(
                                 armEnabled = idle,
                                 onArm = { viewModel.armFavorite(favorite) },
                                 onDelete = { viewModel.deleteFavorite(favorite) },
+                                modifier = Modifier.animateItem(),
                             )
                         }
                     }
                 }
+            }
+            }
             }
         }
 
@@ -144,6 +168,50 @@ fun HomeScreen(
                     text = stringResource(R.string.home_set_alarm),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
+                )
+            }
+        }
+    }
+}
+
+/** Greeting header: avatar, salam + creator credit — always visible on top. */
+@Composable
+private fun GreetingCard() {
+    GlassCard(
+        shape = RoundedCornerShape(24.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 10.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(46.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primaryContainer),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = stringResource(R.string.home_owner_initial),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+            Column(modifier = Modifier.padding(horizontal = 12.dp)) {
+                Text(
+                    text = stringResource(R.string.home_greeting),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    text = stringResource(R.string.settings_credit),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
@@ -195,6 +263,7 @@ private fun GlassTopBar(onOpenSettings: () -> Unit, onOpenHistory: () -> Unit) {
 private fun ArmedCard(
     destination: Destination,
     distanceMeters: Float?,
+    startDistanceMeters: Float?,
     signalWeak: Boolean,
     onCancel: () -> Unit,
 ) {
@@ -205,7 +274,7 @@ private fun ArmedCard(
         shape = RoundedCornerShape(32.dp),
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Column(modifier = Modifier.padding(20.dp)) {
+        Column(modifier = Modifier.padding(20.dp).animateContentSize(tween(320))) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
@@ -244,6 +313,20 @@ private fun ArmedCard(
                 }
             }
 
+            // Trip progress toward the destination (once both are known).
+            if (startDistanceMeters != null && distanceMeters != null && startDistanceMeters > 0f) {
+                val progress = (1f - distanceMeters / startDistanceMeters).coerceIn(0f, 1f)
+                Spacer(modifier = Modifier.height(14.dp))
+                LinearProgressIndicator(
+                    progress = { progress },
+                    trackColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp)
+                        .clip(CircleShape),
+                )
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -255,6 +338,7 @@ private fun ArmedCard(
                         distanceMeters != null -> formatDistance(context, distanceMeters)
                         else -> "—"
                     },
+                    animateValue = true,
                 )
                 StatTile(
                     modifier = Modifier.weight(1f),
@@ -299,6 +383,7 @@ private fun StatTile(
     valueColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurface,
     showLiveDot: Boolean = false,
     pulse: Float = 0f,
+    animateValue: Boolean = false,
 ) {
     Box(
         modifier = modifier.then(
@@ -327,11 +412,21 @@ private fun StatTile(
                     )
                     Spacer(modifier = Modifier.size(6.dp))
                 }
-                Text(
-                    text = value,
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = valueColor,
-                )
+                if (animateValue) {
+                    Crossfade(targetState = value, animationSpec = tween(350), label = "stat") { v ->
+                        Text(
+                            text = v,
+                            style = MaterialTheme.typography.headlineSmall,
+                            color = valueColor,
+                        )
+                    }
+                } else {
+                    Text(
+                        text = value,
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = valueColor,
+                    )
+                }
             }
         }
     }
@@ -344,8 +439,9 @@ private fun FavoriteRow(
     armEnabled: Boolean,
     onArm: () -> Unit,
     onDelete: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    GlassCard(shape = RoundedCornerShape(24.dp), modifier = Modifier.fillMaxWidth()) {
+    GlassCard(shape = RoundedCornerShape(24.dp), modifier = modifier.fillMaxWidth()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
