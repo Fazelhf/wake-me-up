@@ -168,8 +168,6 @@ fun MapScreen(
             // (and its taps swallowed) under the system bar.
             .statusBarsPadding(),
     ) {
-        ModeSwitcher(mode = state.mode, onModeChanged = viewModel::onModeChanged)
-
         if (state.mode == PickerMode.FREE) {
             SearchBar(state = state, viewModel = viewModel)
         }
@@ -180,20 +178,26 @@ fun MapScreen(
                 onMapTapped = viewModel::onMapTapped,
                 onStationTapped = viewModel::onStationTapped,
             )
-            if (!state.hasPin) {
-                Card(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(12.dp),
-                ) {
-                    Text(
-                        text = stringResource(
-                            if (state.mode == PickerMode.FREE) R.string.map_tap_hint
-                            else R.string.map_tap_station_hint
-                        ),
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                    )
+            // The switcher (and the hint) float pinned OVER the map, so they
+            // never move, shrink or slip under it while panning/zooming.
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .fillMaxWidth(),
+            ) {
+                ModeSwitcher(mode = state.mode, onModeChanged = viewModel::onModeChanged)
+                if (!state.hasPin) {
+                    Card(modifier = Modifier.padding(top = 2.dp)) {
+                        Text(
+                            text = stringResource(
+                                if (state.mode == PickerMode.FREE) R.string.map_tap_hint
+                                else R.string.map_tap_station_hint
+                            ),
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        )
+                    }
                 }
             }
         }

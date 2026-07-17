@@ -1,6 +1,6 @@
 {
  "version": 2,
- "source": "MohammadAmin-Andy/iran-public-transport tehran/bus/brt (ODbL)",
+ "source": "MohammadAmin-Andy/iran-public-transport tehran/bus/brt (ODbL); lines 3/7/10 hand-curated along the real corridors",
  "lines": [
   {
    "id": "1",
@@ -583,6 +583,288 @@
     [
      22,
      24
+    ]
+   ]
+  },
+  {
+   "id": "3",
+   "name": "بی‌آرتی ۳ (پایانه علم‌وصنعت – پایانه خاوران)",
+   "en": "BRT 3 (Elm-o-Sanat – Khavaran Terminal)",
+   "color": "#2E7D32",
+   "stations": [
+    {
+     "key": "Payaneh Elm-o-Sanat",
+     "name": "پایانه علم‌وصنعت",
+     "en": "Elm-o-Sanat Terminal",
+     "lat": 35.74,
+     "lon": 51.501
+    },
+    {
+     "key": "Golbarg",
+     "name": "گلبرگ",
+     "en": "Golbarg",
+     "lat": 35.728,
+     "lon": 51.478
+    },
+    {
+     "key": "Sabalan-Madani",
+     "name": "سبلان (مدنی)",
+     "en": "Sabalan (Madani)",
+     "lat": 35.718206,
+     "lon": 51.464657
+    },
+    {
+     "key": "Emam Hossein",
+     "name": "امام حسین (ع)",
+     "en": "Emam Hossein",
+     "lat": 35.702216,
+     "lon": 51.445721
+    },
+    {
+     "key": "Meydan-e Shohada",
+     "name": "میدان شهدا",
+     "en": "Shohada Square",
+     "lat": 35.690468,
+     "lon": 51.447574
+    },
+    {
+     "key": "Meydan-e Khorasan",
+     "name": "میدان خراسان",
+     "en": "Khorasan Square",
+     "lat": 35.664139,
+     "lon": 51.44515
+    },
+    {
+     "key": "Payaneh Khavaran",
+     "name": "پایانه خاوران",
+     "en": "Khavaran Terminal",
+     "lat": 35.6553,
+     "lon": 51.4667
+    }
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ]
+   ]
+  },
+  {
+   "id": "7",
+   "name": "بی‌آرتی ۷ (پایانه راه‌آهن – تجریش)",
+   "en": "BRT 7 (Rahahan – Tajrish)",
+   "color": "#EF6C00",
+   "stations": [
+    {
+     "key": "Payaneh Rahahan",
+     "name": "پایانه راه‌آهن",
+     "en": "Rahahan Terminal",
+     "lat": 35.65866,
+     "lon": 51.398344
+    },
+    {
+     "key": "Monirieh",
+     "name": "میدان منیریه",
+     "en": "Monirieh Square",
+     "lat": 35.6789,
+     "lon": 51.4013
+    },
+    {
+     "key": "Chaharah-e Vali asr",
+     "name": "چهار راه ولیعصر",
+     "en": "Chaharah-e Vali asr",
+     "lat": 35.701156,
+     "lon": 51.405342
+    },
+    {
+     "key": "Meydan-e Vali Asr",
+     "name": "میدان ولیعصر",
+     "en": "Vali Asr Square",
+     "lat": 35.712026,
+     "lon": 51.407869
+    },
+    {
+     "key": "Zartosht",
+     "name": "زرتشت",
+     "en": "Zartosht",
+     "lat": 35.7205,
+     "lon": 51.4082
+    },
+    {
+     "key": "Park-e Saei",
+     "name": "پارک ساعی",
+     "en": "Saei Park",
+     "lat": 35.736,
+     "lon": 51.4105
+    },
+    {
+     "key": "Meydan-e Vanak",
+     "name": "میدان ونک",
+     "en": "Vanak Square",
+     "lat": 35.757,
+     "lon": 51.41
+    },
+    {
+     "key": "Parkway",
+     "name": "پارک‌وی",
+     "en": "Parkway",
+     "lat": 35.7935,
+     "lon": 51.413
+    },
+    {
+     "key": "Tajrish",
+     "name": "میدان تجریش",
+     "en": "Tajrish Square",
+     "lat": 35.804649,
+     "lon": 51.433488
+    }
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ]
+   ]
+  },
+  {
+   "id": "10",
+   "name": "بی‌آرتی ۱۰ (پایانه آزادی – پایانه خاوران)",
+   "en": "BRT 10 (Azadi – Khavaran Terminal)",
+   "color": "#4527A0",
+   "stations": [
+    {
+     "key": "Payaneh Azadi",
+     "name": "پایانه آزادی",
+     "en": "Payaneh Azadi",
+     "lat": 35.7042,
+     "lon": 51.3352
+    },
+    {
+     "key": "Azadi",
+     "name": "آزادی",
+     "en": "Azadi",
+     "lat": 35.701162,
+     "lon": 51.333327
+    },
+    {
+     "key": "Meydan-e Ghazvin",
+     "name": "میدان قزوین",
+     "en": "Ghazvin Square",
+     "lat": 35.6748,
+     "lon": 51.3865
+    },
+    {
+     "key": "Meydan-e Gomrok",
+     "name": "میدان گمرک",
+     "en": "Gomrok Square",
+     "lat": 35.6738,
+     "lon": 51.4
+    },
+    {
+     "key": "Meydan-e Mohammadiyeh",
+     "name": "میدان محمدیه",
+     "en": "Mohammadiyeh Square",
+     "lat": 35.668233,
+     "lon": 51.416006
+    },
+    {
+     "key": "Meydan-e Shush",
+     "name": "میدان شوش",
+     "en": "Shush Square",
+     "lat": 35.657419,
+     "lon": 51.414134
+    },
+    {
+     "key": "Bozorgrah-e Besat",
+     "name": "بزرگراه بعثت",
+     "en": "Besat Expressway",
+     "lat": 35.656,
+     "lon": 51.446
+    },
+    {
+     "key": "Payaneh Khavaran",
+     "name": "پایانه خاوران",
+     "en": "Khavaran Terminal",
+     "lat": 35.6553,
+     "lon": 51.4667
+    }
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
     ]
    ]
   }

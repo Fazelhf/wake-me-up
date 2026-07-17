@@ -111,9 +111,17 @@ class RoutePlannerTest {
     @Test
     fun `every station is reachable from Tajrish`() {
         // Guards the generated data: no orphaned station in either network.
+        // Stations within walking range of the origin (e.g. the BRT line-7
+        // stop on Tajrish Square itself) need no ride at all, and plan()
+        // deliberately returns null for ride-less routes — exclude them.
+        val origin = planner.station("METRO:Tajrish")!!
+        val walkable = planner
+            .nearest(origin.latitude, origin.longitude, limit = 10, maxMeters = 400.0)
+            .map { it.first.id }
+            .toSet()
         val failures = planner.stations
-            .filter { it.id != "METRO:Tajrish" }
-            .filter { planner.plan("METRO:Tajrish", it.id) == null }
+            .filter { it.id != origin.id && it.id !in walkable }
+            .filter { planner.plan(origin.id, it.id) == null }
             .map { it.id }
         assertEquals(emptyList<String>(), failures)
     }

@@ -64,6 +64,7 @@ import com.wakemethere.app.ui.components.GlassCard
 import com.wakemethere.app.ui.components.ScreenMargin
 import com.wakemethere.app.ui.components.glassModifier
 import com.wakemethere.app.ui.components.rememberPulse
+import com.wakemethere.app.ui.components.successAccent
 import com.wakemethere.app.util.formatDistance
 
 /**
@@ -500,7 +501,7 @@ private fun ArmedCard(
                     modifier = Modifier.weight(1f),
                     label = stringResource(R.string.home_stat_status),
                     value = stringResource(R.string.home_stat_live),
-                    valueColor = MaterialTheme.colorScheme.tertiaryContainer,
+                    valueColor = successAccent(),
                     showLiveDot = true,
                     pulse = pulse,
                 )
@@ -544,7 +545,7 @@ private fun StatTile(
                             .size(8.dp)
                             .graphicsLayer { alpha = 0.4f + (1f - pulse) * 0.6f }
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.tertiaryContainer),
+                            .background(successAccent()),
                     )
                     Spacer(modifier = Modifier.size(6.dp))
                 }

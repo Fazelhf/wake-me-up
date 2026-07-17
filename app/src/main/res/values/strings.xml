@@ -171,8 +171,10 @@
     <string name="planner_summary_transfers">%1$d تعویض</string>
     <string name="planner_summary_no_transfer">بدون تعویض</string>
     <string name="planner_leg_stops">%1$d ایستگاه</string>
-    <string name="planner_transfer_at">تعویض خط در %1$s</string>
-    <string name="planner_walk_between">پیاده‌روی %1$s تا %2$s</string>
+    <string name="planner_transfer_detail">در ایستگاه %1$s از %2$s به %3$s تغییر خط بده</string>
+    <string name="planner_walk_detail">در %1$s پیاده شو و %2$s پیاده‌روی کن تا %3$s؛ سوار %4$s شو</string>
+    <string name="planner_filter_all">همه</string>
+    <string name="planner_filter_bus">اتوبوس (بی‌آرتی)</string>
     <string name="planner_walk_to_start">پیاده‌روی %1$s تا ایستگاه %2$s</string>
     <string name="planner_best_route">بهترین مسیر</string>
     <string name="planner_alt_route">مسیر جایگزین</string>

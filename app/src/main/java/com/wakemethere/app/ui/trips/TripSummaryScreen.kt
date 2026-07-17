@@ -49,7 +49,9 @@ import com.wakemethere.app.domain.model.Trip
 import com.wakemethere.app.ui.components.AmbientBackground
 import com.wakemethere.app.ui.components.GlassCard
 import com.wakemethere.app.ui.components.ScreenMargin
+import com.wakemethere.app.ui.components.arrivalAccent
 import com.wakemethere.app.ui.components.glassModifier
+import com.wakemethere.app.ui.components.successAccent
 
 /**
  * Trip Summary (Liquid Transit): the success state shown on arrival — a check,
@@ -88,7 +90,7 @@ fun TripSummaryScreen(
                 Icon(
                     Icons.Default.CheckCircle,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.tertiaryContainer,
+                    tint = successAccent(),
                     modifier = Modifier.size(40.dp),
                 )
             }
@@ -146,7 +148,7 @@ fun TripSummaryScreen(
                                         pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f)),
                                     )
                                 }
-                                TimelineDot(MaterialTheme.colorScheme.secondaryContainer)
+                                TimelineDot(arrivalAccent())
                             }
                             Column {
                                 TimeBlock(
@@ -301,7 +303,7 @@ private fun StatTile(
     modifier: Modifier = Modifier,
     highlight: Boolean = false,
 ) {
-    val color = if (highlight) MaterialTheme.colorScheme.tertiaryContainer else MaterialTheme.colorScheme.onSurface
+    val color = if (highlight) successAccent() else MaterialTheme.colorScheme.onSurface
     Box(
         modifier = modifier.then(
             glassModifier(

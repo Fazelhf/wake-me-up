@@ -68,6 +68,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.wakemethere.app.R
 import com.wakemethere.app.ui.components.AmbientBackground
 import com.wakemethere.app.ui.components.GlassCard
+import com.wakemethere.app.ui.components.successAccent
 
 /**
  * Permission Health dashboard (from the design prototype): every critical
@@ -276,7 +277,7 @@ fun PermissionHealthScreen(onBack: () -> Unit) {
                                     Icon(
                                         Icons.Default.CheckCircle,
                                         contentDescription = stringResource(R.string.perm_granted),
-                                        tint = MaterialTheme.colorScheme.tertiaryContainer,
+                                        tint = successAccent(),
                                         modifier = Modifier.size(24.dp),
                                     )
                                 }
