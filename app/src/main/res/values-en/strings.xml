@@ -126,6 +126,14 @@
     <string name="nav_trips">Trips</string>
     <string name="nav_settings">Settings</string>
 
+    <string name="health_title">Permission Health</string>
+    <string name="health_subtitle">Everything below must be green for the alarm to always fire on time.</string>
+    <string name="health_fix">Fix</string>
+    <string name="health_location_desc">Required for live trip tracking</string>
+    <string name="health_notifications_desc">Trip notification and the wake-up alarm</string>
+    <string name="health_fullscreen_desc">Instant wake-up over the lock screen</string>
+    <string name="health_battery_desc">Keeps background tracking from being killed</string>
+
     <!-- Misc -->
     <string name="distance_meters">%1$d m</string>
     <string name="distance_kilometers">%1$.1f km</string>

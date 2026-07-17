@@ -178,7 +178,7 @@ class TrackingService : LifecycleService() {
         if (decision.shouldTrigger) {
             fireAlarm(dest)
         } else {
-            stateHolder.update(TrackingStatus.Tracking(dest, lastDistanceMeters, signalWeak = false))
+            stateHolder.update(TrackingStatus.Tracking(dest, lastDistanceMeters, signalWeak = false, startDistanceMeters = tripStartDistance))
             updateNotification(buildTrackingNotification())
             // Adapt cadence to the remaining distance.
             restartLocationUpdates(intervalPolicy.intervalFor(lastDistanceMeters))
@@ -201,7 +201,7 @@ class TrackingService : LifecycleService() {
                 if (quiet != signalWeak) {
                     signalWeak = quiet
                     destination?.let { dest ->
-                        stateHolder.update(TrackingStatus.Tracking(dest, lastDistanceMeters, signalWeak))
+                        stateHolder.update(TrackingStatus.Tracking(dest, lastDistanceMeters, signalWeak, startDistanceMeters = tripStartDistance))
                         updateNotification(buildTrackingNotification())
                     }
                 }

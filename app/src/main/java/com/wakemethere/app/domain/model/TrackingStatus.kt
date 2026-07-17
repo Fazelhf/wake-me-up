@@ -21,6 +21,8 @@ sealed interface TrackingStatus {
         val destination: Destination,
         val distanceMeters: Float?,
         val signalWeak: Boolean = false,
+        /** Distance at the moment tracking started, for trip progress. */
+        val startDistanceMeters: Float? = null,
     ) : TrackingStatus
 
     /** The trigger radius was reached and the alarm is ringing. */

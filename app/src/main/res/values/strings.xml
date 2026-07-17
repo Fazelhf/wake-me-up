@@ -126,6 +126,14 @@
     <string name="nav_trips">سفرها</string>
     <string name="nav_settings">تنظیمات</string>
 
+    <string name="health_title">سلامت مجوزها</string>
+    <string name="health_subtitle">برای این‌که هشدار همیشه به‌موقع کار کند، همهٔ موارد زیر باید سبز باشند.</string>
+    <string name="health_fix">رفع</string>
+    <string name="health_location_desc">لازمهٔ ردیابی زندهٔ سفر</string>
+    <string name="health_notifications_desc">نمایش اعلان سفر و زنگ بیدارباش</string>
+    <string name="health_fullscreen_desc">بیدارکردن فوری روی صفحهٔ قفل</string>
+    <string name="health_battery_desc">جلوگیری از کشته‌شدن ردیابی در پس‌زمینه</string>
+
     <!-- Misc -->
     <string name="distance_meters">%1$d متر</string>
     <string name="distance_kilometers">%1$.1f کیلومتر</string>

@@ -27,6 +27,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -83,12 +84,14 @@ fun HomeScreen(
                     is TrackingStatus.Tracking -> ArmedCard(
                         destination = current.destination,
                         distanceMeters = current.distanceMeters,
+                        startDistanceMeters = current.startDistanceMeters,
                         signalWeak = current.signalWeak,
                         onCancel = viewModel::cancelTracking,
                     )
                     is TrackingStatus.Alarming -> ArmedCard(
                         destination = current.destination,
                         distanceMeters = current.distanceMeters,
+                        startDistanceMeters = null,
                         signalWeak = false,
                         onCancel = viewModel::cancelTracking,
                     )
@@ -195,6 +198,7 @@ private fun GlassTopBar(onOpenSettings: () -> Unit, onOpenHistory: () -> Unit) {
 private fun ArmedCard(
     destination: Destination,
     distanceMeters: Float?,
+    startDistanceMeters: Float?,
     signalWeak: Boolean,
     onCancel: () -> Unit,
 ) {
@@ -242,6 +246,20 @@ private fun ArmedCard(
                         )
                     }
                 }
+            }
+
+            // Trip progress toward the destination (once both are known).
+            if (startDistanceMeters != null && distanceMeters != null && startDistanceMeters > 0f) {
+                val progress = (1f - distanceMeters / startDistanceMeters).coerceIn(0f, 1f)
+                Spacer(modifier = Modifier.height(14.dp))
+                LinearProgressIndicator(
+                    progress = { progress },
+                    trackColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(8.dp)
+                        .clip(CircleShape),
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
