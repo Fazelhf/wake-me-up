@@ -1,6 +1,8 @@
 package com.wakemethere.app.ui.home
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -140,6 +142,7 @@ fun HomeScreen(
                                 armEnabled = idle,
                                 onArm = { viewModel.armFavorite(favorite) },
                                 onDelete = { viewModel.deleteFavorite(favorite) },
+                                modifier = Modifier.animateItem(),
                             )
                         }
                     }
@@ -271,7 +274,7 @@ private fun ArmedCard(
         shape = RoundedCornerShape(32.dp),
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Column(modifier = Modifier.padding(20.dp)) {
+        Column(modifier = Modifier.padding(20.dp).animateContentSize(tween(320))) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
@@ -335,6 +338,7 @@ private fun ArmedCard(
                         distanceMeters != null -> formatDistance(context, distanceMeters)
                         else -> "—"
                     },
+                    animateValue = true,
                 )
                 StatTile(
                     modifier = Modifier.weight(1f),
@@ -379,6 +383,7 @@ private fun StatTile(
     valueColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurface,
     showLiveDot: Boolean = false,
     pulse: Float = 0f,
+    animateValue: Boolean = false,
 ) {
     Box(
         modifier = modifier.then(
@@ -407,11 +412,21 @@ private fun StatTile(
                     )
                     Spacer(modifier = Modifier.size(6.dp))
                 }
-                Text(
-                    text = value,
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = valueColor,
-                )
+                if (animateValue) {
+                    Crossfade(targetState = value, animationSpec = tween(350), label = "stat") { v ->
+                        Text(
+                            text = v,
+                            style = MaterialTheme.typography.headlineSmall,
+                            color = valueColor,
+                        )
+                    }
+                } else {
+                    Text(
+                        text = value,
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = valueColor,
+                    )
+                }
             }
         }
     }
@@ -424,8 +439,9 @@ private fun FavoriteRow(
     armEnabled: Boolean,
     onArm: () -> Unit,
     onDelete: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    GlassCard(shape = RoundedCornerShape(24.dp), modifier = Modifier.fillMaxWidth()) {
+    GlassCard(shape = RoundedCornerShape(24.dp), modifier = modifier.fillMaxWidth()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),

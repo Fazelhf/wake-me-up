@@ -3,6 +3,9 @@ package com.wakemethere.app
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -33,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -260,29 +264,40 @@ private fun GlassBottomNav(
     ) {
         tabs.forEach { tab ->
             val selected = tab.route == currentRoute
+            // Animated selection: pill color, content tint and a gentle pop.
+            val pill by animateColorAsState(
+                if (selected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.9f)
+                else androidx.compose.ui.graphics.Color.Transparent,
+                animationSpec = tween(250), label = "pill",
+            )
+            val tint by animateColorAsState(
+                if (selected) MaterialTheme.colorScheme.onPrimaryContainer
+                else MaterialTheme.colorScheme.onSurfaceVariant,
+                animationSpec = tween(250), label = "tint",
+            )
+            val pop by animateFloatAsState(
+                if (selected) 1.08f else 1f,
+                animationSpec = spring(dampingRatio = 0.5f), label = "pop",
+            )
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
+                    .scale(pop)
                     .clip(RoundedCornerShape(20.dp))
-                    .background(
-                        if (selected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.9f)
-                        else androidx.compose.ui.graphics.Color.Transparent
-                    )
+                    .background(pill)
                     .clickable { onNavigate(tab.route) }
                     .padding(horizontal = 22.dp, vertical = 7.dp),
             ) {
                 Icon(
                     imageVector = tab.icon,
                     contentDescription = null,
-                    tint = if (selected) MaterialTheme.colorScheme.onPrimaryContainer
-                    else MaterialTheme.colorScheme.onSurfaceVariant,
+                    tint = tint,
                     modifier = Modifier.size(22.dp),
                 )
                 Text(
                     text = stringResource(tab.labelRes),
                     style = MaterialTheme.typography.labelMedium,
-                    color = if (selected) MaterialTheme.colorScheme.onPrimaryContainer
-                    else MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = tint,
                 )
             }
         }

@@ -8,6 +8,8 @@ import android.location.LocationManager
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -294,7 +296,11 @@ private fun BottomPanel(
         tonalElevation = 3.dp,
         shadowElevation = 12.dp,
     ) {
-        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 14.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 14.dp)
+                .animateContentSize(tween(260)),
+        ) {
             // Selected station header (transit modes).
             if (state.selectedStationId != null) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
