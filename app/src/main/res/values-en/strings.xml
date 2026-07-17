@@ -155,4 +155,27 @@
     <string name="distance_meters">%1$d m</string>
     <string name="distance_kilometers">%1$.1f km</string>
     <string name="back">Back</string>
+    <!-- Route planner -->
+    <string name="planner_title">Route planner</string>
+    <string name="planner_home_title">Find your route</string>
+    <string name="planner_home_sub">Suggested line, transfer stations, time and distance</string>
+    <string name="planner_origin">Origin</string>
+    <string name="planner_destination">Destination</string>
+    <string name="planner_my_location">My current location</string>
+    <string name="planner_choose_station">Choose a station</string>
+    <string name="planner_search_hint">Search stations…</string>
+    <string name="planner_find">Find route</string>
+    <string name="planner_no_route">No route found; check the origin and destination</string>
+    <string name="planner_location_error">Couldn\'t get your location; pick an origin station manually</string>
+    <string name="planner_summary_minutes">%1$d min</string>
+    <string name="planner_summary_transfers">%1$d transfers</string>
+    <string name="planner_summary_no_transfer">No transfers</string>
+    <string name="planner_leg_stops">%1$d stops</string>
+    <string name="planner_transfer_at">Change line at %1$s</string>
+    <string name="planner_walk_between">Walk %1$s to %2$s</string>
+    <string name="planner_walk_to_start">Walk %1$s to %2$s station</string>
+    <string name="planner_best_route">Best route</string>
+    <string name="planner_alt_route">Alternative route</string>
+    <string name="planner_arm_alarm">Wake-up alarm at destination</string>
+    <string name="planner_swap">Swap origin and destination</string>
 </resources>

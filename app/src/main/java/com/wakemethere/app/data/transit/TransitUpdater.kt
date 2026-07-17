@@ -94,16 +94,24 @@ class TransitUpdater @Inject constructor(
                 val role = member.optString("role")
                 if (role.isNotEmpty() && !role.startsWith("stop")) continue
                 val node = nodes[member.getLong("ref")] ?: continue
-                val name = node.optJSONObject("tags")?.optString("name").orEmpty()
+                val nodeTags = node.optJSONObject("tags")
+                val name = nodeTags?.optString("name").orEmpty()
                 if (name.isBlank() || !seen.add(name)) continue
+                val nameEn = nodeTags?.optString("name:en").orEmpty()
                 stations.put(
                     JSONObject()
+                        // Shared v2 key so transfer stations link across
+                        // lines (routing); prefer the English name — the
+                        // same convention the bundled assets use.
+                        .put("key", nameEn.ifBlank { name })
                         .put("name", name)
+                        .put("en", nameEn.ifBlank { null })
                         .put("lat", node.getDouble("lat"))
                         .put("lon", node.getDouble("lon"))
                 )
             }
             if (stations.length() < 2) continue
+            val edges = consecutiveEdges(stations)
 
             val color = tags.optString("colour").takeIf { it.startsWith("#") }
                 ?: colors?.get(ref)
@@ -113,6 +121,7 @@ class TransitUpdater @Inject constructor(
                 .put("name", tags.optString("name", ref))
                 .put("color", color)
                 .put("stations", stations)
+                .put("edges", edges)
 
             val existing = best[ref]
             if (existing == null ||
@@ -124,9 +133,30 @@ class TransitUpdater @Inject constructor(
         return JSONArray(best.values.toList())
     }
 
+    /**
+     * Track edges from the relation's stop order, skipping implausible
+     * >4 km jumps (a partial or badly ordered OSM relation).
+     */
+    private fun consecutiveEdges(stations: JSONArray): JSONArray {
+        val edges = JSONArray()
+        for (j in 1 until stations.length()) {
+            val a = stations.getJSONObject(j - 1)
+            val b = stations.getJSONObject(j)
+            val d = TransitParser.distanceMeters(
+                a.getDouble("lat"), a.getDouble("lon"),
+                b.getDouble("lat"), b.getDouble("lon"),
+            )
+            if (d <= 4_000.0) {
+                edges.put(JSONArray().put(j - 1).put(j))
+            }
+        }
+        return edges
+    }
+
     private fun save(system: TransitSystem, lines: JSONArray): Int {
         val root = JSONObject()
             .put("note", "Exact data from OpenStreetMap, fetched in-app.")
+            .put("version", 2)
             .put("lines", lines)
         val dir = File(context.filesDir, "transit").apply { mkdirs() }
         val name = when (system) {

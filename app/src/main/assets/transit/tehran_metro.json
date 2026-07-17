@@ -1,679 +1,1907 @@
 {
-  "note": "Approximate station coordinates; shared interchange squares are street-verified. Run tools/fetch_stations.py on a machine with internet to overwrite with exact OpenStreetMap data.",
-  "lines": [
+ "version": 2,
+ "source": "mostafa-kheibary/tehran-metro-data (ISC)",
+ "lines": [
+  {
+   "id": "1",
+   "name": "خط ۱",
+   "en": "Line 1",
+   "color": "#E0001F",
+   "stations": [
     {
-      "id": "1",
-      "name": "خط ۱",
-      "color": "#E0001B",
-      "stations": [
-        {
-          "name": "تجریش",
-          "lat": 35.8045,
-          "lon": 51.4258
-        },
-        {
-          "name": "قیطریه",
-          "lat": 35.794,
-          "lon": 51.437
-        },
-        {
-          "name": "شهید صدر",
-          "lat": 35.782,
-          "lon": 51.437
-        },
-        {
-          "name": "قلهک",
-          "lat": 35.771,
-          "lon": 51.44
-        },
-        {
-          "name": "دکتر شریعتی",
-          "lat": 35.759,
-          "lon": 51.437
-        },
-        {
-          "name": "میرداماد",
-          "lat": 35.752,
-          "lon": 51.435
-        },
-        {
-          "name": "شهید حقانی",
-          "lat": 35.744,
-          "lon": 51.431
-        },
-        {
-          "name": "شهید همت",
-          "lat": 35.734,
-          "lon": 51.43
-        },
-        {
-          "name": "مصلی امام خمینی",
-          "lat": 35.726,
-          "lon": 51.428
-        },
-        {
-          "name": "شهید بهشتی",
-          "lat": 35.7245,
-          "lon": 51.43
-        },
-        {
-          "name": "شهید مفتح",
-          "lat": 35.715,
-          "lon": 51.428
-        },
-        {
-          "name": "هفت تیر",
-          "lat": 35.709,
-          "lon": 51.427
-        },
-        {
-          "name": "طالقانی",
-          "lat": 35.705,
-          "lon": 51.427
-        },
-        {
-          "name": "دروازه دولت",
-          "lat": 35.702,
-          "lon": 51.426
-        },
-        {
-          "name": "سعدی",
-          "lat": 35.694,
-          "lon": 51.425
-        },
-        {
-          "name": "امام خمینی",
-          "lat": 35.6872,
-          "lon": 51.42
-        },
-        {
-          "name": "پانزده خرداد",
-          "lat": 35.6812,
-          "lon": 51.4235
-        },
-        {
-          "name": "خیام",
-          "lat": 35.675,
-          "lon": 51.421
-        },
-        {
-          "name": "میدان محمدیه",
-          "lat": 35.669,
-          "lon": 51.4205
-        },
-        {
-          "name": "شوش",
-          "lat": 35.661,
-          "lon": 51.42
-        },
-        {
-          "name": "پایانه جنوب",
-          "lat": 35.652,
-          "lon": 51.421
-        },
-        {
-          "name": "شهید بخارایی",
-          "lat": 35.644,
-          "lon": 51.421
-        },
-        {
-          "name": "علی‌آباد",
-          "lat": 35.636,
-          "lon": 51.422
-        },
-        {
-          "name": "جوانمرد قصاب",
-          "lat": 35.626,
-          "lon": 51.424
-        },
-        {
-          "name": "شهر ری",
-          "lat": 35.612,
-          "lon": 51.426
-        },
-        {
-          "name": "پالایشگاه",
-          "lat": 35.596,
-          "lon": 51.421
-        },
-        {
-          "name": "شاهد - باقرشهر",
-          "lat": 35.574,
-          "lon": 51.406
-        },
-        {
-          "name": "حرم مطهر",
-          "lat": 35.548,
-          "lon": 51.368
-        },
-        {
-          "name": "کهریزک",
-          "lat": 35.525,
-          "lon": 51.362
-        }
-      ]
+     "key": "Tajrish",
+     "name": "تجریش",
+     "en": "Tajrish",
+     "lat": 35.804649,
+     "lon": 51.433488
     },
     {
-      "id": "2",
-      "name": "خط ۲",
-      "color": "#2F4389",
-      "stations": [
-        {
-          "name": "فرهنگسرا",
-          "lat": 35.7315,
-          "lon": 51.5305
-        },
-        {
-          "name": "شهید باقری",
-          "lat": 35.73,
-          "lon": 51.514
-        },
-        {
-          "name": "تهرانپارس",
-          "lat": 35.7285,
-          "lon": 51.499
-        },
-        {
-          "name": "سرسبز",
-          "lat": 35.727,
-          "lon": 51.489
-        },
-        {
-          "name": "علم و صنعت",
-          "lat": 35.7258,
-          "lon": 51.4785
-        },
-        {
-          "name": "شهید مدنی",
-          "lat": 35.722,
-          "lon": 51.468
-        },
-        {
-          "name": "سبلان",
-          "lat": 35.72,
-          "lon": 51.458
-        },
-        {
-          "name": "فدک",
-          "lat": 35.718,
-          "lon": 51.448
-        },
-        {
-          "name": "امام حسین",
-          "lat": 35.7016,
-          "lon": 51.4459
-        },
-        {
-          "name": "دروازه شمیران",
-          "lat": 35.6975,
-          "lon": 51.4355
-        },
-        {
-          "name": "بهارستان",
-          "lat": 35.693,
-          "lon": 51.428
-        },
-        {
-          "name": "ملت",
-          "lat": 35.69,
-          "lon": 51.421
-        },
-        {
-          "name": "امام خمینی",
-          "lat": 35.6872,
-          "lon": 51.42
-        },
-        {
-          "name": "حسن‌آباد",
-          "lat": 35.687,
-          "lon": 51.414
-        },
-        {
-          "name": "میدان حر",
-          "lat": 35.688,
-          "lon": 51.4
-        },
-        {
-          "name": "شهید نواب صفوی",
-          "lat": 35.691,
-          "lon": 51.386
-        },
-        {
-          "name": "شادمان",
-          "lat": 35.6975,
-          "lon": 51.371
-        },
-        {
-          "name": "دانشگاه شریف",
-          "lat": 35.7025,
-          "lon": 51.3585
-        },
-        {
-          "name": "طرشت",
-          "lat": 35.707,
-          "lon": 51.35
-        },
-        {
-          "name": "صادقیه",
-          "lat": 35.7176,
-          "lon": 51.3353
-        }
-      ]
+     "key": "Gheytariyeh",
+     "name": "قیطریه",
+     "en": "Gheytariyeh",
+     "lat": 35.793045,
+     "lon": 51.435008
     },
     {
-      "id": "3",
-      "name": "خط ۳",
-      "color": "#0098D8",
-      "stations": [
-        {
-          "name": "قائم",
-          "lat": 35.7935,
-          "lon": 51.481
-        },
-        {
-          "name": "شهید محلاتی",
-          "lat": 35.782,
-          "lon": 51.475
-        },
-        {
-          "name": "اقدسیه",
-          "lat": 35.787,
-          "lon": 51.47
-        },
-        {
-          "name": "نوبنیاد",
-          "lat": 35.7925,
-          "lon": 51.462
-        },
-        {
-          "name": "حسین‌آباد",
-          "lat": 35.78,
-          "lon": 51.46
-        },
-        {
-          "name": "هروی",
-          "lat": 35.771,
-          "lon": 51.463
-        },
-        {
-          "name": "شهید زین‌الدین",
-          "lat": 35.761,
-          "lon": 51.463
-        },
-        {
-          "name": "شهید صیاد شیرازی",
-          "lat": 35.75,
-          "lon": 51.456
-        },
-        {
-          "name": "شهید قدوسی",
-          "lat": 35.737,
-          "lon": 51.444
-        },
-        {
-          "name": "سهروردی",
-          "lat": 35.729,
-          "lon": 51.436
-        },
-        {
-          "name": "شهید بهشتی",
-          "lat": 35.7245,
-          "lon": 51.43
-        },
-        {
-          "name": "میرزای شیرازی",
-          "lat": 35.718,
-          "lon": 51.418
-        },
-        {
-          "name": "میدان جهاد",
-          "lat": 35.715,
-          "lon": 51.41
-        },
-        {
-          "name": "میدان ولیعصر",
-          "lat": 35.7112,
-          "lon": 51.4072
-        },
-        {
-          "name": "تئاتر شهر",
-          "lat": 35.701,
-          "lon": 51.406
-        },
-        {
-          "name": "منیریه",
-          "lat": 35.685,
-          "lon": 51.405
-        },
-        {
-          "name": "مهدیه",
-          "lat": 35.674,
-          "lon": 51.404
-        },
-        {
-          "name": "راه‌آهن",
-          "lat": 35.6605,
-          "lon": 51.4065
-        },
-        {
-          "name": "جوادیه",
-          "lat": 35.653,
-          "lon": 51.4
-        },
-        {
-          "name": "زمزم",
-          "lat": 35.648,
-          "lon": 51.389
-        },
-        {
-          "name": "شهرک شریعتی",
-          "lat": 35.642,
-          "lon": 51.376
-        },
-        {
-          "name": "عبدل‌آباد",
-          "lat": 35.637,
-          "lon": 51.364
-        },
-        {
-          "name": "نعمت‌آباد",
-          "lat": 35.633,
-          "lon": 51.35
-        },
-        {
-          "name": "آزادگان",
-          "lat": 35.627,
-          "lon": 51.336
-        }
-      ]
+     "key": "Shahid Sadr",
+     "name": "شهید صدر",
+     "en": "Shahid Sadr",
+     "lat": 35.785173,
+     "lon": 51.435842
     },
     {
-      "id": "4",
-      "name": "خط ۴",
-      "color": "#F9A825",
-      "stations": [
-        {
-          "name": "شهید کلاهدوز",
-          "lat": 35.7005,
-          "lon": 51.5115
-        },
-        {
-          "name": "نیروی هوایی",
-          "lat": 35.702,
-          "lon": 51.5
-        },
-        {
-          "name": "نبرد",
-          "lat": 35.699,
-          "lon": 51.4895
-        },
-        {
-          "name": "پیروزی",
-          "lat": 35.699,
-          "lon": 51.48
-        },
-        {
-          "name": "ابن‌سینا",
-          "lat": 35.7,
-          "lon": 51.47
-        },
-        {
-          "name": "میدان شهدا",
-          "lat": 35.6963,
-          "lon": 51.4478
-        },
-        {
-          "name": "دروازه شمیران",
-          "lat": 35.6975,
-          "lon": 51.4355
-        },
-        {
-          "name": "دروازه دولت",
-          "lat": 35.702,
-          "lon": 51.426
-        },
-        {
-          "name": "فردوسی",
-          "lat": 35.7016,
-          "lon": 51.4185
-        },
-        {
-          "name": "تئاتر شهر",
-          "lat": 35.701,
-          "lon": 51.406
-        },
-        {
-          "name": "میدان انقلاب",
-          "lat": 35.7008,
-          "lon": 51.3945
-        },
-        {
-          "name": "توحید",
-          "lat": 35.7005,
-          "lon": 51.378
-        },
-        {
-          "name": "شادمان",
-          "lat": 35.6975,
-          "lon": 51.371
-        },
-        {
-          "name": "دکتر حبیب‌الله",
-          "lat": 35.6975,
-          "lon": 51.363
-        },
-        {
-          "name": "استاد معین",
-          "lat": 35.699,
-          "lon": 51.353
-        },
-        {
-          "name": "میدان آزادی",
-          "lat": 35.6997,
-          "lon": 51.3379
-        },
-        {
-          "name": "بیمه",
-          "lat": 35.699,
-          "lon": 51.329
-        },
-        {
-          "name": "شهرک اکباتان",
-          "lat": 35.7045,
-          "lon": 51.3095
-        },
-        {
-          "name": "ارم سبز",
-          "lat": 35.71,
-          "lon": 51.298
-        },
-        {
-          "name": "علامه جعفری",
-          "lat": 35.712,
-          "lon": 51.288
-        },
-        {
-          "name": "پایانه ۱ و ۲ فرودگاه مهرآباد",
-          "lat": 35.692,
-          "lon": 51.327
-        },
-        {
-          "name": "پایانه ۴ و ۶ فرودگاه مهرآباد",
-          "lat": 35.69,
-          "lon": 51.32
-        }
-      ]
+     "key": "Qolhak",
+     "name": "قلهک",
+     "en": "Qolhak",
+     "lat": 35.772803,
+     "lon": 51.437948
     },
     {
-      "id": "5",
-      "name": "خط ۵",
-      "color": "#00A651",
-      "stations": [
-        {
-          "name": "صادقیه",
-          "lat": 35.7176,
-          "lon": 51.3353
-        },
-        {
-          "name": "ارم سبز",
-          "lat": 35.71,
-          "lon": 51.298
-        },
-        {
-          "name": "ورزشگاه آزادی",
-          "lat": 35.723,
-          "lon": 51.272
-        },
-        {
-          "name": "چیتگر",
-          "lat": 35.7255,
-          "lon": 51.2445
-        },
-        {
-          "name": "ایران خودرو",
-          "lat": 35.736,
-          "lon": 51.208
-        },
-        {
-          "name": "وردآورد",
-          "lat": 35.744,
-          "lon": 51.17
-        },
-        {
-          "name": "گرمدره",
-          "lat": 35.755,
-          "lon": 51.062
-        },
-        {
-          "name": "اتمسفر",
-          "lat": 35.771,
-          "lon": 51.005
-        },
-        {
-          "name": "کرج",
-          "lat": 35.813,
-          "lon": 50.968
-        },
-        {
-          "name": "گلشهر",
-          "lat": 35.825,
-          "lon": 50.935
-        }
-      ]
+     "key": "Doctor Shariati",
+     "name": "دکتر شریعتی",
+     "en": "Doctor Shariati",
+     "lat": 35.762679,
+     "lon": 51.444242
     },
     {
-      "id": "6",
-      "name": "خط ۶",
-      "color": "#E5097F",
-      "stations": [
-        {
-          "name": "دولت‌آباد",
-          "lat": 35.635,
-          "lon": 51.464
-        },
-        {
-          "name": "میدان خراسان",
-          "lat": 35.677,
-          "lon": 51.455
-        },
-        {
-          "name": "میدان شهدا",
-          "lat": 35.6963,
-          "lon": 51.4478
-        },
-        {
-          "name": "امام حسین",
-          "lat": 35.7016,
-          "lon": 51.4459
-        },
-        {
-          "name": "شهید اشرفی اصفهانی",
-          "lat": 35.747,
-          "lon": 51.308
-        },
-        {
-          "name": "شهران",
-          "lat": 35.762,
-          "lon": 51.278
-        }
-      ]
+     "key": "Mirdamad",
+     "name": "میرداماد",
+     "en": "Mirdamad",
+     "lat": 35.759826,
+     "lon": 51.433819
     },
     {
-      "id": "7",
-      "name": "خط ۷",
-      "color": "#7C2E8E",
-      "stations": [
-        {
-          "name": "ورزشگاه تختی",
-          "lat": 35.649,
-          "lon": 51.505
-        },
-        {
-          "name": "بسیج",
-          "lat": 35.663,
-          "lon": 51.497
-        },
-        {
-          "name": "آهنگ",
-          "lat": 35.653,
-          "lon": 51.478
-        },
-        {
-          "name": "میدان قیام",
-          "lat": 35.672,
-          "lon": 51.432
-        },
-        {
-          "name": "میدان محمدیه",
-          "lat": 35.669,
-          "lon": 51.4205
-        },
-        {
-          "name": "هلال احمر",
-          "lat": 35.67,
-          "lon": 51.398
-        },
-        {
-          "name": "بریانک",
-          "lat": 35.678,
-          "lon": 51.389
-        },
-        {
-          "name": "کمیل",
-          "lat": 35.684,
-          "lon": 51.385
-        },
-        {
-          "name": "شهید نواب صفوی",
-          "lat": 35.691,
-          "lon": 51.386
-        },
-        {
-          "name": "توحید",
-          "lat": 35.7005,
-          "lon": 51.378
-        },
-        {
-          "name": "تربیت مدرس",
-          "lat": 35.72,
-          "lon": 51.383
-        },
-        {
-          "name": "بوستان گفتگو",
-          "lat": 35.744,
-          "lon": 51.375
-        },
-        {
-          "name": "میدان صنعت",
-          "lat": 35.755,
-          "lon": 51.368
-        },
-        {
-          "name": "شهید دادمان",
-          "lat": 35.758,
-          "lon": 51.343
-        }
-      ]
+     "key": "Shahid Haghani",
+     "name": "شهید حقانی",
+     "en": "Shahid Haghani",
+     "lat": 35.756276,
+     "lon": 51.426616
+    },
+    {
+     "key": "Shahid Hemmat",
+     "name": "شهید همت",
+     "en": "Shahid Hemmat",
+     "lat": 35.748052,
+     "lon": 51.425992
+    },
+    {
+     "key": "Mosalla-ye Imam Khomeini",
+     "name": "مصلی امام خمینی",
+     "en": "Mosalla-ye Imam Khomeini",
+     "lat": 35.740463,
+     "lon": 51.427096
+    },
+    {
+     "key": "Shahid Beheshti",
+     "name": "شهید بهشتی",
+     "en": "Shahid Beheshti",
+     "lat": 35.730966,
+     "lon": 51.427073
+    },
+    {
+     "key": "Shahid Mofattah",
+     "name": "شهید مفتح",
+     "en": "Shahid Mofattah",
+     "lat": 35.72458,
+     "lon": 51.427837
+    },
+    {
+     "key": "Shohada-ye Haftom-e Tir",
+     "name": "شهدای هفتم تیر",
+     "en": "Shohada-ye Haftom-e Tir",
+     "lat": 35.715324,
+     "lon": 51.426272
+    },
+    {
+     "key": "Ayatollah Taleghani",
+     "name": "آیت‌الله طالقانی",
+     "en": "Ayatollah Taleghani",
+     "lat": 35.707454,
+     "lon": 51.425498
+    },
+    {
+     "key": "Darvazeh Dolat",
+     "name": "دروازه دولت",
+     "en": "Darvazeh Dolat",
+     "lat": 35.70178,
+     "lon": 51.42575
+    },
+    {
+     "key": "Sa'adi",
+     "name": "سعدی",
+     "en": "Sa'adi",
+     "lat": 35.693335,
+     "lon": 51.424539
+    },
+    {
+     "key": "Imam Khomeini",
+     "name": "امام خمینی",
+     "en": "Imam Khomeini",
+     "lat": 35.685525,
+     "lon": 51.419885
+    },
+    {
+     "key": "Panzdah-e Khordad",
+     "name": "پانزده خرداد",
+     "en": "Panzdah-e Khordad",
+     "lat": 35.678003,
+     "lon": 51.417534
+    },
+    {
+     "key": "Khayyam",
+     "name": "خیام",
+     "en": "Khayyam",
+     "lat": 35.6732,
+     "lon": 51.416903
+    },
+    {
+     "key": "Meydan-e Mohammadiyeh",
+     "name": "میدان محمدیه",
+     "en": "Meydan-e Mohammadiyeh",
+     "lat": 35.668233,
+     "lon": 51.416006
+    },
+    {
+     "key": "Shoush",
+     "name": "شوش",
+     "en": "Shoush",
+     "lat": 35.657419,
+     "lon": 51.414134
+    },
+    {
+     "key": "Payaneh Jonoub(Jonoub Terminal)",
+     "name": "پایانه جنوبی",
+     "en": "Payaneh Jonoub(Jonoub Terminal)",
+     "lat": 35.650762,
+     "lon": 51.416638
+    },
+    {
+     "key": "Shahid Bokharaei",
+     "name": "شهید بخارایی",
+     "en": "Shahid Bokharaei",
+     "lat": 35.640657,
+     "lon": 51.414943
+    },
+    {
+     "key": "Aliabad",
+     "name": "علی‌آباد",
+     "en": "Aliabad",
+     "lat": 35.629763,
+     "lon": 51.416111
+    },
+    {
+     "key": "Javanmard-e Ghassab",
+     "name": "جوانمرد قصاب",
+     "en": "Javanmard-e Ghassab",
+     "lat": 35.609933,
+     "lon": 51.419522
+    },
+    {
+     "key": "Shahr-e Rey",
+     "name": "شهر ری",
+     "en": "Shahr-e Rey",
+     "lat": 35.594728,
+     "lon": 51.422335
+    },
+    {
+     "key": "Palayeshgah",
+     "name": "پالایشگاه",
+     "en": "Palayeshgah",
+     "lat": 35.559744,
+     "lon": 51.399479
+    },
+    {
+     "key": "Shahed - BagherShahr",
+     "name": "شاهد - باقرشهر",
+     "en": "Shahed - BagherShahr",
+     "lat": 35.546992,
+     "lon": 51.38258
+    },
+    {
+     "key": "Namayeshgah-e Shahr-e Aftab",
+     "name": "نمایشگاه شهر آفتاب",
+     "en": "Namayeshgah-e Shahr-e Aftab",
+     "lat": 35.539874,
+     "lon": 51.349153
+    },
+    {
+     "key": "Vavan",
+     "name": "واوان",
+     "en": "Vavan",
+     "lat": 35.514507,
+     "lon": 51.30011
+    },
+    {
+     "key": "Emam Khomeini Airport",
+     "name": "فرودگاه امام خمینی",
+     "en": "Emam Khomeini Airport",
+     "lat": 35.406838,
+     "lon": 51.154227
+    },
+    {
+     "key": "Shahr-e Parand",
+     "name": "شهر پرند",
+     "en": "Shahr-e Parand",
+     "lat": 35.464413,
+     "lon": 50.976677
+    },
+    {
+     "key": "Holy Shrine of Imam Khomeini",
+     "name": "حرم مطهر امام خمینی",
+     "en": "Holy Shrine of Imam Khomeini",
+     "lat": 35.545185,
+     "lon": 51.373194
+    },
+    {
+     "key": "Kahrizak",
+     "name": "کهریزک",
+     "en": "Kahrizak",
+     "lat": 35.521558,
+     "lon": 51.369254
     }
-  ]
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ],
+    [
+     21,
+     22
+    ],
+    [
+     22,
+     23
+    ],
+    [
+     23,
+     24
+    ],
+    [
+     24,
+     25
+    ],
+    [
+     25,
+     26
+    ],
+    [
+     26,
+     27
+    ],
+    [
+     26,
+     31
+    ],
+    [
+     27,
+     28
+    ],
+    [
+     28,
+     29
+    ],
+    [
+     29,
+     30
+    ],
+    [
+     31,
+     32
+    ]
+   ]
+  },
+  {
+   "id": "2",
+   "name": "خط ۲",
+   "en": "Line 2",
+   "color": "#2F4389",
+   "stations": [
+    {
+     "key": "Farhangsara",
+     "name": "فرهنگسرا",
+     "en": "Farhangsara",
+     "lat": 35.730007,
+     "lon": 51.546895
+    },
+    {
+     "key": "Tehranpars",
+     "name": "تهرانپارس",
+     "en": "Tehranpars",
+     "lat": 35.731032,
+     "lon": 51.531745
+    },
+    {
+     "key": "Shahid Bagheri",
+     "name": "شهید باقری",
+     "en": "Shahid Bagheri",
+     "lat": 35.733108,
+     "lon": 51.516414
+    },
+    {
+     "key": "Daneshgah-e Elm-o San'at",
+     "name": "دانشگاه علم و صنعت",
+     "en": "Daneshgah-e Elm-o San'at",
+     "lat": 35.73461,
+     "lon": 51.505015
+    },
+    {
+     "key": "Sarsabz",
+     "name": "سرسبز",
+     "en": "Sarsabz",
+     "lat": 35.73532,
+     "lon": 51.494914
+    },
+    {
+     "key": "Janbazan",
+     "name": "جانبازان",
+     "en": "Janbazan",
+     "lat": 35.733424,
+     "lon": 51.484597
+    },
+    {
+     "key": "Fadak",
+     "name": "فدک",
+     "en": "Fadak",
+     "lat": 35.726541,
+     "lon": 51.475804
+    },
+    {
+     "key": "Sabalan",
+     "name": "سبلان",
+     "en": "Sabalan",
+     "lat": 35.718206,
+     "lon": 51.464657
+    },
+    {
+     "key": "Shahid Madani",
+     "name": "شهید مدنی",
+     "en": "Shahid Madani",
+     "lat": 35.709208,
+     "lon": 51.453373
+    },
+    {
+     "key": "Imam Hossein",
+     "name": "امام حسین",
+     "en": "Imam Hossein",
+     "lat": 35.702216,
+     "lon": 51.445721
+    },
+    {
+     "key": "Darvazeh Shemiran",
+     "name": "دروازه شمیران",
+     "en": "Darvazeh Shemiran",
+     "lat": 35.699086,
+     "lon": 51.4377
+    },
+    {
+     "key": "Baharistan",
+     "name": "بهارستان",
+     "en": "Baharistan",
+     "lat": 35.691913,
+     "lon": 51.432758
+    },
+    {
+     "key": "Mellat",
+     "name": "ملت",
+     "en": "Mellat",
+     "lat": 35.688484,
+     "lon": 51.426821
+    },
+    {
+     "key": "Imam Khomeini",
+     "name": "امام خمینی",
+     "en": "Imam Khomeini",
+     "lat": 35.685525,
+     "lon": 51.419885
+    },
+    {
+     "key": "Hasan Abad",
+     "name": "حسن آباد",
+     "en": "Hasan Abad",
+     "lat": 35.686415,
+     "lon": 51.410121
+    },
+    {
+     "key": "Daneshgah-e Imam Ali",
+     "name": "دانشگاه امام علی",
+     "en": "Daneshgah-e Imam Ali",
+     "lat": 35.687226,
+     "lon": 51.399424
+    },
+    {
+     "key": "Meydan-e Horr",
+     "name": "میدان حر",
+     "en": "Meydan-e Horr",
+     "lat": 35.690962,
+     "lon": 51.388447
+    },
+    {
+     "key": "Shahid Navab-e Safavi",
+     "name": "شهید نواب صفوی",
+     "en": "Shahid Navab-e Safavi",
+     "lat": 35.694462,
+     "lon": 51.379233
+    },
+    {
+     "key": "Shademan",
+     "name": "شادمان",
+     "en": "Shademan",
+     "lat": 35.700665,
+     "lon": 51.363505
+    },
+    {
+     "key": "Daneshgah-e Sharif",
+     "name": "دانشگاه شریف",
+     "en": "Daneshgah-e Sharif",
+     "lat": 35.705805,
+     "lon": 51.353633
+    },
+    {
+     "key": "Tarasht",
+     "name": "طرشت",
+     "en": "Tarasht",
+     "lat": 35.716168,
+     "lon": 51.343439
+    },
+    {
+     "key": "Tehran (Sadeghiyeh)",
+     "name": "تهران (صادقیه)",
+     "en": "Tehran (Sadeghiyeh)",
+     "lat": 35.717577,
+     "lon": 51.330962
+    }
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ]
+   ]
+  },
+  {
+   "id": "3",
+   "name": "خط ۳",
+   "en": "Line 3",
+   "color": "#67C5F5",
+   "stations": [
+    {
+     "key": "Qa'em",
+     "name": "قائم",
+     "en": "Qa'em",
+     "lat": 35.798769,
+     "lon": 51.520988
+    },
+    {
+     "key": "Shahid Mahallati",
+     "name": "شهید محلاتی",
+     "en": "Shahid Mahallati",
+     "lat": 35.797909,
+     "lon": 51.508173
+    },
+    {
+     "key": "Aghdasiyeh",
+     "name": "اقدسیه",
+     "en": "Aghdasiyeh",
+     "lat": 35.800364,
+     "lon": 51.483775
+    },
+    {
+     "key": "Nobonyad",
+     "name": "نوبنیاد",
+     "en": "Nobonyad",
+     "lat": 35.790716,
+     "lon": 51.478684
+    },
+    {
+     "key": "Hossein Abad",
+     "name": "حسین‌آباد",
+     "en": "Hossein Abad",
+     "lat": 35.778856,
+     "lon": 51.478771
+    },
+    {
+     "key": "Meydan-e Heravi",
+     "name": "میدان هروی",
+     "en": "Meydan-e Heravi",
+     "lat": 35.771865,
+     "lon": 51.473393
+    },
+    {
+     "key": "Shahid Zeynoddin",
+     "name": "شهید زین‌الدین",
+     "en": "Shahid Zeynoddin",
+     "lat": 35.760523,
+     "lon": 51.465489
+    },
+    {
+     "key": "Khajeh Abdollah-e Ansari",
+     "name": "خواجه عبدالله انصاری",
+     "en": "Khajeh Abdollah-e Ansari",
+     "lat": 35.743426,
+     "lon": 51.46347
+    },
+    {
+     "key": "Shahid Sayyad Shirazi",
+     "name": "شهید صیاد شیرازی",
+     "en": "Shahid Sayyad Shirazi",
+     "lat": 35.735361,
+     "lon": 51.458427
+    },
+    {
+     "key": "Shahid Ghodousi",
+     "name": "شهید قدوسی",
+     "en": "Shahid Ghodousi",
+     "lat": 35.731446,
+     "lon": 51.444375
+    },
+    {
+     "key": "Sohrevardi",
+     "name": "سهروردی",
+     "en": "Sohrevardi",
+     "lat": 35.731062,
+     "lon": 51.436984
+    },
+    {
+     "key": "Shahid Beheshti",
+     "name": "شهید بهشتی",
+     "en": "Shahid Beheshti",
+     "lat": 35.730966,
+     "lon": 51.427073
+    },
+    {
+     "key": "Mirza-ye Shirazi",
+     "name": "میرزا شیرازی",
+     "en": "Mirza-ye Shirazi",
+     "lat": 35.728102,
+     "lon": 51.417444
+    },
+    {
+     "key": "Meydan-e Jahad",
+     "name": "میدان جهاد",
+     "en": "Meydan-e Jahad",
+     "lat": 35.720601,
+     "lon": 51.408212
+    },
+    {
+     "key": "Meydan-e Hazrat Vali Asr",
+     "name": "میدان حضرت ولیعصر",
+     "en": "Meydan-e Hazrat Vali Asr",
+     "lat": 35.712026,
+     "lon": 51.407869
+    },
+    {
+     "key": "Teatr-e Shahr",
+     "name": "تئاتر شهر",
+     "en": "Teatr-e Shahr",
+     "lat": 35.701156,
+     "lon": 51.405342
+    },
+    {
+     "key": "Moniriyeh",
+     "name": "منیریه",
+     "en": "Moniriyeh",
+     "lat": 35.68108,
+     "lon": 51.40159
+    },
+    {
+     "key": "Mahdiyeh",
+     "name": "مهدیه",
+     "en": "Mahdiyeh",
+     "lat": 35.667066,
+     "lon": 51.39929
+    },
+    {
+     "key": "Rahahan",
+     "name": "راه آهن",
+     "en": "Rahahan",
+     "lat": 35.65866,
+     "lon": 51.398344
+    },
+    {
+     "key": "Javadiyeh",
+     "name": "جوادیه",
+     "en": "Javadiyeh",
+     "lat": 35.659116,
+     "lon": 51.388142
+    },
+    {
+     "key": "Zamzam",
+     "name": "زمزم",
+     "en": "Zamzam",
+     "lat": 35.652588,
+     "lon": 51.373299
+    },
+    {
+     "key": "Shahrak-e Shariaty",
+     "name": "شهرک شریعتی",
+     "en": "Shahrak-e Shariaty",
+     "lat": 35.644339,
+     "lon": 51.369277
+    },
+    {
+     "key": "Abdol Abad",
+     "name": "عبدل آباد",
+     "en": "Abdol Abad",
+     "lat": 35.638136,
+     "lon": 51.36016
+    },
+    {
+     "key": "Nemat Abad",
+     "name": "نعمت آباد",
+     "en": "Nemat Abad",
+     "lat": 35.633896,
+     "lon": 51.347082
+    },
+    {
+     "key": "Azadegan",
+     "name": "آزادگان",
+     "en": "Azadegan",
+     "lat": 35.627327,
+     "lon": 51.335491
+    }
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ],
+    [
+     21,
+     22
+    ],
+    [
+     22,
+     23
+    ],
+    [
+     23,
+     24
+    ]
+   ]
+  },
+  {
+   "id": "4",
+   "name": "خط ۴",
+   "en": "Line 4",
+   "color": "#F8E100",
+   "stations": [
+    {
+     "key": "Shahid Kolahdooz",
+     "name": "شهید کلاهدوز",
+     "en": "Shahid Kolahdooz",
+     "lat": 35.698259,
+     "lon": 51.499856
+    },
+    {
+     "key": "Nirou Havaei",
+     "name": "نیروهوایی",
+     "en": "Nirou Havaei",
+     "lat": 35.692937,
+     "lon": 51.488248
+    },
+    {
+     "key": "Nabard",
+     "name": "نبرد",
+     "en": "Nabard",
+     "lat": 35.691598,
+     "lon": 51.477463
+    },
+    {
+     "key": "Piroozi",
+     "name": "پیروزی",
+     "en": "Piroozi",
+     "lat": 35.691008,
+     "lon": 51.467918
+    },
+    {
+     "key": "Ebn-e Sina",
+     "name": "ابن سینا",
+     "en": "Ebn-e Sina",
+     "lat": 35.690643,
+     "lon": 51.456541
+    },
+    {
+     "key": "Meydan-e Shohada",
+     "name": "میدان شهدا",
+     "en": "Meydan-e Shohada",
+     "lat": 35.690468,
+     "lon": 51.447574
+    },
+    {
+     "key": "Darvazeh Shemiran",
+     "name": "دروازه شمیران",
+     "en": "Darvazeh Shemiran",
+     "lat": 35.699086,
+     "lon": 51.4377
+    },
+    {
+     "key": "Darvazeh Dolat",
+     "name": "دروازه دولت",
+     "en": "Darvazeh Dolat",
+     "lat": 35.70178,
+     "lon": 51.42575
+    },
+    {
+     "key": "Ferdowsi",
+     "name": "فردوسی",
+     "en": "Ferdowsi",
+     "lat": 35.701335,
+     "lon": 51.418507
+    },
+    {
+     "key": "Teatr-e Shahr",
+     "name": "تئاتر شهر",
+     "en": "Teatr-e Shahr",
+     "lat": 35.701156,
+     "lon": 51.405342
+    },
+    {
+     "key": "Meydan-e Enghelab-e Eslami",
+     "name": "میدان انقلاب اسلامی",
+     "en": "Meydan-e Enghelab-e Eslami",
+     "lat": 35.701188,
+     "lon": 51.389983
+    },
+    {
+     "key": "Towhid",
+     "name": "توحید",
+     "en": "Towhid",
+     "lat": 35.700853,
+     "lon": 51.378564
+    },
+    {
+     "key": "Shademan",
+     "name": "شادمان",
+     "en": "Shademan",
+     "lat": 35.700665,
+     "lon": 51.363505
+    },
+    {
+     "key": "Doctor Habibollah",
+     "name": "دکتر حبیب‌الله",
+     "en": "Doctor Habibollah",
+     "lat": 35.700689,
+     "lon": 51.356039
+    },
+    {
+     "key": "Ostad Mo'in",
+     "name": "استاد معین",
+     "en": "Ostad Mo'in",
+     "lat": 35.700121,
+     "lon": 51.34461
+    },
+    {
+     "key": "Meydan-e Azadi",
+     "name": "میدان آزادی",
+     "en": "Meydan-e Azadi",
+     "lat": 35.701162,
+     "lon": 51.333327
+    },
+    {
+     "key": "Bimeh",
+     "name": "بیمه",
+     "en": "Bimeh",
+     "lat": 35.699634,
+     "lon": 51.320203
+    },
+    {
+     "key": "Shahrak-e Ekbatan",
+     "name": "شهرک اکباتان",
+     "en": "Shahrak-e Ekbatan",
+     "lat": 35.705426,
+     "lon": 51.307651
+    },
+    {
+     "key": "Eram-e Sabz",
+     "name": "ارم سبز",
+     "en": "Eram-e Sabz",
+     "lat": 35.717797,
+     "lon": 51.30179
+    },
+    {
+     "key": "Allameh Jafari",
+     "name": "علامه جعفری",
+     "en": "Allameh Jafari",
+     "lat": 35.730719,
+     "lon": 51.307255
+    },
+    {
+     "key": "Ayatollah Kashani",
+     "name": "آیت‌الله کاشانی",
+     "en": "Ayatollah Kashani",
+     "lat": 35.74101,
+     "lon": 51.302598
+    },
+    {
+     "key": "Chaharbagh",
+     "name": "چهارباغ",
+     "en": "Chaharbagh",
+     "lat": 35.750653,
+     "lon": 51.304012
+    },
+    {
+     "key": "Mehrabad Airport Terminal 1&2",
+     "name": "پایانه ۱ و ۲ فرودگاه مهرآباد",
+     "en": "Mehrabad Airport Terminal 1&2",
+     "lat": 35.695824,
+     "lon": 51.324128
+    },
+    {
+     "key": "Mehrabad Airport Terminal 4&6",
+     "name": "پایانه ۴ و ۶ فرودگاه مهرآباد",
+     "en": "Mehrabad Airport Terminal 4&6",
+     "lat": 35.688655,
+     "lon": 51.331122
+    }
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     16,
+     22
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ],
+    [
+     22,
+     23
+    ]
+   ]
+  },
+  {
+   "id": "5",
+   "name": "خط ۵",
+   "en": "Line 5",
+   "color": "#007E46",
+   "stations": [
+    {
+     "key": "Tehran (Sadeghiyeh)",
+     "name": "تهران (صادقیه)",
+     "en": "Tehran (Sadeghiyeh)",
+     "lat": 35.717577,
+     "lon": 51.330962
+    },
+    {
+     "key": "Eram-e Sabz",
+     "name": "ارم سبز",
+     "en": "Eram-e Sabz",
+     "lat": 35.717797,
+     "lon": 51.30179
+    },
+    {
+     "key": "Varzeshgah-e Azadi",
+     "name": "ورزشگاه آزادی",
+     "en": "Varzeshgah-e Azadi",
+     "lat": 35.717235,
+     "lon": 51.284032
+    },
+    {
+     "key": "Chitgar",
+     "name": "چیتگر",
+     "en": "Chitgar",
+     "lat": 35.717052,
+     "lon": 51.243843
+    },
+    {
+     "key": "Iran Khodro",
+     "name": "ایران‌خودرو",
+     "en": "Iran Khodro",
+     "lat": 35.725609,
+     "lon": 51.196807
+    },
+    {
+     "key": "Vardavard",
+     "name": "وردآورد",
+     "en": "Vardavard",
+     "lat": 35.744358,
+     "lon": 51.151031
+    },
+    {
+     "key": "Garmdareh",
+     "name": "گرم‌دره",
+     "en": "Garmdareh",
+     "lat": 35.751037,
+     "lon": 51.081782
+    },
+    {
+     "key": "Atmosphere",
+     "name": "اتمسفر",
+     "en": "Atmosphere",
+     "lat": 35.766531,
+     "lon": 51.046565
+    },
+    {
+     "key": "Karaj",
+     "name": "کرج",
+     "en": "Karaj",
+     "lat": 35.78701,
+     "lon": 51.002705
+    },
+    {
+     "key": "Mohammadshahr",
+     "name": "محمدشهر",
+     "en": "Mohammadshahr",
+     "lat": 35.802094,
+     "lon": 50.964825
+    },
+    {
+     "key": "Golshahr",
+     "name": "گلشهر",
+     "en": "Golshahr",
+     "lat": 35.824879,
+     "lon": 50.933065
+    },
+    {
+     "key": "Shahid Sepahbod Qasem Soleimani",
+     "name": "شهید سپهبد قاسم سلیمانی",
+     "en": "Shahid Sepahbod Qasem Soleimani",
+     "lat": 35.959001,
+     "lon": 50.719115
+    }
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ]
+   ]
+  },
+  {
+   "id": "6",
+   "name": "خط ۶",
+   "en": "Line 6",
+   "color": "#EF639F",
+   "stations": [
+    {
+     "key": "Kouhsar",
+     "name": "کوهسار",
+     "en": "Kouhsar",
+     "lat": 35.770811,
+     "lon": 51.279148
+    },
+    {
+     "key": "Shohada-ye Kan",
+     "name": "شهدای کن",
+     "en": "Shohada-ye Kan",
+     "lat": 35.763503,
+     "lon": 51.283461
+    },
+    {
+     "key": "Shahran",
+     "name": "شهران",
+     "en": "Shahran",
+     "lat": 35.753953,
+     "lon": 51.288141
+    },
+    {
+     "key": "Shahr-e Ziba",
+     "name": "شهر زیبا",
+     "en": "Shahr-e Ziba",
+     "lat": 35.745684,
+     "lon": 51.294694
+    },
+    {
+     "key": "Ayatollah Kashani",
+     "name": "آیت‌الله کاشانی",
+     "en": "Ayatollah Kashani",
+     "lat": 35.74101,
+     "lon": 51.302598
+    },
+    {
+     "key": "Shahid Sattari",
+     "name": "شهید ستاری",
+     "en": "Shahid Sattari",
+     "lat": 35.736882,
+     "lon": 51.319948
+    },
+    {
+     "key": "Shahid Ashrafi Esfahani",
+     "name": "شهید اشرفی اصفهانی",
+     "en": "Shahid Ashrafi Esfahani",
+     "lat": 35.736001,
+     "lon": 51.331756
+    },
+    {
+     "key": "Yadegar-e Imam",
+     "name": "یادگار امام",
+     "en": "Yadegar-e Imam",
+     "lat": 35.734986,
+     "lon": 51.346161
+    },
+    {
+     "key": "Marzdaran",
+     "name": "مرزداران",
+     "en": "Marzdaran",
+     "lat": 35.734555,
+     "lon": 51.359461
+    },
+    {
+     "key": "Shahrak-e Azmayesh",
+     "name": "شهرک آزمایش",
+     "en": "Shahrak-e Azmayesh",
+     "lat": 35.731623,
+     "lon": 51.371338
+    },
+    {
+     "key": "Daneshgah-e Tarbiat Modarres",
+     "name": "دانشگاه تربیت مدرس",
+     "en": "Daneshgah-e Tarbiat Modarres",
+     "lat": 35.724137,
+     "lon": 51.381302
+    },
+    {
+     "key": "Karagar",
+     "name": "کارگر",
+     "en": "Karagar",
+     "lat": 35.714935,
+     "lon": 51.389576
+    },
+    {
+     "key": "Bustan-e Laleh",
+     "name": "بوستان لاله",
+     "en": "Bustan-e Laleh",
+     "lat": 35.708173,
+     "lon": 51.390847
+    },
+    {
+     "key": "Meydan-e Hazrat Vali Asr",
+     "name": "میدان حضرت ولیعصر",
+     "en": "Meydan-e Hazrat Vali Asr",
+     "lat": 35.712026,
+     "lon": 51.407869
+    },
+    {
+     "key": "Maryam-e Moghaddas",
+     "name": "مریم مقدس (س)",
+     "en": "Maryam-e Moghaddas",
+     "lat": 35.71543,
+     "lon": 51.414545
+    },
+    {
+     "key": "Shohada-ye Haftom-e Tir",
+     "name": "شهدای هفتم تیر",
+     "en": "Shohada-ye Haftom-e Tir",
+     "lat": 35.715324,
+     "lon": 51.426272
+    },
+    {
+     "key": "Bahar Shiraz (Khanevadeh Hospital)",
+     "name": "بهار شیراز (بیمارستان خانواده)",
+     "en": "Bahar Shiraz (Khanevadeh Hospital)",
+     "lat": 35.7122,
+     "lon": 51.4325
+    },
+    {
+     "key": "Sarbaz",
+     "name": "سرباز",
+     "en": "Sarbaz",
+     "lat": 35.708965,
+     "lon": 51.442825
+    },
+    {
+     "key": "Imam Hossein",
+     "name": "امام حسین",
+     "en": "Imam Hossein",
+     "lat": 35.702216,
+     "lon": 51.445721
+    },
+    {
+     "key": "Meydan-e Shohada",
+     "name": "میدان شهدا",
+     "en": "Meydan-e Shohada",
+     "lat": 35.690468,
+     "lon": 51.447574
+    },
+    {
+     "key": "Amirkabir",
+     "name": "امیرکبیر",
+     "en": "Amirkabir",
+     "lat": 35.68248,
+     "lon": 51.447023
+    },
+    {
+     "key": "Shohada-ye Hefdah-e Shahrivar",
+     "name": "شهدای هفده شهریور",
+     "en": "Shohada-ye Hefdah-e Shahrivar",
+     "lat": 35.668383,
+     "lon": 51.445417
+    },
+    {
+     "key": "Meydan-e Khorasan",
+     "name": "میدان خراسان",
+     "en": "Meydan-e Khorasan",
+     "lat": 35.664139,
+     "lon": 51.44515
+    },
+    {
+     "key": "Shahid Rezaei",
+     "name": "شهید رضایی",
+     "en": "Shahid Rezaei",
+     "lat": 35.652376,
+     "lon": 51.444717
+    },
+    {
+     "key": "Be'sat",
+     "name": "بعثت",
+     "en": "Be'sat",
+     "lat": 35.644726,
+     "lon": 51.444266
+    },
+    {
+     "key": "Kiyan Shahr",
+     "name": "کیان شهر",
+     "en": "Kiyan Shahr",
+     "lat": 35.632845,
+     "lon": 51.448599
+    },
+    {
+     "key": "Shohada-ye Dowlat Abad",
+     "name": "شهدای دولت‌آباد",
+     "en": "Shohada-ye Dowlat Abad",
+     "lat": 35.618896,
+     "lon": 51.464612
+    },
+    {
+     "key": "Cheshmeh Ali",
+     "name": "چشمه علی",
+     "en": "Cheshmeh Ali",
+     "lat": 35.6099,
+     "lon": 51.455
+    },
+    {
+     "key": "Ebn-e Babviyeh",
+     "name": "ابن بابویه",
+     "en": "Ebn-e Babviyeh",
+     "lat": 35.6037,
+     "lon": 51.4463
+    },
+    {
+     "key": "Meydan-e Hazrat-e Abdol Azim",
+     "name": "میدان حضرت عبدالعظیم",
+     "en": "Meydan-e Hazrat-e Abdol Azim",
+     "lat": 35.5935,
+     "lon": 51.4406
+    },
+    {
+     "key": "Haram-e Hazrat-e Abdol Azim",
+     "name": "حرم حضرت عبدالعظیم",
+     "en": "Haram-e Hazrat-e Abdol Azim",
+     "lat": 35.5916,
+     "lon": 51.4391
+    }
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ],
+    [
+     21,
+     22
+    ],
+    [
+     22,
+     23
+    ],
+    [
+     23,
+     24
+    ],
+    [
+     24,
+     25
+    ],
+    [
+     25,
+     26
+    ],
+    [
+     26,
+     27
+    ],
+    [
+     27,
+     28
+    ],
+    [
+     28,
+     29
+    ],
+    [
+     29,
+     30
+    ]
+   ]
+  },
+  {
+   "id": "7",
+   "name": "خط ۷",
+   "en": "Line 7",
+   "color": "#7F0B74",
+   "stations": [
+    {
+     "key": "Meydan-e Ketab",
+     "name": "میدان کتاب",
+     "en": "Meydan-e Ketab",
+     "lat": 35.777307,
+     "lon": 51.355488
+    },
+    {
+     "key": "Shahid Dadman",
+     "name": "شهید دادمان",
+     "en": "Shahid Dadman",
+     "lat": 35.767048,
+     "lon": 51.366129
+    },
+    {
+     "key": "Meydan-e San'at",
+     "name": "میدان صنعت",
+     "en": "Meydan-e San'at",
+     "lat": 35.754471,
+     "lon": 51.367396
+    },
+    {
+     "key": "Milad Tower",
+     "name": "برج میلاد",
+     "en": "Milad Tower",
+     "lat": 35.747707,
+     "lon": 51.378313
+    },
+    {
+     "key": "Boostan-e Goftegou",
+     "name": "بوستان گفتگو",
+     "en": "Boostan-e Goftegou",
+     "lat": 35.73256,
+     "lon": 51.382599
+    },
+    {
+     "key": "Daneshgah-e Tarbiat Modarres",
+     "name": "دانشگاه تربیت مدرس",
+     "en": "Daneshgah-e Tarbiat Modarres",
+     "lat": 35.724137,
+     "lon": 51.381302
+    },
+    {
+     "key": "Modafean-e Salamat",
+     "name": "مدافعان سلامت",
+     "en": "Modafean-e Salamat",
+     "lat": 35.706679,
+     "lon": 51.377344
+    },
+    {
+     "key": "Towhid",
+     "name": "توحید",
+     "en": "Towhid",
+     "lat": 35.700853,
+     "lon": 51.378564
+    },
+    {
+     "key": "Shahid Navab-e Safavi",
+     "name": "شهید نواب صفوی",
+     "en": "Shahid Navab-e Safavi",
+     "lat": 35.694462,
+     "lon": 51.379233
+    },
+    {
+     "key": "Roudaki",
+     "name": "رودکی",
+     "en": "Roudaki",
+     "lat": 35.687618,
+     "lon": 51.379088
+    },
+    {
+     "key": "Komeyl",
+     "name": "کمیل",
+     "en": "Komeyl",
+     "lat": 35.680503,
+     "lon": 51.379828
+    },
+    {
+     "key": "Beryanak",
+     "name": "بریانک",
+     "en": "Beryanak",
+     "lat": 35.673191,
+     "lon": 51.3808
+    },
+    {
+     "key": "Helal Ahmar",
+     "name": "هلال احمر",
+     "en": "Helal Ahmar",
+     "lat": 35.66801,
+     "lon": 51.387585
+    },
+    {
+     "key": "Mahdiyeh",
+     "name": "مهدیه",
+     "en": "Mahdiyeh",
+     "lat": 35.667066,
+     "lon": 51.39929
+    },
+    {
+     "key": "Meydan-e Mohammadiyeh",
+     "name": "میدان محمدیه",
+     "en": "Meydan-e Mohammadiyeh",
+     "lat": 35.668233,
+     "lon": 51.416006
+    },
+    {
+     "key": "Mowlavi",
+     "name": "مولوی",
+     "en": "Mowlavi",
+     "lat": 35.668182,
+     "lon": 51.416013
+    },
+    {
+     "key": "Meydan-e Giyam",
+     "name": "میدان قیام",
+     "en": "Meydan-e Giyam",
+     "lat": 35.670005,
+     "lon": 51.437324
+    },
+    {
+     "key": "Shohada-ye Hefdah-e Shahrivar",
+     "name": "شهدای هفده شهریور",
+     "en": "Shohada-ye Hefdah-e Shahrivar",
+     "lat": 35.668383,
+     "lon": 51.445417
+    },
+    {
+     "key": "Chehel Tan-e Doulab",
+     "name": "چهل تن دولاب",
+     "en": "Chehel Tan-e Doulab",
+     "lat": 35.667938,
+     "lon": 51.462569
+    },
+    {
+     "key": "Ahang",
+     "name": "آهنگ",
+     "en": "Ahang",
+     "lat": 35.669532,
+     "lon": 51.473829
+    },
+    {
+     "key": "Basij",
+     "name": "بسیج",
+     "en": "Basij",
+     "lat": 35.666748,
+     "lon": 51.490859
+    },
+    {
+     "key": "Varzeshgah-e Takhti",
+     "name": "ورزشگاه تختی",
+     "en": "Varzeshgah-e Takhti",
+     "lat": 35.670829,
+     "lon": 51.508352
+    }
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ]
+   ]
+  }
+ ]
 }

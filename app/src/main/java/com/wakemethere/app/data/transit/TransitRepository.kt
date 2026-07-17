@@ -34,13 +34,23 @@ class TransitRepository @Inject constructor(
                     TransitSystem.METRO -> "transit/tehran_metro.json"
                     TransitSystem.BRT -> "transit/tehran_brt.json"
                 }
-                // Prefer exact data downloaded in-app from OpenStreetMap
-                // (see TransitUpdater); fall back to the bundled asset.
+                // Prefer data downloaded in-app from OpenStreetMap (see
+                // TransitUpdater) — but only if its schema version is at
+                // least the bundled one, so an app update that ships richer
+                // data (v2: shared station keys + real track edges) is not
+                // shadowed by an older cached download.
                 val updated = java.io.File(context.filesDir, fileName)
-                val json = if (updated.isFile) {
-                    updated.readText()
-                } else {
+                val assetJson =
                     context.assets.open(fileName).bufferedReader().use { it.readText() }
+                val json = if (updated.isFile) {
+                    val fileJson = updated.readText()
+                    if (schemaVersion(fileJson) >= schemaVersion(assetJson)) {
+                        fileJson
+                    } else {
+                        assetJson
+                    }
+                } else {
+                    assetJson
                 }
                 TransitParser.parse(system, json)
             }
@@ -49,4 +59,7 @@ class TransitRepository @Inject constructor(
 
     /** Drops the in-memory cache after a data update. */
     suspend fun invalidate() = mutex.withLock { cache.clear() }
+
+    private fun schemaVersion(json: String): Int =
+        runCatching { org.json.JSONObject(json).optInt("version", 1) }.getOrDefault(0)
 }

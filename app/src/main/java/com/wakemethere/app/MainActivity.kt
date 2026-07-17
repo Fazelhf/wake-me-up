@@ -62,6 +62,7 @@ import com.wakemethere.app.service.TrackingStateHolder
 import com.wakemethere.app.ui.home.HomeScreen
 import com.wakemethere.app.ui.map.MapScreen
 import com.wakemethere.app.ui.onboarding.OnboardingScreen
+import com.wakemethere.app.ui.planner.RoutePlannerScreen
 import com.wakemethere.app.ui.settings.PermissionHealthScreen
 import com.wakemethere.app.ui.settings.SettingsScreen
 import com.wakemethere.app.ui.theme.WakeMeThereTheme
@@ -83,6 +84,7 @@ object Routes {
     const val SETTINGS = "settings"
     const val HISTORY = "history"
     const val HEALTH = "health"
+    const val PLANNER = "planner"
     const val SUMMARY = "summary" // summary/{tripId}
     fun summary(tripId: Long) = "summary/$tripId"
 }
@@ -209,6 +211,17 @@ class MainActivity : AppCompatActivity() {
                             onSetAlarm = { navController.navigate(Routes.MAP) },
                             onOpenSettings = { navController.navigate(Routes.SETTINGS) },
                             onOpenHistory = { navController.navigate(Routes.HISTORY) },
+                            onOpenPlanner = { navController.navigate(Routes.PLANNER) },
+                        )
+                    }
+                    composable(Routes.PLANNER) {
+                        RoutePlannerScreen(
+                            onBack = { navController.popBackStack() },
+                            onArmed = {
+                                navController.navigate(Routes.HOME) {
+                                    popUpTo(Routes.HOME) { inclusive = true }
+                                }
+                            },
                         )
                     }
                     composable(Routes.MAP) {
