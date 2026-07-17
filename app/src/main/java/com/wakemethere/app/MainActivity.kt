@@ -99,6 +99,10 @@ class MainViewModel @Inject constructor(
         .map { it.themeMode }
         .stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = ThemeMode.SYSTEM)
 
+    val isTracking = stateHolder.status
+        .map { it !is com.wakemethere.app.domain.model.TrackingStatus.Idle }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = false)
+
     val justCompletedTripId = stateHolder.justCompletedTripId
 
     fun consumeCompletedTrip() = stateHolder.consumeCompletedTrip()
@@ -216,8 +220,12 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                // Glass bottom navigation on the three main tabs.
-                if (currentRoute in setOf(Routes.HOME, Routes.HISTORY, Routes.SETTINGS)) {
+                // Glass bottom navigation on the three main tabs. Hidden on
+                // Home while tracking (the Stop capsule takes its place).
+                val isTracking by viewModel.isTracking.collectAsStateWithLifecycle()
+                if (currentRoute in setOf(Routes.HOME, Routes.HISTORY, Routes.SETTINGS) &&
+                    !(currentRoute == Routes.HOME && isTracking)
+                ) {
                     GlassBottomNav(
                         currentRoute = currentRoute,
                         modifier = Modifier.align(Alignment.BottomCenter),

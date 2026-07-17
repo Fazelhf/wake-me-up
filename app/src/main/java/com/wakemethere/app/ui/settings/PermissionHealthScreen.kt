@@ -12,6 +12,7 @@ import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,6 +52,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -206,7 +208,21 @@ fun PermissionHealthScreen(onBack: () -> Unit) {
                 )
 
                 items.forEach { item ->
-                    GlassCard(shape = RoundedCornerShape(22.dp), modifier = Modifier.fillMaxWidth()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(
+                                if (item.ok) MaterialTheme.colorScheme.surfaceContainerLowest.copy(alpha = 0.6f)
+                                else MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.25f)
+                            )
+                            .border(
+                                1.dp,
+                                if (item.ok) Color.White.copy(alpha = 0.4f)
+                                else MaterialTheme.colorScheme.error.copy(alpha = 0.2f),
+                                RoundedCornerShape(16.dp),
+                            ),
+                    ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.padding(16.dp),
@@ -246,12 +262,22 @@ fun PermissionHealthScreen(onBack: () -> Unit) {
                                 )
                             }
                             if (item.ok) {
-                                Icon(
-                                    Icons.Default.CheckCircle,
-                                    contentDescription = stringResource(R.string.perm_granted),
-                                    tint = MaterialTheme.colorScheme.tertiaryContainer,
-                                    modifier = Modifier.size(28.dp),
-                                )
+                                Box(
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .background(
+                                            MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.1f),
+                                            CircleShape,
+                                        ),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Icon(
+                                        Icons.Default.CheckCircle,
+                                        contentDescription = stringResource(R.string.perm_granted),
+                                        tint = MaterialTheme.colorScheme.tertiaryContainer,
+                                        modifier = Modifier.size(24.dp),
+                                    )
+                                }
                             } else {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Icon(

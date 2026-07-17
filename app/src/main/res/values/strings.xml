@@ -144,6 +144,9 @@
     <string name="settings_data_done">انجام شد! نقشه با دادهٔ دقیق به‌روز شد ✅</string>
     <string name="settings_data_failed">ناموفق — اتصال اینترنت را بررسی کن و دوباره تلاش کن</string>
 
+    <string name="home_stat_eta">زمان تقریبی</string>
+    <string name="home_minutes">%1$d دقیقه</string>
+
     <!-- Misc -->
     <string name="distance_meters">%1$d متر</string>
     <string name="distance_kilometers">%1$.1f کیلومتر</string>

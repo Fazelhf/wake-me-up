@@ -144,6 +144,9 @@
     <string name="settings_data_done">Done! The map now uses exact data ✅</string>
     <string name="settings_data_failed">Failed — check your connection and try again</string>
 
+    <string name="home_stat_eta">ETA</string>
+    <string name="home_minutes">%1$d min</string>
+
     <!-- Misc -->
     <string name="distance_meters">%1$d m</string>
     <string name="distance_kilometers">%1$.1f km</string>

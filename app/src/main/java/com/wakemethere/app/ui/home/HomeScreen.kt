@@ -91,13 +91,14 @@ fun HomeScreen(
                 enter = fadeIn(tween(420)) + slideInVertically(tween(420)) { it / 10 },
             ) {
             Column {
-            GreetingCard()
+            if (idle) GreetingCard() else DisabledModeSwitcher()
 
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = ScreenMargin),
             ) {
+                if (!idle) Spacer(modifier = Modifier.weight(1f))
                 when (val current = status) {
                     is TrackingStatus.Tracking -> ArmedCard(
                         destination = current.destination,
@@ -116,6 +117,10 @@ fun HomeScreen(
                     TrackingStatus.Idle -> Unit
                 }
 
+                if (!idle) {
+                    Spacer(modifier = Modifier.height(96.dp))
+                }
+                if (idle) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
@@ -147,8 +152,36 @@ fun HomeScreen(
                         }
                     }
                 }
+                }
             }
             }
+            }
+        }
+
+        // Floating pulsing "Stop Tracking" capsule (prototype: fixed above
+        // the bottom edge while tracking; bottom nav is hidden then).
+        if (!idle) {
+            val stopPulse = rememberPulse()
+            Button(
+                onClick = viewModel::cancelTracking,
+                shape = CircleShape,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.onError,
+                ),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 28.dp)
+                    .scale(1f + (1f - stopPulse) * 0.03f)
+                    .height(56.dp),
+            ) {
+                Icon(Icons.Default.Stop, contentDescription = null)
+                Spacer(modifier = Modifier.size(10.dp))
+                Text(
+                    text = stringResource(R.string.notif_stop_action),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold,
+                )
             }
         }
 
@@ -168,6 +201,49 @@ fun HomeScreen(
                     text = stringResource(R.string.home_set_alarm),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
+                )
+            }
+        }
+    }
+}
+
+/** The Metro/BRT/Anywhere switcher, shown disabled while tracking. */
+@Composable
+private fun DisabledModeSwitcher() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 10.dp)
+            .graphicsLayer { alpha = 0.5f }
+            .then(glassModifier(RoundedCornerShape(26.dp)))
+            .padding(6.dp),
+        horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp),
+    ) {
+        listOf(
+            Triple(true, Icons.Default.Navigation, R.string.map_mode_metro),
+            Triple(false, Icons.Default.Navigation, R.string.map_mode_brt),
+            Triple(false, Icons.Default.Navigation, R.string.map_mode_free),
+        ).forEach { (selected, _, labelRes) ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(
+                        if (selected) MaterialTheme.colorScheme.primaryContainer
+                        else androidx.compose.ui.graphics.Color.Transparent
+                    )
+                    .padding(vertical = 11.dp),
+            ) {
+                Text(
+                    text = stringResource(labelRes),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = if (selected) MaterialTheme.colorScheme.onPrimaryContainer
+                    else MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
                 )
             }
         }
@@ -280,6 +356,7 @@ private fun ArmedCard(
                     Text(
                         text = stringResource(R.string.home_armed_title).uppercase(),
                         style = MaterialTheme.typography.labelMedium,
+                        letterSpacing = androidx.compose.ui.unit.TextUnit(1.5f, androidx.compose.ui.unit.TextUnitType.Sp),
                         color = MaterialTheme.colorScheme.primary,
                     )
                     Text(
@@ -326,16 +403,30 @@ private fun ArmedCard(
                         .clip(CircleShape),
                 )
             }
+            if (distanceMeters != null) {
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = stringResource(
+                        R.string.home_armed_distance,
+                        formatDistance(context, distanceMeters),
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 StatTile(
                     modifier = Modifier.weight(1f),
-                    label = stringResource(R.string.home_stat_remaining),
+                    label = stringResource(R.string.home_stat_eta),
                     value = when {
                         signalWeak -> stringResource(R.string.home_stat_weak)
-                        distanceMeters != null -> formatDistance(context, distanceMeters)
+                        distanceMeters != null -> stringResource(
+                            R.string.home_minutes,
+                            (distanceMeters / 500f).toInt().coerceAtLeast(1),
+                        )
                         else -> "—"
                     },
                     animateValue = true,
@@ -350,26 +441,6 @@ private fun ArmedCard(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = onCancel,
-                shape = CircleShape,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.error,
-                    contentColor = MaterialTheme.colorScheme.onError,
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(52.dp),
-            ) {
-                Icon(Icons.Default.Stop, contentDescription = null)
-                Spacer(modifier = Modifier.size(8.dp))
-                Text(
-                    text = stringResource(R.string.home_cancel_tracking),
-                    fontWeight = FontWeight.Bold,
-                )
-            }
         }
     }
 }
