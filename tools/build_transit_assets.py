@@ -67,6 +67,61 @@ BRT_LINE_NAMES = {
 
 BRT_LINE_COLORS = {1: "#E0001F", 4: "#00AEEF"}
 
+# BRT lines missing from the source dataset, hand-curated along the real
+# corridors (major stops). A station dict either references an existing BRT
+# station ("key" only — shared keys become transfer stations), a metro
+# station at the same square ("metro"), or carries manual coordinates.
+MANUAL_BRT_LINES = [
+    {
+        "id": "3",
+        "fa_name": "بی‌آرتی ۳ (پایانه علم‌وصنعت – پایانه خاوران)",
+        "en_name": "BRT 3 (Elm-o-Sanat – Khavaran Terminal)",
+        "color": "#2E7D32",
+        "stations": [
+            {"key": "Payaneh Elm-o-Sanat", "fa": "پایانه علم‌وصنعت", "en": "Elm-o-Sanat Terminal", "coord": (35.7400, 51.5010)},
+            {"key": "Golbarg", "fa": "گلبرگ", "en": "Golbarg", "coord": (35.7280, 51.4780)},
+            {"key": "Sabalan-Madani", "fa": "سبلان (مدنی)", "en": "Sabalan (Madani)", "metro": "Sabalan"},
+            {"key": "Emam Hossein"},
+            {"key": "Meydan-e Shohada", "fa": "میدان شهدا", "en": "Shohada Square", "metro": "Meydan-e Shohada"},
+            {"key": "Meydan-e Khorasan", "fa": "میدان خراسان", "en": "Khorasan Square", "metro": "Meydan-e Khorasan"},
+            {"key": "Payaneh Khavaran", "fa": "پایانه خاوران", "en": "Khavaran Terminal", "coord": (35.6553, 51.4667)},
+        ],
+    },
+    {
+        "id": "7",
+        "fa_name": "بی‌آرتی ۷ (پایانه راه‌آهن – تجریش)",
+        "en_name": "BRT 7 (Rahahan – Tajrish)",
+        "color": "#EF6C00",
+        "stations": [
+            {"key": "Payaneh Rahahan", "fa": "پایانه راه‌آهن", "en": "Rahahan Terminal", "metro": "Rahahan"},
+            {"key": "Monirieh", "fa": "میدان منیریه", "en": "Monirieh Square", "coord": (35.6789, 51.4013)},
+            {"key": "Chaharah-e Vali asr"},
+            {"key": "Meydan-e Vali Asr", "fa": "میدان ولیعصر", "en": "Vali Asr Square", "metro": "Meydan-e Hazrat Vali Asr"},
+            {"key": "Zartosht", "fa": "زرتشت", "en": "Zartosht", "coord": (35.7205, 51.4082)},
+            {"key": "Park-e Saei", "fa": "پارک ساعی", "en": "Saei Park", "coord": (35.7360, 51.4105)},
+            {"key": "Meydan-e Vanak", "fa": "میدان ونک", "en": "Vanak Square", "coord": (35.7570, 51.4100)},
+            {"key": "Parkway", "fa": "پارک‌وی", "en": "Parkway", "coord": (35.7935, 51.4130)},
+            {"key": "Tajrish", "fa": "میدان تجریش", "en": "Tajrish Square", "metro": "Tajrish"},
+        ],
+    },
+    {
+        "id": "10",
+        "fa_name": "بی‌آرتی ۱۰ (پایانه آزادی – پایانه خاوران)",
+        "en_name": "BRT 10 (Azadi – Khavaran Terminal)",
+        "color": "#4527A0",
+        "stations": [
+            {"key": "Payaneh Azadi"},
+            {"key": "Azadi"},
+            {"key": "Meydan-e Ghazvin", "fa": "میدان قزوین", "en": "Ghazvin Square", "coord": (35.6748, 51.3865)},
+            {"key": "Meydan-e Gomrok", "fa": "میدان گمرک", "en": "Gomrok Square", "coord": (35.6738, 51.4000)},
+            {"key": "Meydan-e Mohammadiyeh", "fa": "میدان محمدیه", "en": "Mohammadiyeh Square", "metro": "Meydan-e Mohammadiyeh"},
+            {"key": "Meydan-e Shush", "fa": "میدان شوش", "en": "Shush Square", "metro": "Shoush"},
+            {"key": "Bozorgrah-e Besat", "fa": "بزرگراه بعثت", "en": "Besat Expressway", "coord": (35.6560, 51.4460)},
+            {"key": "Payaneh Khavaran", "fa": "پایانه خاوران", "en": "Khavaran Terminal", "coord": (35.6553, 51.4667)},
+        ],
+    },
+]
+
 # Typos in the source's relations, mapped to the real station keys
 # (None = drop the relation; the target does not exist in the dataset).
 BRT_RELATION_FIXES = {
@@ -293,13 +348,59 @@ def build_brt() -> dict:
     data = fix_brt_relations(load(SOURCES / "tehran_brt_stations.json"))
     metro = load(SOURCES / "tehran_metro_stations.json")
     coords = resolve_brt_coords(data, metro)
+
+    # Registry of every BRT station (source + hand-curated): key -> info.
+    # Shared keys across lines become transfer stations in the app.
+    registry = {
+        k: {
+            "fa": v["translations"]["fa"].strip(),
+            "en": k,
+            "coord": coords[k],
+        }
+        for k, v in data.items()
+    }
+
+    lines = [
+        make_line(data, line, BRT_LINE_NAMES[line], BRT_LINE_COLORS[line], coords)
+        for line in sorted(BRT_LINE_NAMES)
+    ]
+
+    for manual in MANUAL_BRT_LINES:
+        stations = []
+        for s in manual["stations"]:
+            key = s["key"]
+            if key not in registry:
+                if "metro" in s:
+                    coord = (metro[s["metro"]]["latitude"], metro[s["metro"]]["longitude"])
+                else:
+                    coord = s["coord"]
+                registry[key] = {"fa": s["fa"], "en": s.get("en", key), "coord": coord}
+            info = registry[key]
+            stations.append(
+                {
+                    "key": key,
+                    "name": info["fa"],
+                    "en": info["en"],
+                    "lat": round(info["coord"][0], 6),
+                    "lon": round(info["coord"][1], 6),
+                }
+            )
+        lines.append(
+            {
+                "id": manual["id"],
+                "name": manual["fa_name"],
+                "en": manual["en_name"],
+                "color": manual["color"],
+                "stations": stations,
+                "edges": [[i, i + 1] for i in range(len(stations) - 1)],
+            }
+        )
+
     return {
         "version": 2,
-        "source": "MohammadAmin-Andy/iran-public-transport tehran/bus/brt (ODbL)",
-        "lines": [
-            make_line(data, line, BRT_LINE_NAMES[line], BRT_LINE_COLORS[line], coords)
-            for line in sorted(BRT_LINE_NAMES)
-        ],
+        "source": "MohammadAmin-Andy/iran-public-transport tehran/bus/brt (ODbL); "
+                  "lines 3/7/10 hand-curated along the real corridors",
+        "lines": lines,
     }
 
 

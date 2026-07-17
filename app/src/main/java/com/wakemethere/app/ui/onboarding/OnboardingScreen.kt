@@ -74,6 +74,7 @@ import com.wakemethere.app.data.datastore.SettingsStore
 import com.wakemethere.app.ui.components.AmbientBackground
 import com.wakemethere.app.ui.components.GlassCard
 import com.wakemethere.app.ui.components.rememberPulse
+import com.wakemethere.app.ui.components.successAccent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -371,7 +372,7 @@ private fun OnboardPageContent(page: OnboardPage, granted: Boolean) {
                 Icon(
                     Icons.Default.CheckCircle,
                     contentDescription = stringResource(R.string.perm_granted),
-                    tint = MaterialTheme.colorScheme.tertiaryContainer,
+                    tint = successAccent(),
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .padding(28.dp)

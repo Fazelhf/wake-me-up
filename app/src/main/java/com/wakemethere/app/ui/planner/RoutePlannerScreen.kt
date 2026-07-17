@@ -32,6 +32,7 @@ import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Straighten
 import androidx.compose.material.icons.filled.Subway
+import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -389,7 +390,8 @@ private fun PlanCard(
             Spacer(modifier = Modifier.height(12.dp))
 
             if (originWalk != null && originWalk.meters > 30) {
-                WalkRow(
+                TransferRow(
+                    icon = Icons.Default.DirectionsWalk,
                     text = stringResource(
                         R.string.planner_walk_to_start,
                         formatDistance(context, originWalk.meters.toFloat()),
@@ -416,18 +418,31 @@ private fun PlanCard(
             }
             plan.legs.forEachIndexed { index, leg ->
                 transferBeforeLeg[index]?.let { t ->
+                    // Explicit change-line guidance: which station, from
+                    // which line to which line (localized line names come
+                    // from the adjacent legs).
+                    val fromLine = plan.legs[index - 1].let {
+                        if (english) it.lineNameEn ?: it.lineName else it.lineName
+                    }
+                    val toLine = if (english) leg.lineNameEn ?: leg.lineName else leg.lineName
                     Spacer(modifier = Modifier.height(10.dp))
-                    WalkRow(
+                    TransferRow(
+                        icon = if (t.isWalk) Icons.Default.DirectionsWalk
+                        else Icons.Default.SwapHoriz,
                         text = if (t.isWalk) {
                             stringResource(
-                                R.string.planner_walk_between,
+                                R.string.planner_walk_detail,
+                                t.fromStation.displayName(english),
                                 formatDistance(context, t.walkMeters.toFloat()),
                                 t.toStation.displayName(english),
+                                toLine,
                             )
                         } else {
                             stringResource(
-                                R.string.planner_transfer_at,
+                                R.string.planner_transfer_detail,
                                 t.fromStation.displayName(english),
+                                fromLine,
+                                toLine,
                             )
                         },
                     )
@@ -461,20 +476,68 @@ private fun PlanCard(
     }
 }
 
+/** Selectable pill for the picker's Metro/Bus filter. */
 @Composable
-private fun WalkRow(text: String) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+private fun SystemPill(
+    label: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector?,
+    tint: Color,
+    selected: Boolean,
+    onClick: () -> Unit,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .clip(CircleShape)
+            .background(
+                if (selected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.9f)
+                else MaterialTheme.colorScheme.surfaceContainerLowest.copy(alpha = 0.6f)
+            )
+            .clickable(onClick = onClick)
+            .padding(horizontal = 14.dp, vertical = 8.dp),
+    ) {
+        if (icon != null) {
+            Icon(
+                icon,
+                contentDescription = null,
+                tint = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else tint,
+                modifier = Modifier.size(16.dp),
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+        }
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.Bold,
+            color = if (selected) MaterialTheme.colorScheme.onPrimaryContainer
+            else MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1,
+        )
+    }
+}
+
+/** Highlighted guidance row for a transfer or a walking link. */
+@Composable
+private fun TransferRow(icon: androidx.compose.ui.graphics.vector.ImageVector, text: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(14.dp))
+            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f))
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+    ) {
         Icon(
-            Icons.Default.DirectionsWalk,
+            icon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(18.dp),
         )
         Spacer(modifier = Modifier.width(10.dp))
         Text(
             text = text,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontWeight = FontWeight.SemiBold,
         )
     }
 }
@@ -546,15 +609,15 @@ private fun StationPicker(
     onStation: (RoutePlanner.StationOption) -> Unit,
 ) {
     var query by remember { mutableStateOf("") }
-    val visible = remember(query, stations) {
+    // Which system to search in: null = both Metro and BRT buses.
+    var systemFilter by remember { mutableStateOf<TransitSystem?>(null) }
+    val visible = remember(query, stations, systemFilter) {
         val q = query.trim()
-        if (q.isEmpty()) {
-            stations
-        } else {
-            stations.filter {
-                it.name.contains(q, ignoreCase = true) ||
-                    (it.nameEn?.contains(q, ignoreCase = true) == true)
-            }
+        stations.filter { station ->
+            (systemFilter == null || station.system == systemFilter) &&
+                (q.isEmpty() ||
+                    station.name.contains(q, ignoreCase = true) ||
+                    (station.nameEn?.contains(q, ignoreCase = true) == true))
         }
     }
 
@@ -606,6 +669,37 @@ private fun StationPicker(
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
+            }
+
+            // What you're searching: everything, Metro, or BRT buses.
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 10.dp),
+            ) {
+                SystemPill(
+                    label = stringResource(R.string.planner_filter_all),
+                    icon = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    selected = systemFilter == null,
+                    onClick = { systemFilter = null },
+                )
+                SystemPill(
+                    label = stringResource(R.string.map_mode_metro),
+                    icon = Icons.Default.Subway,
+                    tint = Color(0xFF007AFF),
+                    selected = systemFilter == TransitSystem.METRO,
+                    onClick = { systemFilter = TransitSystem.METRO },
+                )
+                SystemPill(
+                    label = stringResource(R.string.planner_filter_bus),
+                    icon = Icons.Default.DirectionsBus,
+                    tint = Color(0xFFFF9500),
+                    selected = systemFilter == TransitSystem.BRT,
+                    onClick = { systemFilter = TransitSystem.BRT },
+                )
             }
 
             LazyColumn(

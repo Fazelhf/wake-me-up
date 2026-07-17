@@ -76,7 +76,21 @@ fun AmbientBackground(modifier: Modifier = Modifier) {
 
 /** True when the current color scheme is dark (by surface luminance). */
 @Composable
-private fun isDarkScheme(): Boolean = MaterialTheme.colorScheme.surface.luminance() < 0.5f
+fun isDarkScheme(): Boolean = MaterialTheme.colorScheme.surface.luminance() < 0.5f
+
+/**
+ * Green "success/on-time" accent that stays readable as a FOREGROUND color
+ * in both themes. (tertiaryContainer is a dark green in the dark scheme —
+ * fine as a background tint, invisible as text/icons on dark surfaces.)
+ */
+@Composable
+fun successAccent(): Color =
+    if (isDarkScheme()) Color(0xFF7ADF9B) else MaterialTheme.colorScheme.tertiaryContainer
+
+/** Orange "arrival" accent for timeline dots, readable in both themes. */
+@Composable
+fun arrivalAccent(): Color =
+    if (isDarkScheme()) Color(0xFFFFB77C) else MaterialTheme.colorScheme.secondaryContainer
 
 /**
  * A translucent glass surface. Use for cards, panels and pills. The tint and
@@ -93,8 +107,10 @@ fun glassModifier(
     } else {
         MaterialTheme.colorScheme.surfaceBright
     },
-    alpha: Float = if (isDarkScheme()) 0.55f else 0.72f,
-    borderColor: Color = Color.White.copy(alpha = if (isDarkScheme()) 0.12f else 0.6f),
+    // Dark glass is more opaque than light: text needs the extra contrast
+    // over the ambient gradients and (on the map screen) the tiles.
+    alpha: Float = if (isDarkScheme()) 0.78f else 0.72f,
+    borderColor: Color = Color.White.copy(alpha = if (isDarkScheme()) 0.16f else 0.6f),
 ): Modifier = Modifier
     .clip(shape)
     .background(color.copy(alpha = alpha), shape)

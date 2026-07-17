@@ -171,8 +171,10 @@
     <string name="planner_summary_transfers">%1$d transfers</string>
     <string name="planner_summary_no_transfer">No transfers</string>
     <string name="planner_leg_stops">%1$d stops</string>
-    <string name="planner_transfer_at">Change line at %1$s</string>
-    <string name="planner_walk_between">Walk %1$s to %2$s</string>
+    <string name="planner_transfer_detail">At %1$s station, change from %2$s to %3$s</string>
+    <string name="planner_walk_detail">Get off at %1$s, walk %2$s to %3$s and board %4$s</string>
+    <string name="planner_filter_all">All</string>
+    <string name="planner_filter_bus">Bus (BRT)</string>
     <string name="planner_walk_to_start">Walk %1$s to %2$s station</string>
     <string name="planner_best_route">Best route</string>
     <string name="planner_alt_route">Alternative route</string>
