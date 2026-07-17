@@ -147,6 +147,10 @@
     <string name="home_stat_eta">ETA</string>
     <string name="home_minutes">%1$d min</string>
 
+    <string name="history_search_hint">Search destinations…</string>
+    <string name="history_details">Details</string>
+    <string name="history_origin">Trip origin</string>
+
     <!-- Misc -->
     <string name="distance_meters">%1$d m</string>
     <string name="distance_kilometers">%1$.1f km</string>
