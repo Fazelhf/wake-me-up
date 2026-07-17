@@ -54,6 +54,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -207,6 +208,7 @@ fun PermissionHealthScreen(onBack: () -> Unit) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
 
+                val darkScheme = MaterialTheme.colorScheme.surface.luminance() < 0.5f
                 items.forEach { item ->
                     Box(
                         modifier = Modifier
@@ -218,7 +220,7 @@ fun PermissionHealthScreen(onBack: () -> Unit) {
                             )
                             .border(
                                 1.dp,
-                                if (item.ok) Color.White.copy(alpha = 0.4f)
+                                if (item.ok) Color.White.copy(alpha = if (darkScheme) 0.12f else 0.4f)
                                 else MaterialTheme.colorScheme.error.copy(alpha = 0.2f),
                                 RoundedCornerShape(16.dp),
                             ),
