@@ -155,4 +155,27 @@
     <string name="distance_meters">%1$d متر</string>
     <string name="distance_kilometers">%1$.1f کیلومتر</string>
     <string name="back">بازگشت</string>
+    <!-- Route planner -->
+    <string name="planner_title">مسیریابی</string>
+    <string name="planner_home_title">مسیرت را پیدا کن</string>
+    <string name="planner_home_sub">خط پیشنهادی، ایستگاه تعویض، زمان و مسافت</string>
+    <string name="planner_origin">مبدأ</string>
+    <string name="planner_destination">مقصد</string>
+    <string name="planner_my_location">موقعیت فعلی من</string>
+    <string name="planner_choose_station">انتخاب ایستگاه</string>
+    <string name="planner_search_hint">جست‌وجوی ایستگاه…</string>
+    <string name="planner_find">پیدا کردن مسیر</string>
+    <string name="planner_no_route">مسیری پیدا نشد؛ مبدأ و مقصد را بررسی کن</string>
+    <string name="planner_location_error">موقعیت پیدا نشد؛ ایستگاه مبدأ را دستی انتخاب کن</string>
+    <string name="planner_summary_minutes">%1$d دقیقه</string>
+    <string name="planner_summary_transfers">%1$d تعویض</string>
+    <string name="planner_summary_no_transfer">بدون تعویض</string>
+    <string name="planner_leg_stops">%1$d ایستگاه</string>
+    <string name="planner_transfer_at">تعویض خط در %1$s</string>
+    <string name="planner_walk_between">پیاده‌روی %1$s تا %2$s</string>
+    <string name="planner_walk_to_start">پیاده‌روی %1$s تا ایستگاه %2$s</string>
+    <string name="planner_best_route">بهترین مسیر</string>
+    <string name="planner_alt_route">مسیر جایگزین</string>
+    <string name="planner_arm_alarm">هشدار بیدارباش برای مقصد</string>
+    <string name="planner_swap">جابه‌جایی مبدأ و مقصد</string>
 </resources>

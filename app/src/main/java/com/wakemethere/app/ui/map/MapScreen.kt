@@ -565,12 +565,10 @@ private fun buildNetworkOverlay(
 ): FolderOverlay {
     val folder = FolderOverlay()
     for (line in network.lines) {
-        // Draw the line as segments, breaking wherever two consecutive
-        // stations are implausibly far apart — a straight line across half
-        // the city (bad data or a partial line) looks broken on the map.
-        for (segment in splitIntoSegments(line.stations.map {
-            GeoPoint(it.latitude, it.longitude)
-        })) {
+        // Draw the line along its real track edges (v2 data carries explicit
+        // adjacency, branches included; for v1 the parser derives it), with
+        // consecutive edges merged into longer polylines.
+        for (segment in edgePaths(line)) {
             val polyline = Polyline(view).apply {
                 setPoints(segment)
                 outlinePaint.color = line.color
@@ -603,23 +601,22 @@ private fun buildNetworkOverlay(
 }
 
 /**
- * Splits an ordered station path into contiguous segments, breaking where
- * two consecutive stops are more than [maxGapMeters] apart.
+ * Turns a line's track edges into drawable polyline paths, merging runs of
+ * consecutive edges so the common case stays a handful of long polylines.
  */
-private fun splitIntoSegments(
-    points: List<GeoPoint>,
-    maxGapMeters: Double = 4_000.0,
-): List<List<GeoPoint>> {
-    if (points.size < 2) return emptyList()
-    val segments = mutableListOf<MutableList<GeoPoint>>(mutableListOf(points.first()))
-    for (i in 1 until points.size) {
-        if (points[i - 1].distanceToAsDouble(points[i]) > maxGapMeters) {
-            segments.add(mutableListOf(points[i]))
+private fun edgePaths(line: com.wakemethere.app.domain.model.TransitLine): List<List<GeoPoint>> {
+    fun point(i: Int) = GeoPoint(line.stations[i].latitude, line.stations[i].longitude)
+    val paths = mutableListOf<MutableList<GeoPoint>>()
+    var lastEnd = -1
+    for ((a, b) in line.edges.sortedWith(compareBy({ it.first }, { it.second }))) {
+        if (a == lastEnd && paths.isNotEmpty()) {
+            paths.last().add(point(b))
         } else {
-            segments.last().add(points[i])
+            paths.add(mutableListOf(point(a), point(b)))
         }
+        lastEnd = b
     }
-    return segments.filter { it.size >= 2 }
+    return paths
 }
 
 // --- Location helpers ---------------------------------------------------------

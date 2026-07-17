@@ -1,75 +1,590 @@
 {
-  "note": "BRT corridors placed along the real avenues (Enghelab/Azadi for line 1, Valiasr for line 7). Coordinates are hand-placed on the street centerline and are close but not survey-exact; run tools/fetch_stations.py on a machine with internet to overwrite with precise OpenStreetMap data.",
-  "lines": [
+ "version": 2,
+ "source": "MohammadAmin-Andy/iran-public-transport tehran/bus/brt (ODbL)",
+ "lines": [
+  {
+   "id": "1",
+   "name": "بی‌آرتی ۱ (تهرانپارس – پایانه آزادی)",
+   "en": "BRT 1 (Tehranpars – Azadi Terminal)",
+   "color": "#E0001F",
+   "stations": [
     {
-      "id": "1",
-      "name": "بی‌آرتی ۱ (آزادی – تهرانپارس)",
-      "color": "#C62828",
-      "stations": [
-        {"name": "میدان آزادی", "lat": 35.6997, "lon": 51.3379},
-        {"name": "استاد معین", "lat": 35.7003, "lon": 51.3535},
-        {"name": "بیمه", "lat": 35.7006, "lon": 51.3640},
-        {"name": "شادمان", "lat": 35.7007, "lon": 51.3722},
-        {"name": "توحید", "lat": 35.7008, "lon": 51.3800},
-        {"name": "میدان انقلاب", "lat": 35.7008, "lon": 51.3945},
-        {"name": "دانشگاه تهران", "lat": 35.7010, "lon": 51.4005},
-        {"name": "چهارراه ولیعصر", "lat": 35.7009, "lon": 51.4065},
-        {"name": "فردوسی", "lat": 35.7016, "lon": 51.4185},
-        {"name": "لاله‌زار", "lat": 35.7016, "lon": 51.4285},
-        {"name": "میدان امام حسین", "lat": 35.7016, "lon": 51.4459},
-        {"name": "سبلان", "lat": 35.7085, "lon": 51.4585},
-        {"name": "چهارراه تلفنخانه", "lat": 35.7160, "lon": 51.4735},
-        {"name": "فلکه اول تهرانپارس", "lat": 35.7285, "lon": 51.5130},
-        {"name": "فلکه دوم تهرانپارس", "lat": 35.7360, "lon": 51.5300}
-      ]
+     "key": "Payaneh Azadi",
+     "name": "پایانه آزادی",
+     "en": "Payaneh Azadi",
+     "lat": 35.7042,
+     "lon": 51.3352
     },
     {
-      "id": "7",
-      "name": "بی‌آرتی ۷ (راه‌آهن – تجریش، محور ولیعصر)",
-      "color": "#EF6C00",
-      "stations": [
-        {"name": "میدان راه‌آهن", "lat": 35.6607, "lon": 51.3888},
-        {"name": "میدان منیریه", "lat": 35.6790, "lon": 51.3960},
-        {"name": "چهارراه ولیعصر", "lat": 35.7009, "lon": 51.4065},
-        {"name": "میدان ولیعصر", "lat": 35.7112, "lon": 51.4072},
-        {"name": "زرتشت", "lat": 35.7205, "lon": 51.4085},
-        {"name": "پارک ساعی", "lat": 35.7360, "lon": 51.4110},
-        {"name": "میدان ونک", "lat": 35.7592, "lon": 51.4103},
-        {"name": "ملاصدرا", "lat": 35.7660, "lon": 51.4110},
-        {"name": "پارک‌وی", "lat": 35.7935, "lon": 51.4130},
-        {"name": "تجریش", "lat": 35.8045, "lon": 51.4258}
-      ]
+     "key": "Azadi",
+     "name": "آزادی",
+     "en": "Azadi",
+     "lat": 35.701162,
+     "lon": 51.333327
     },
     {
-      "id": "4",
-      "name": "بی‌آرتی ۴ (پایانه جنوب – میدان تجریش)",
-      "color": "#2E7D32",
-      "stations": [
-        {"name": "پایانه جنوب", "lat": 35.6520, "lon": 51.4215},
-        {"name": "میدان شوش", "lat": 35.6605, "lon": 51.4262},
-        {"name": "میدان قیام", "lat": 35.6720, "lon": 51.4335},
-        {"name": "میدان امام خمینی", "lat": 35.6870, "lon": 51.4200},
-        {"name": "چهارراه استانبول", "lat": 35.6935, "lon": 51.4170},
-        {"name": "فردوسی", "lat": 35.7016, "lon": 51.4185},
-        {"name": "چهارراه ولیعصر", "lat": 35.7009, "lon": 51.4065},
-        {"name": "میدان ولیعصر", "lat": 35.7112, "lon": 51.4072},
-        {"name": "میدان ونک", "lat": 35.7592, "lon": 51.4103},
-        {"name": "تجریش", "lat": 35.8045, "lon": 51.4258}
-      ]
+     "key": "Ostad moein",
+     "name": "استاد معین",
+     "en": "Ostad moein",
+     "lat": 35.700121,
+     "lon": 51.34461
     },
     {
-      "id": "10",
-      "name": "بی‌آرتی ۱۰ (میدان آزادی – پایانه خاوران)",
-      "color": "#4527A0",
-      "stations": [
-        {"name": "میدان آزادی", "lat": 35.6997, "lon": 51.3379},
-        {"name": "میدان قزوین", "lat": 35.6748, "lon": 51.3865},
-        {"name": "میدان گمرک", "lat": 35.6740, "lon": 51.3985},
-        {"name": "میدان محمدیه", "lat": 35.6690, "lon": 51.4205},
-        {"name": "میدان شوش", "lat": 35.6605, "lon": 51.4262},
-        {"name": "بزرگراه بعثت", "lat": 35.6575, "lon": 51.4460},
-        {"name": "پایانه خاوران", "lat": 35.6560, "lon": 51.4680}
-      ]
+     "key": "Daneshgah-e Sharif",
+     "name": "دانشگاه شریف",
+     "en": "Daneshgah-e Sharif",
+     "lat": 35.700381,
+     "lon": 51.35604
+    },
+    {
+     "key": "Behboudi",
+     "name": "بهبودی",
+     "en": "Behboudi",
+     "lat": 35.70064,
+     "lon": 51.36747
+    },
+    {
+     "key": "Navvab",
+     "name": "نواب",
+     "en": "Navvab",
+     "lat": 35.7009,
+     "lon": 51.3789
+    },
+    {
+     "key": "Dr Gharib",
+     "name": "دکتر قریب",
+     "en": "Dr Gharib",
+     "lat": 35.701044,
+     "lon": 51.384442
+    },
+    {
+     "key": "Meydan-e Enghelab",
+     "name": "میدان انقلاب",
+     "en": "Meydan-e Enghelab",
+     "lat": 35.701188,
+     "lon": 51.389983
+    },
+    {
+     "key": "Daneshgah-e Tehran",
+     "name": "دانشگاه تهران",
+     "en": "Daneshgah-e Tehran",
+     "lat": 35.701172,
+     "lon": 51.397662
+    },
+    {
+     "key": "Chaharah-e Vali asr",
+     "name": "چهار راه ولیعصر",
+     "en": "Chaharah-e Vali asr",
+     "lat": 35.701156,
+     "lon": 51.405342
+    },
+    {
+     "key": "Ferdowsi",
+     "name": "فردوسی",
+     "en": "Ferdowsi",
+     "lat": 35.701335,
+     "lon": 51.418507
+    },
+    {
+     "key": "Darvaze dowlat",
+     "name": "دروازه دولت",
+     "en": "Darvaze dowlat",
+     "lat": 35.70178,
+     "lon": 51.42575
+    },
+    {
+     "key": "Shariati",
+     "name": "شریعتی",
+     "en": "Shariati",
+     "lat": 35.701925,
+     "lon": 51.432407
+    },
+    {
+     "key": "Pol-e Choubi",
+     "name": "پل چوبی",
+     "en": "Pol-e Choubi",
+     "lat": 35.702071,
+     "lon": 51.439064
+    },
+    {
+     "key": "Emam Hossein",
+     "name": "امام حسین (ع)",
+     "en": "Emam Hossein",
+     "lat": 35.702216,
+     "lon": 51.445721
+    },
+    {
+     "key": "Montazeri",
+     "name": "منتظری",
+     "en": "Montazeri",
+     "lat": 35.703473,
+     "lon": 51.448277
+    },
+    {
+     "key": "Bou Ali",
+     "name": "بوعلی",
+     "en": "Bou Ali",
+     "lat": 35.70473,
+     "lon": 51.450832
+    },
+    {
+     "key": "Fathnaei",
+     "name": "فتحنایی",
+     "en": "Fathnaei",
+     "lat": 35.705986,
+     "lon": 51.453388
+    },
+    {
+     "key": "Forodgah",
+     "name": "فرودگاه",
+     "en": "Forodgah",
+     "lat": 35.707243,
+     "lon": 51.455944
+    },
+    {
+     "key": "Sabalan",
+     "name": "سبلان",
+     "en": "Sabalan",
+     "lat": 35.7085,
+     "lon": 51.4585
+    },
+    {
+     "key": "Vahidiyeh",
+     "name": "وحیدیه",
+     "en": "Vahidiyeh",
+     "lat": 35.71049,
+     "lon": 51.466938
+    },
+    {
+     "key": "Pol",
+     "name": "پل",
+     "en": "Pol",
+     "lat": 35.71248,
+     "lon": 51.475376
+    },
+    {
+     "key": "Ayat",
+     "name": "آیت",
+     "en": "Ayat",
+     "lat": 35.714469,
+     "lon": 51.483813
+    },
+    {
+     "key": "Aboureyhan",
+     "name": "ابوریحان",
+     "en": "Aboureyhan",
+     "lat": 35.716459,
+     "lon": 51.492251
+    },
+    {
+     "key": "Khaghani",
+     "name": "خاقانی",
+     "en": "Khaghani",
+     "lat": 35.718449,
+     "lon": 51.500689
+    },
+    {
+     "key": "Dariush",
+     "name": "داریوش",
+     "en": "Dariush",
+     "lat": 35.720439,
+     "lon": 51.509127
+    },
+    {
+     "key": "Chaharrah-e Tehranpars",
+     "name": "چهارراه تهرانپارس",
+     "en": "Chaharrah-e Tehranpars",
+     "lat": 35.72372,
+     "lon": 51.520331
     }
-  ]
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ],
+    [
+     21,
+     22
+    ],
+    [
+     22,
+     23
+    ],
+    [
+     23,
+     24
+    ],
+    [
+     24,
+     25
+    ],
+    [
+     25,
+     26
+    ]
+   ]
+  },
+  {
+   "id": "4",
+   "name": "بی‌آرتی ۴ (پایانه افشار – ترمینال جنوب)",
+   "en": "BRT 4 (Afshar – South Terminal)",
+   "color": "#00AEEF",
+   "stations": [
+    {
+     "key": "Terminal-e Jonoob",
+     "name": "ترمینال جنوب",
+     "en": "Terminal-e Jonoob",
+     "lat": 35.652,
+     "lon": 51.4215
+    },
+    {
+     "key": "Roghan Nabati",
+     "name": "روغن نباتی",
+     "en": "Roghan Nabati",
+     "lat": 35.6528,
+     "lon": 51.417125
+    },
+    {
+     "key": "Shahid Rajaee",
+     "name": "شهید رجایی",
+     "en": "Shahid Rajaee",
+     "lat": 35.6536,
+     "lon": 51.41275
+    },
+    {
+     "key": "Shahid Emami",
+     "name": "شهید امامی",
+     "en": "Shahid Emami",
+     "lat": 35.6544,
+     "lon": 51.408375
+    },
+    {
+     "key": "Meydan-e Bahman",
+     "name": "میدان بهمن",
+     "en": "Meydan-e Bahman",
+     "lat": 35.6552,
+     "lon": 51.404
+    },
+    {
+     "key": "Ghalishoei",
+     "name": "قالیشویی",
+     "en": "Ghalishoei",
+     "lat": 35.6556,
+     "lon": 51.39825
+    },
+    {
+     "key": "Pol-e Javadiyeh",
+     "name": "پل جوادیه",
+     "en": "Pol-e Javadiyeh",
+     "lat": 35.656,
+     "lon": 51.3925
+    },
+    {
+     "key": "Robat Karim",
+     "name": "رباط کریم",
+     "en": "Robat Karim",
+     "lat": 35.6595,
+     "lon": 51.3884
+    },
+    {
+     "key": "Helal-e ahmar",
+     "name": "هلال احمر",
+     "en": "Helal-e ahmar",
+     "lat": 35.663,
+     "lon": 51.3843
+    },
+    {
+     "key": "Pole Ghazvin",
+     "name": "پل قزوین",
+     "en": "Pole Ghazvin",
+     "lat": 35.6672,
+     "lon": 51.383
+    },
+    {
+     "key": "Safdari",
+     "name": "صفدری",
+     "en": "Safdari",
+     "lat": 35.67335,
+     "lon": 51.3821
+    },
+    {
+     "key": "Komeyl",
+     "name": "کمیل",
+     "en": "Komeyl",
+     "lat": 35.6795,
+     "lon": 51.3812
+    },
+    {
+     "key": "Emam Khomeini",
+     "name": "امام خمینی",
+     "en": "Emam Khomeini",
+     "lat": 35.6842,
+     "lon": 51.3806
+    },
+    {
+     "key": "Azarbayjan",
+     "name": "آذربایجان",
+     "en": "Azarbayjan",
+     "lat": 35.6893,
+     "lon": 51.38
+    },
+    {
+     "key": "Jomhouri-orumie",
+     "name": "جمهوری",
+     "en": "Jomhouri-orumie",
+     "lat": 35.6932,
+     "lon": 51.3796
+    },
+    {
+     "key": "Azadi4",
+     "name": "آزادی",
+     "en": "Azadi4",
+     "lat": 35.6995,
+     "lon": 51.379
+    },
+    {
+     "key": "Tohid",
+     "name": "توحید",
+     "en": "Tohid",
+     "lat": 35.700853,
+     "lon": 51.378564
+    },
+    {
+     "key": "Bagherkhan",
+     "name": "باقرخان",
+     "en": "Bagherkhan",
+     "lat": 35.7095,
+     "lon": 51.3778
+    },
+    {
+     "key": "Kooy-e nasr",
+     "name": "کوی نصر",
+     "en": "Kooy-e nasr",
+     "lat": 35.7442,
+     "lon": 51.3762
+    },
+    {
+     "key": "Mollasadra",
+     "name": "ملاصدرا",
+     "en": "Mollasadra",
+     "lat": 35.7565,
+     "lon": 51.3748
+    },
+    {
+     "key": "Pol-e Modiriat",
+     "name": "پل مدیریت",
+     "en": "Pol-e Modiriat",
+     "lat": 35.7688,
+     "lon": 51.38
+    },
+    {
+     "key": "Ati Saz",
+     "name": "آتی ساز",
+     "en": "Ati Saz",
+     "lat": 35.777,
+     "lon": 51.388
+    },
+    {
+     "key": "Namayeshgah",
+     "name": "نمایشگاه",
+     "en": "Namayeshgah",
+     "lat": 35.7838,
+     "lon": 51.3922
+    },
+    {
+     "key": "Pomp-e benzin",
+     "name": "پمپ بنزین",
+     "en": "Pomp-e benzin",
+     "lat": 35.788,
+     "lon": 51.3945
+    },
+    {
+     "key": "Payaneh afshar",
+     "name": "پایانه افشار",
+     "en": "Payaneh afshar",
+     "lat": 35.792,
+     "lon": 51.396
+    }
+   ],
+   "edges": [
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     7
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     8,
+     9
+    ],
+    [
+     9,
+     10
+    ],
+    [
+     10,
+     11
+    ],
+    [
+     11,
+     12
+    ],
+    [
+     12,
+     13
+    ],
+    [
+     13,
+     14
+    ],
+    [
+     14,
+     15
+    ],
+    [
+     15,
+     16
+    ],
+    [
+     16,
+     17
+    ],
+    [
+     17,
+     18
+    ],
+    [
+     18,
+     19
+    ],
+    [
+     19,
+     20
+    ],
+    [
+     20,
+     21
+    ],
+    [
+     21,
+     22
+    ],
+    [
+     22,
+     23
+    ],
+    [
+     22,
+     24
+    ]
+   ]
+  }
+ ]
 }
