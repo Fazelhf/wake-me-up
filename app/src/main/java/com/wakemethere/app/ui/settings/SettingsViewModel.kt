@@ -14,10 +14,28 @@ import javax.inject.Inject
 /**
  * Exposes and mutates the persisted app settings.
  */
+/** State of the in-app OSM station-data update. */
+enum class DataUpdateState { IDLE, RUNNING, DONE, FAILED }
+
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val settingsStore: SettingsStore,
+    private val transitUpdater: com.wakemethere.app.data.transit.TransitUpdater,
 ) : ViewModel() {
+
+    private val _updateState =
+        kotlinx.coroutines.flow.MutableStateFlow(DataUpdateState.IDLE)
+    val updateState: StateFlow<DataUpdateState> = _updateState
+
+    /** Downloads exact station data from OpenStreetMap on the device. */
+    fun updateStations() {
+        if (_updateState.value == DataUpdateState.RUNNING) return
+        _updateState.value = DataUpdateState.RUNNING
+        viewModelScope.launch {
+            _updateState.value = runCatching { transitUpdater.updateAll() }
+                .fold({ DataUpdateState.DONE }, { DataUpdateState.FAILED })
+        }
+    }
 
     val settings: StateFlow<AppSettings> = settingsStore.settings
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), AppSettings())

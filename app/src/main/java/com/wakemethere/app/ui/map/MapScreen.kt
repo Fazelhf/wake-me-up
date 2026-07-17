@@ -383,10 +383,26 @@ private fun OsmMap(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    val mapBackground = MaterialTheme.colorScheme.surfaceContainerLow
     val mapView = remember {
         MapView(context).apply {
             setTileSource(TileSourceFactory.MAPNIK)
             setMultiTouchControls(true)
+            // Pinch-to-zoom only: the built-in +/- buttons look out of place.
+            zoomController.setVisibility(
+                org.osmdroid.views.CustomZoomButtonsController.Visibility.NEVER
+            )
+            isTilesScaledToDpi = true
+            minZoomLevel = 9.5
+            maxZoomLevel = 19.0
+            // Theme-aware canvas behind tiles, so the map still looks
+            // designed while tiles load (or fail to) on slow connections.
+            setBackgroundColor(android.graphics.Color.argb(
+                255,
+                (mapBackground.red * 255).toInt(),
+                (mapBackground.green * 255).toInt(),
+                (mapBackground.blue * 255).toInt(),
+            ))
             controller.setZoom(INITIAL_ZOOM)
             controller.setCenter(GeoPoint(state.startLatitude, state.startLongitude))
         }

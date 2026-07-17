@@ -134,6 +134,16 @@
     <string name="health_fullscreen_desc">بیدارکردن فوری روی صفحهٔ قفل</string>
     <string name="health_battery_desc">جلوگیری از کشته‌شدن ردیابی در پس‌زمینه</string>
 
+    <string name="home_greeting">سلام! سفر بخیر 👋</string>
+    <string name="home_owner_initial">ف</string>
+
+    <string name="settings_data_title">دادهٔ ایستگاه‌ها</string>
+    <string name="settings_data_desc">دریافت مختصات دقیق ایستگاه‌های مترو و بی‌آرتی از OpenStreetMap</string>
+    <string name="settings_data_action">به‌روزرسانی ایستگاه‌ها</string>
+    <string name="settings_data_running">در حال دریافت…</string>
+    <string name="settings_data_done">انجام شد! نقشه با دادهٔ دقیق به‌روز شد ✅</string>
+    <string name="settings_data_failed">ناموفق — اتصال اینترنت را بررسی کن و دوباره تلاش کن</string>
+
     <!-- Misc -->
     <string name="distance_meters">%1$d متر</string>
     <string name="distance_kilometers">%1$.1f کیلومتر</string>

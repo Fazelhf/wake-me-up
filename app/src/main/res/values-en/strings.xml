@@ -134,6 +134,16 @@
     <string name="health_fullscreen_desc">Instant wake-up over the lock screen</string>
     <string name="health_battery_desc">Keeps background tracking from being killed</string>
 
+    <string name="home_greeting">Hi! Safe travels 👋</string>
+    <string name="home_owner_initial">F</string>
+
+    <string name="settings_data_title">Station data</string>
+    <string name="settings_data_desc">Fetch exact Metro and BRT station coordinates from OpenStreetMap</string>
+    <string name="settings_data_action">Update stations</string>
+    <string name="settings_data_running">Downloading…</string>
+    <string name="settings_data_done">Done! The map now uses exact data ✅</string>
+    <string name="settings_data_failed">Failed — check your connection and try again</string>
+
     <!-- Misc -->
     <string name="distance_meters">%1$d m</string>
     <string name="distance_kilometers">%1$.1f km</string>

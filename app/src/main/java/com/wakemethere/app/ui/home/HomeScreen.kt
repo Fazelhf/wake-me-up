@@ -1,5 +1,10 @@
 package com.wakemethere.app.ui.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,6 +37,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -69,11 +75,21 @@ fun HomeScreen(
     val status by viewModel.trackingStatus.collectAsStateWithLifecycle()
     val idle = status is TrackingStatus.Idle
 
+    // One-shot entrance animation for the dashboard content.
+    val entered = remember { MutableTransitionState(false).apply { targetState = true } }
+
     Box(modifier = Modifier.fillMaxSize()) {
         AmbientBackground()
 
         Column(modifier = Modifier.fillMaxSize()) {
             GlassTopBar(onOpenSettings = onOpenSettings, onOpenHistory = onOpenHistory)
+
+            AnimatedVisibility(
+                visibleState = entered,
+                enter = fadeIn(tween(420)) + slideInVertically(tween(420)) { it / 10 },
+            ) {
+            Column {
+            GreetingCard()
 
             Column(
                 modifier = Modifier
@@ -129,6 +145,8 @@ fun HomeScreen(
                     }
                 }
             }
+            }
+            }
         }
 
         // Floating "Set Alarm" capsule (hidden while an alarm is armed).
@@ -147,6 +165,50 @@ fun HomeScreen(
                     text = stringResource(R.string.home_set_alarm),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
+                )
+            }
+        }
+    }
+}
+
+/** Greeting header: avatar, salam + creator credit — always visible on top. */
+@Composable
+private fun GreetingCard() {
+    GlassCard(
+        shape = RoundedCornerShape(24.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 10.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(46.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primaryContainer),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = stringResource(R.string.home_owner_initial),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+            Column(modifier = Modifier.padding(horizontal = 12.dp)) {
+                Text(
+                    text = stringResource(R.string.home_greeting),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    text = stringResource(R.string.settings_credit),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }

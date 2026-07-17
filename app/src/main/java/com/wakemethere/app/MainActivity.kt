@@ -107,11 +107,12 @@ class MainViewModel @Inject constructor(
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    override fun attachBaseContext(newBase: android.content.Context) {
+        // Apply the stored language (default Persian) before anything renders.
+        super.attachBaseContext(AppLocale.wrap(newBase))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Must run before super.onCreate so the very first frame is Persian.
-        // (Calling this from Application.onCreate is too early and gets
-        // ignored — that was why the app came up in English.)
-        AppLocale.applyDefaultIfUnset()
         super.onCreate(savedInstanceState)
         setContent {
             val viewModel: MainViewModel = hiltViewModel()
