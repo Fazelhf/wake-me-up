@@ -102,8 +102,22 @@ class TrackingService : LifecycleService() {
         return START_STICKY
     }
 
+    private fun hasLocationPermission(): Boolean =
+        androidx.core.content.ContextCompat.checkSelfPermission(
+            this, android.Manifest.permission.ACCESS_FINE_LOCATION
+        ) == android.content.pm.PackageManager.PERMISSION_GRANTED ||
+            androidx.core.content.ContextCompat.checkSelfPermission(
+                this, android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+
     /** Arms (or re-arms) tracking toward [dest]. */
     private fun startTracking(dest: Destination, startedAt: Long) {
+        // Starting a location-type foreground service without the permission
+        // throws on API 34; bail out gracefully instead of crashing.
+        if (!hasLocationPermission()) {
+            stopEverything()
+            return
+        }
         destination = dest
         alarming = false
         lastDistanceMeters = null
@@ -269,15 +283,20 @@ class TrackingService : LifecycleService() {
     // --- Notifications -----------------------------------------------------
 
     private fun goForeground(notification: Notification) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ServiceCompat.startForeground(
-                this,
-                NOTIFICATION_ID,
-                notification,
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION,
-            )
-        } else {
-            startForeground(NOTIFICATION_ID, notification)
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ServiceCompat.startForeground(
+                    this,
+                    NOTIFICATION_ID,
+                    notification,
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION,
+                )
+            } else {
+                startForeground(NOTIFICATION_ID, notification)
+            }
+        } catch (e: SecurityException) {
+            // Permission revoked mid-flight: stop cleanly, never crash.
+            stopEverything()
         }
     }
 

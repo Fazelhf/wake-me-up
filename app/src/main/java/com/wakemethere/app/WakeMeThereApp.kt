@@ -18,8 +18,6 @@ class WakeMeThereApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        // Default the UI language to Persian on first launch (user can switch).
-        com.wakemethere.app.util.AppLocale.applyDefaultIfUnset()
         configureOsmdroid()
         createNotificationChannels()
     }

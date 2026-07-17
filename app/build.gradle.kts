@@ -14,20 +14,28 @@ android {
         applicationId = "com.wakemethere.app"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        // Stable key committed to the repo so every release APK carries the
+        // same signature (a personal sideloaded app, not a Play upload key).
+        create("release") {
+            storeFile = rootProject.file("signing/wakemethere.keystore")
+            storePassword = "wakemethere"
+            keyAlias = "wakemethere"
+            keyPassword = "wakemethere"
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            // No code shrinking: reliability over size for a sideloaded app.
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {

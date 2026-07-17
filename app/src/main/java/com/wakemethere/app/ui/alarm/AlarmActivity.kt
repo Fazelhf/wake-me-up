@@ -53,6 +53,7 @@ class AlarmActivity : AppCompatActivity() {
     @Inject lateinit var stateHolder: TrackingStateHolder
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        com.wakemethere.app.util.AppLocale.applyDefaultIfUnset()
         super.onCreate(savedInstanceState)
         showOverLockScreen()
 

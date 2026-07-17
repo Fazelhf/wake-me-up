@@ -135,7 +135,7 @@ fun HomeScreen(
                 shape = CircleShape,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 32.dp)
+                    .padding(bottom = 104.dp)
                     .height(56.dp),
             ) {
                 Icon(Icons.Default.Add, contentDescription = null)
