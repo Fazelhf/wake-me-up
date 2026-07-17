@@ -8,6 +8,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Navigation
 import androidx.compose.material.icons.filled.Settings
@@ -91,13 +93,14 @@ fun HomeScreen(
                 enter = fadeIn(tween(420)) + slideInVertically(tween(420)) { it / 10 },
             ) {
             Column {
-            GreetingCard()
+            if (idle) GreetingCard() else DisabledModeSwitcher()
 
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = ScreenMargin),
             ) {
+                if (!idle) Spacer(modifier = Modifier.weight(1f))
                 when (val current = status) {
                     is TrackingStatus.Tracking -> ArmedCard(
                         destination = current.destination,
@@ -116,6 +119,10 @@ fun HomeScreen(
                     TrackingStatus.Idle -> Unit
                 }
 
+                if (!idle) {
+                    Spacer(modifier = Modifier.height(96.dp))
+                }
+                if (idle) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
@@ -147,8 +154,36 @@ fun HomeScreen(
                         }
                     }
                 }
+                }
             }
             }
+            }
+        }
+
+        // Floating pulsing "Stop Tracking" capsule (prototype: fixed above
+        // the bottom edge while tracking; bottom nav is hidden then).
+        if (!idle) {
+            val stopPulse = rememberPulse()
+            Button(
+                onClick = viewModel::cancelTracking,
+                shape = CircleShape,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.onError,
+                ),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 28.dp)
+                    .scale(1f + (1f - stopPulse) * 0.03f)
+                    .height(56.dp),
+            ) {
+                Icon(Icons.Default.Stop, contentDescription = null)
+                Spacer(modifier = Modifier.size(10.dp))
+                Text(
+                    text = stringResource(R.string.notif_stop_action),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold,
+                )
             }
         }
 
@@ -168,6 +203,49 @@ fun HomeScreen(
                     text = stringResource(R.string.home_set_alarm),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
+                )
+            }
+        }
+    }
+}
+
+/** The Metro/BRT/Anywhere switcher, shown disabled while tracking. */
+@Composable
+private fun DisabledModeSwitcher() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 10.dp)
+            .graphicsLayer { alpha = 0.5f }
+            .then(glassModifier(RoundedCornerShape(26.dp)))
+            .padding(6.dp),
+        horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp),
+    ) {
+        listOf(
+            Triple(true, Icons.Default.Navigation, R.string.map_mode_metro),
+            Triple(false, Icons.Default.Navigation, R.string.map_mode_brt),
+            Triple(false, Icons.Default.Navigation, R.string.map_mode_free),
+        ).forEach { (selected, _, labelRes) ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(
+                        if (selected) MaterialTheme.colorScheme.primaryContainer
+                        else androidx.compose.ui.graphics.Color.Transparent
+                    )
+                    .padding(vertical = 11.dp),
+            ) {
+                Text(
+                    text = stringResource(labelRes),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = if (selected) MaterialTheme.colorScheme.onPrimaryContainer
+                    else MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
                 )
             }
         }
@@ -218,22 +296,22 @@ private fun GreetingCard() {
     }
 }
 
-/** Floating glass top app bar with history + settings actions. */
+/** Floating glass top app bar (prototype: menu / title / avatar). */
 @Composable
 private fun GlassTopBar(onOpenSettings: () -> Unit, onOpenHistory: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp)
-            .then(glassModifier(RoundedCornerShape(20.dp)))
-            .height(56.dp),
+            .padding(horizontal = 24.dp, vertical = 14.dp)
+            .then(glassModifier(RoundedCornerShape(12.dp)))
+            .height(64.dp),
     ) {
         IconButton(
             onClick = onOpenHistory,
-            modifier = Modifier.align(Alignment.CenterStart).padding(start = 4.dp),
+            modifier = Modifier.align(Alignment.CenterStart).padding(start = 8.dp),
         ) {
             Icon(
-                Icons.Default.History,
+                Icons.Default.Menu,
                 contentDescription = stringResource(R.string.history_title),
                 tint = MaterialTheme.colorScheme.primary,
             )
@@ -245,14 +323,22 @@ private fun GlassTopBar(onOpenSettings: () -> Unit, onOpenHistory: () -> Unit) {
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.align(Alignment.Center),
         )
-        IconButton(
-            onClick = onOpenSettings,
-            modifier = Modifier.align(Alignment.CenterEnd).padding(end = 4.dp),
+        // Avatar (prototype trailing element) — opens settings.
+        Box(
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(end = 14.dp)
+                .size(36.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .clickable { onOpenSettings() },
+            contentAlignment = Alignment.Center,
         ) {
-            Icon(
-                Icons.Default.Settings,
-                contentDescription = stringResource(R.string.home_settings),
-                tint = MaterialTheme.colorScheme.primary,
+            Text(
+                text = stringResource(R.string.home_owner_initial),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                fontWeight = FontWeight.Bold,
             )
         }
     }
@@ -280,6 +366,7 @@ private fun ArmedCard(
                     Text(
                         text = stringResource(R.string.home_armed_title).uppercase(),
                         style = MaterialTheme.typography.labelMedium,
+                        letterSpacing = androidx.compose.ui.unit.TextUnit(1.5f, androidx.compose.ui.unit.TextUnitType.Sp),
                         color = MaterialTheme.colorScheme.primary,
                     )
                     Text(
@@ -326,16 +413,30 @@ private fun ArmedCard(
                         .clip(CircleShape),
                 )
             }
+            if (distanceMeters != null) {
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = stringResource(
+                        R.string.home_armed_distance,
+                        formatDistance(context, distanceMeters),
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 StatTile(
                     modifier = Modifier.weight(1f),
-                    label = stringResource(R.string.home_stat_remaining),
+                    label = stringResource(R.string.home_stat_eta),
                     value = when {
                         signalWeak -> stringResource(R.string.home_stat_weak)
-                        distanceMeters != null -> formatDistance(context, distanceMeters)
+                        distanceMeters != null -> stringResource(
+                            R.string.home_minutes,
+                            (distanceMeters / 500f).toInt().coerceAtLeast(1),
+                        )
                         else -> "—"
                     },
                     animateValue = true,
@@ -350,26 +451,6 @@ private fun ArmedCard(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = onCancel,
-                shape = CircleShape,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.error,
-                    contentColor = MaterialTheme.colorScheme.onError,
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(52.dp),
-            ) {
-                Icon(Icons.Default.Stop, contentDescription = null)
-                Spacer(modifier = Modifier.size(8.dp))
-                Text(
-                    text = stringResource(R.string.home_cancel_tracking),
-                    fontWeight = FontWeight.Bold,
-                )
-            }
         }
     }
 }
