@@ -112,6 +112,20 @@
     <string name="summary_ontime">به‌موقع</string>
     <string name="summary_done">تمام</string>
 
+    <string name="onb_welcome_title">به WakeMeThere خوش آمدی</string>
+    <string name="onb_welcome_body">در مترو و اتوبوس با خیال راحت بخواب؛ نزدیک ایستگاهت که رسیدی، بیدارت می‌کنیم.</string>
+    <string name="onb_welcome_action">شروع کنیم</string>
+    <string name="onb_allow">اجازه بده</string>
+    <string name="onb_next">بعدی</string>
+    <string name="onb_later">بعداً</string>
+    <string name="onb_finish">شروع استفاده</string>
+    <string name="gps_off_title">موقعیت‌یاب خاموش است</string>
+    <string name="gps_off_body">برای ردیابی سفر باید GPS گوشی روشن باشد. از تنظیمات، موقعیت‌یاب را روشن کن.</string>
+    <string name="gps_off_open_settings">روشن کردن GPS</string>
+    <string name="nav_home">خانه</string>
+    <string name="nav_trips">سفرها</string>
+    <string name="nav_settings">تنظیمات</string>
+
     <!-- Misc -->
     <string name="distance_meters">%1$d متر</string>
     <string name="distance_kilometers">%1$.1f کیلومتر</string>

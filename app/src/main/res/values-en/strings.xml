@@ -112,6 +112,20 @@
     <string name="summary_ontime">On time</string>
     <string name="summary_done">Done</string>
 
+    <string name="onb_welcome_title">Welcome to WakeMeThere</string>
+    <string name="onb_welcome_body">Doze off on the metro or bus — we\'ll wake you up as you approach your stop.</string>
+    <string name="onb_welcome_action">Get started</string>
+    <string name="onb_allow">Allow</string>
+    <string name="onb_next">Next</string>
+    <string name="onb_later">Later</string>
+    <string name="onb_finish">Start using</string>
+    <string name="gps_off_title">Location is off</string>
+    <string name="gps_off_body">Trip tracking needs the phone\'s GPS turned on. Enable location in settings.</string>
+    <string name="gps_off_open_settings">Turn on GPS</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_trips">Trips</string>
+    <string name="nav_settings">Settings</string>
+
     <!-- Misc -->
     <string name="distance_meters">%1$d m</string>
     <string name="distance_kilometers">%1$.1f km</string>

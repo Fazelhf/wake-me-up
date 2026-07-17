@@ -2,21 +2,24 @@ package com.wakemethere.app.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.wakemethere.app.R
 
 /**
- * Typography scale from the Liquid Transit design (Plus Jakarta Sans).
- *
- * The design uses Plus Jakarta Sans. To ship it, drop the variable/rest
- * weights into `res/font/` and set [BrandFontFamily] to that FontFamily
- * (e.g. `FontFamily(Font(R.font.plus_jakarta_sans))`). Until then we fall
- * back to the platform sans-serif so the app always builds, while keeping
- * the exact sizes, weights and letter spacing of the design.
+ * Typography scale from the Liquid Transit design, set in Vazirmatn — an
+ * open (OFL) Persian/Latin family that renders Farsi beautifully and keeps
+ * Latin legible, bundled in res/font.
  */
-val BrandFontFamily: FontFamily = FontFamily.SansSerif
+val BrandFontFamily: FontFamily = FontFamily(
+    Font(R.font.vazirmatn_regular, FontWeight.Normal),
+    Font(R.font.vazirmatn_medium, FontWeight.Medium),
+    Font(R.font.vazirmatn_semibold, FontWeight.SemiBold),
+    Font(R.font.vazirmatn_bold, FontWeight.Bold),
+)
 
 val AppTypography = Typography(
     // headline-lg: 32 / 40, w700, -0.02em

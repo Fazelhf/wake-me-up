@@ -22,6 +22,14 @@ geocoding uses **Nominatim** — no Google Maps SDK, no API keys, no billing.
 | Background | Foreground Service, `foregroundServiceType="location"`, `START_STICKY` |
 | Min / target SDK | 26 / 34 |
 
+## Install note (Play Protect)
+
+Sideloaded APKs from outside Play Store always show a Play Protect
+"unknown developer" prompt — tap **Install anyway**. This cannot be removed
+by code; it disappears only when the app is distributed through a store.
+Release APKs are signed with the repo keystore (`signing/`) so every build
+carries the same signature and updates install over each other cleanly.
+
 ## Building & running
 
 1. Open the repository in Android Studio (Koala or newer) — it is a
@@ -51,10 +59,9 @@ The UI follows a custom "Liquid Transit" design system:
   dedicated Metro (`#007AFF`) and BRT (`#FF9500`) accents — see
   `ui/theme/Color.kt`. Dynamic color is intentionally disabled so the look is
   consistent across devices.
-- **Typography:** the Plus Jakarta Sans scale (`ui/theme/Type.kt`). To ship the
-  actual font, drop the files into `res/font/` and point `BrandFontFamily` at
-  them; until then it falls back to the platform sans-serif at the exact
-  sizes/weights.
+- **Typography:** Vazirmatn (OFL license, bundled in `res/font/`) — a Persian/
+  Latin family that renders the Farsi UI beautifully, on the design's scale
+  (`ui/theme/Type.kt`).
 - **Dark mode:** full dark color scheme; Settings offers System / Light / Dark,
   and the glass surfaces adapt to stay legible in both.
 - **Glass components:** `ui/components/LiquidGlass.kt` provides the ambient

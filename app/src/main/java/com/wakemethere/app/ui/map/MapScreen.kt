@@ -1,5 +1,13 @@
 package com.wakemethere.app.ui.map
 
+import android.Manifest
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.LocationManager
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -22,6 +30,7 @@ import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Subway
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
@@ -38,11 +47,14 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,6 +65,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -85,6 +99,58 @@ fun MapScreen(
     viewModel: MapViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
+    // Ask for location permission as soon as the picker opens (the user may
+    // have skipped onboarding); without it tracking cannot start at all.
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { }
+    LaunchedEffect(Unit) {
+        if (!hasLocationPermission(context)) {
+            permissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                )
+            )
+        }
+    }
+
+    // "Turn on GPS" dialog, shown when starting with location services off.
+    var showGpsDialog by remember { mutableStateOf(false) }
+    if (showGpsDialog) {
+        AlertDialog(
+            onDismissRequest = { showGpsDialog = false },
+            title = { Text(stringResource(R.string.gps_off_title)) },
+            text = { Text(stringResource(R.string.gps_off_body)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showGpsDialog = false
+                    context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                }) { Text(stringResource(R.string.gps_off_open_settings)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showGpsDialog = false }) {
+                    Text(stringResource(R.string.home_cancel_tracking))
+                }
+            },
+        )
+    }
+
+    // Gatekeeper for the Start button: permission -> GPS on -> arm.
+    val startTracking: () -> Unit = {
+        when {
+            !hasLocationPermission(context) -> permissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                )
+            )
+            !isGpsEnabled(context) -> showGpsDialog = true
+            else -> viewModel.onStartTracking(onTrackingStarted)
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         ModeSwitcher(mode = state.mode, onModeChanged = viewModel::onModeChanged)
@@ -120,7 +186,7 @@ fun MapScreen(
         BottomPanel(
             state = state,
             viewModel = viewModel,
-            onTrackingStarted = onTrackingStarted,
+            onStartTracking = startTracking,
         )
     }
 }
@@ -219,7 +285,7 @@ private fun SearchBar(state: MapUiState, viewModel: MapViewModel) {
 private fun BottomPanel(
     state: MapUiState,
     viewModel: MapViewModel,
-    onTrackingStarted: () -> Unit,
+    onStartTracking: () -> Unit,
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -283,7 +349,7 @@ private fun BottomPanel(
                 )
             }
             Button(
-                onClick = { viewModel.onStartTracking(onTrackingStarted) },
+                onClick = onStartTracking,
                 enabled = state.hasPin,
                 shape = CircleShape,
                 modifier = Modifier
@@ -438,15 +504,23 @@ private fun buildNetworkOverlay(
 ): FolderOverlay {
     val folder = FolderOverlay()
     for (line in network.lines) {
-        // Line path connecting the stations in order.
-        val polyline = Polyline(view).apply {
-            setPoints(line.stations.map { GeoPoint(it.latitude, it.longitude) })
-            outlinePaint.color = line.color
-            outlinePaint.strokeWidth = 9f
-            outlinePaint.strokeCap = android.graphics.Paint.Cap.ROUND
-            infoWindow = null
+        // Draw the line as segments, breaking wherever two consecutive
+        // stations are implausibly far apart — a straight line across half
+        // the city (bad data or a partial line) looks broken on the map.
+        for (segment in splitIntoSegments(line.stations.map {
+            GeoPoint(it.latitude, it.longitude)
+        })) {
+            val polyline = Polyline(view).apply {
+                setPoints(segment)
+                outlinePaint.color = line.color
+                outlinePaint.alpha = 210
+                outlinePaint.strokeWidth = 8f
+                outlinePaint.strokeCap = android.graphics.Paint.Cap.ROUND
+                outlinePaint.strokeJoin = android.graphics.Paint.Join.ROUND
+                infoWindow = null
+            }
+            folder.add(polyline)
         }
-        folder.add(polyline)
 
         for (station in line.stations) {
             val selected = station.id == state.selectedStationId
@@ -465,6 +539,38 @@ private fun buildNetworkOverlay(
         }
     }
     return folder
+}
+
+/**
+ * Splits an ordered station path into contiguous segments, breaking where
+ * two consecutive stops are more than [maxGapMeters] apart.
+ */
+private fun splitIntoSegments(
+    points: List<GeoPoint>,
+    maxGapMeters: Double = 4_000.0,
+): List<List<GeoPoint>> {
+    if (points.size < 2) return emptyList()
+    val segments = mutableListOf<MutableList<GeoPoint>>(mutableListOf(points.first()))
+    for (i in 1 until points.size) {
+        if (points[i - 1].distanceToAsDouble(points[i]) > maxGapMeters) {
+            segments.add(mutableListOf(points[i]))
+        } else {
+            segments.last().add(points[i])
+        }
+    }
+    return segments.filter { it.size >= 2 }
+}
+
+// --- Location helpers ---------------------------------------------------------
+
+private fun hasLocationPermission(context: Context): Boolean =
+    ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) ==
+        PackageManager.PERMISSION_GRANTED
+
+private fun isGpsEnabled(context: Context): Boolean {
+    val manager = context.getSystemService<LocationManager>() ?: return false
+    return manager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+        manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 }
 
 /** Bounding box containing every station of the network. */
