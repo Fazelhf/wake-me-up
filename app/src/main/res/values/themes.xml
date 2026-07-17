@@ -5,6 +5,7 @@
          activities are AppCompatActivity (needed for per-app locales). -->
     <style name="Theme.WakeMeThere" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowBackground">@color/window_background</item>
     </style>
 </resources>

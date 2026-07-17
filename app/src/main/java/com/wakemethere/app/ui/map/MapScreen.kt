@@ -21,8 +21,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -60,6 +62,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -86,6 +89,7 @@ import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polygon
 import org.osmdroid.views.overlay.Polyline
+import org.osmdroid.views.overlay.TilesOverlay
 
 /**
  * Destination-picking screen. Three bold modes:
@@ -154,7 +158,16 @@ fun MapScreen(
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            // Own opaque background (this screen skips AmbientBackground), so
+            // dark-theme text never lands on the light window background.
+            .background(MaterialTheme.colorScheme.background)
+            // Below the status bar — at the very top the switcher was drawn
+            // (and its taps swallowed) under the system bar.
+            .statusBarsPadding(),
+    ) {
         ModeSwitcher(mode = state.mode, onModeChanged = viewModel::onModeChanged)
 
         if (state.mode == PickerMode.FREE) {
@@ -317,6 +330,7 @@ private fun BottomPanel(
     ) {
         Column(
             modifier = Modifier
+                .navigationBarsPadding()
                 .padding(horizontal = 20.dp, vertical = 14.dp)
                 .animateContentSize(tween(260)),
         ) {
@@ -409,6 +423,9 @@ private fun OsmMap(
     val lifecycleOwner = LocalLifecycleOwner.current
 
     val mapBackground = MaterialTheme.colorScheme.surfaceContainerLow
+    // OSM tiles only exist in a light style; invert them in dark theme so
+    // the map matches the rest of the app and stays readable at night.
+    val darkMap = MaterialTheme.colorScheme.surface.luminance() < 0.5f
     val mapView = remember {
         MapView(context).apply {
             setTileSource(TileSourceFactory.MAPNIK)
@@ -464,6 +481,9 @@ private fun OsmMap(
         factory = { mapView },
         modifier = Modifier.fillMaxSize(),
         update = { view ->
+            view.overlayManager.tilesOverlay.setColorFilter(
+                if (darkMap) TilesOverlay.INVERT_COLORS else null
+            )
             val key = listOf(
                 state.mode,
                 state.network?.system,

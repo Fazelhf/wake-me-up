@@ -1,5 +1,6 @@
 package com.wakemethere.app
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,14 +34,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -122,6 +127,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Edge-to-edge: screens manage their own status/navigation bar insets.
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             val viewModel: MainViewModel = hiltViewModel()
             val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
@@ -131,6 +138,21 @@ class MainActivity : AppCompatActivity() {
                 ThemeMode.SYSTEM -> isSystemInDarkTheme()
             }
             WakeMeThereTheme(darkTheme = darkTheme) {
+                // Keep the window itself in sync with the in-app theme choice:
+                // the XML window background only follows the *system* setting,
+                // so forcing dark in-app would otherwise leave a light window
+                // (light-on-light text) and light status bar icons.
+                val windowBackground = MaterialTheme.colorScheme.background
+                SideEffect {
+                    window.setBackgroundDrawable(ColorDrawable(windowBackground.toArgb()))
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                        window.isNavigationBarContrastEnforced = false
+                    }
+                    val insets = WindowCompat.getInsetsController(window, window.decorView)
+                    insets.isAppearanceLightStatusBars = !darkTheme
+                    insets.isAppearanceLightNavigationBars = !darkTheme
+                }
+
                 val onboardingDone by viewModel.onboardingDone.collectAsStateWithLifecycle()
                 val completedTripId by viewModel.justCompletedTripId.collectAsStateWithLifecycle()
 
@@ -156,7 +178,11 @@ class MainActivity : AppCompatActivity() {
                 val backStack by navController.currentBackStackEntryAsState()
                 val currentRoute = backStack?.destination?.route
 
-                Box(modifier = Modifier.fillMaxSize()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background),
+                ) {
                 NavHost(
                     navController = navController,
                     startDestination = startRoute,
@@ -270,6 +296,8 @@ private fun GlassBottomNav(
                     alpha = 0.85f,
                 )
             )
+            // Keep the tabs above the gesture/navigation bar (edge-to-edge).
+            .navigationBarsPadding()
             .padding(horizontal = 24.dp)
             .padding(top = 12.dp, bottom = 22.dp),
         horizontalArrangement = Arrangement.SpaceAround,

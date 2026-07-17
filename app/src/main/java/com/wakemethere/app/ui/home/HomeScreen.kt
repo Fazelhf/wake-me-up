@@ -17,8 +17,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -85,7 +87,11 @@ fun HomeScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         AmbientBackground()
 
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding(),
+        ) {
             GlassTopBar(onOpenSettings = onOpenSettings, onOpenHistory = onOpenHistory)
 
             AnimatedVisibility(
@@ -173,6 +179,7 @@ fun HomeScreen(
                 ),
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
+                    .navigationBarsPadding()
                     .padding(bottom = 28.dp)
                     .scale(1f + (1f - stopPulse) * 0.03f)
                     .height(56.dp),
@@ -194,6 +201,7 @@ fun HomeScreen(
                 shape = CircleShape,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
+                    .navigationBarsPadding()
                     .padding(bottom = 104.dp)
                     .height(56.dp),
             ) {
