@@ -8,6 +8,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Navigation
 import androidx.compose.material.icons.filled.Settings
@@ -294,22 +296,22 @@ private fun GreetingCard() {
     }
 }
 
-/** Floating glass top app bar with history + settings actions. */
+/** Floating glass top app bar (prototype: menu / title / avatar). */
 @Composable
 private fun GlassTopBar(onOpenSettings: () -> Unit, onOpenHistory: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp)
-            .then(glassModifier(RoundedCornerShape(20.dp)))
-            .height(56.dp),
+            .padding(horizontal = 24.dp, vertical = 14.dp)
+            .then(glassModifier(RoundedCornerShape(12.dp)))
+            .height(64.dp),
     ) {
         IconButton(
             onClick = onOpenHistory,
-            modifier = Modifier.align(Alignment.CenterStart).padding(start = 4.dp),
+            modifier = Modifier.align(Alignment.CenterStart).padding(start = 8.dp),
         ) {
             Icon(
-                Icons.Default.History,
+                Icons.Default.Menu,
                 contentDescription = stringResource(R.string.history_title),
                 tint = MaterialTheme.colorScheme.primary,
             )
@@ -321,14 +323,22 @@ private fun GlassTopBar(onOpenSettings: () -> Unit, onOpenHistory: () -> Unit) {
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.align(Alignment.Center),
         )
-        IconButton(
-            onClick = onOpenSettings,
-            modifier = Modifier.align(Alignment.CenterEnd).padding(end = 4.dp),
+        // Avatar (prototype trailing element) — opens settings.
+        Box(
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(end = 14.dp)
+                .size(36.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .clickable { onOpenSettings() },
+            contentAlignment = Alignment.Center,
         ) {
-            Icon(
-                Icons.Default.Settings,
-                contentDescription = stringResource(R.string.home_settings),
-                tint = MaterialTheme.colorScheme.primary,
+            Text(
+                text = stringResource(R.string.home_owner_initial),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                fontWeight = FontWeight.Bold,
             )
         }
     }

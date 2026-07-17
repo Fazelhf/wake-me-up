@@ -264,10 +264,15 @@ private fun GlassBottomNav(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 14.dp)
-            .then(glassModifier(RoundedCornerShape(28.dp)))
-            .padding(horizontal = 8.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
+            .then(
+                glassModifier(
+                    RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+                    alpha = 0.85f,
+                )
+            )
+            .padding(horizontal = 24.dp)
+            .padding(top = 12.dp, bottom = 22.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         tabs.forEach { tab ->
@@ -291,10 +296,10 @@ private fun GlassBottomNav(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .scale(pop)
-                    .clip(RoundedCornerShape(20.dp))
+                    .clip(RoundedCornerShape(999.dp))
                     .background(pill)
                     .clickable { onNavigate(tab.route) }
-                    .padding(horizontal = 22.dp, vertical = 7.dp),
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
             ) {
                 Icon(
                     imageVector = tab.icon,
